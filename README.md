@@ -25,7 +25,10 @@ This CMS platform implements a sophisticated microservices architecture with mul
 ├── backend/
 │   ├── cms-sys/                          # Core CMS Service (Go)
 │   ├── gateway/                          # API Gateway Service (Spring Boot)
-│   └── lms-sys/                          # Learning Management System (Go)
+│   └── lms-sys/                          # Learning Management System (Spring Boot)
+│   └── ems-sys/                          # E-Commerce Management System (Spring Boot)
+│   └── bms-sys/                          # Booking Management System (Spring Boot)
+│   └── ams-sys/                          # Agency Management System (Spring Boot)
 ├── docker-compose.yml                     # Main Orchestration
 ├── infra/                                # Infrastructure as Code
 │   ├── migration/                        # Database Migrations
