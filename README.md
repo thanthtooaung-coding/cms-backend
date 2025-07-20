@@ -44,7 +44,7 @@ This CMS platform implements a sophisticated microservices architecture with mul
 
 # CMS High level 
 
-![architecture.xml](photo/architecture.xml)
+![architecture.svg](photo/architecture.svg)
 
 # API level overview
 
