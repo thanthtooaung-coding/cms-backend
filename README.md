@@ -8,7 +8,7 @@
 <img src="https://img.shields.io/badge/Docker-24-2496ED?style=for-the-badge&logo=docker&logoColor=white"/>
 </div>
 
-![architecture.svg](photo/architecture.svg)
+![image.png](photo/image.png)
 
 ## 🌟 Repository Overview
 
@@ -44,7 +44,7 @@ This CMS platform implements a sophisticated microservices architecture with mul
 
 # CMS High level 
 
-![architecture.svg](photo/architecture.svg)
+![image.png](photo/image.png)
 
 # API level overview
 
