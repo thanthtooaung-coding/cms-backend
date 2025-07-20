@@ -30,14 +30,6 @@ This CMS platform implements a sophisticated microservices architecture with mul
 │   └── bms-sys/                          # Booking Management System (Spring Boot)
 │   └── ams-sys/                          # Agency Management System (Spring Boot)
 ├── docker-compose.yml                     # Main Orchestration
-├── infra/                                # Infrastructure as Code
-│   ├── migration/                        # Database Migrations
-│   ├── github/                           # CI/CD Configuration
-│   ├── schema/                           # Database Schemas
-│   └── terraform/                        # Infrastructure Provisioning
-├── keys/                                 # Cryptographic Keys
-├── scripts/                              # Automation Scripts
-└── vault-init.sh                         # Vault Initialization
 ```
 
 ---
