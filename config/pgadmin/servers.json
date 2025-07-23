@@ -1,0 +1,22 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "CMS Database",
+      "Group": "Docker Services",
+      "Host": "postgres-cms",
+      "Port": 5432,
+      "MaintenanceDB": "cms_db",
+      "Username": "postgres",
+      "SSLMode": "prefer"
+    },
+    "2": {
+      "Name": "LMS Database",
+      "Group": "Docker Services",
+      "Host": "postgres-lms",
+      "Port": 5432,
+      "MaintenanceDB": "lms_db",
+      "Username": "lms_user",
+      "SSLMode": "prefer"
+    }
+  }
+}
