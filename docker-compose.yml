@@ -43,6 +43,44 @@ services:
       consul:
         condition: service_healthy
 
+  cms-main-system:
+    build:
+      context: ./app/cms-sys
+      dockerfile: Dockerfile
+    networks:
+      - whole-system-network
+    depends_on:
+      postgres-cms:
+        condition: service_healthy
+      consul:
+        condition: service_healthy
+    environment:
+      - CMS_APP_STATUS=${CMS_APP_STATUS}
+      - CMS_DB_HOST=postgres-cms
+      - CMS_DB_PORT=${CMS_DB_PORT}
+      - CMS_DB_NAME=${POSTGRES_CMS_DB}
+      - CMS_DB_USER=${POSTGRES_CMS_USER}
+      - CMS_DB_PASSWORD=${POSTGRES_CMS_PASSWORD}
+      - CMS_LOG_LEVEL=${CMS_LOG_LEVEL}
+      - CMS_LOG_FILE_PATH=${CMS_LOG_FILE_PATH}
+      - CMS_LOG_MAX_SIZE=${CMS_LOG_MAX_SIZE}
+      - CMS_LOG_MAX_BACKUPS=${CMS_LOG_MAX_BACKUPS}
+      - CMS_LOG_MAX_AGE=${CMS_LOG_MAX_AGE}
+      - CMS_LOG_COMPRESS=${CMS_LOG_COMPRESS}
+      - CONSUL_ENABLED=${CONSUL_ENABLED}
+      - CMS_CONSUL_ADDRESS=${CMS_CONSUL_ADDRESS}
+      - CMS_CONSUL_DATACENTER=${CMS_CONSUL_DATACENTER}
+      - CMS_CONSUL_SCHEME=${CMS_CONSUL_SCHEME}
+      - CMS_CONSUL_SERVICE_ID=cms-api-1
+      - CMS_CONSUL_SERVICE_NAME=cms-service
+      - CMS_CONSUL_SERVICE_TAGS=${CMS_SERVICE_TAGS}
+      - CMS_CONSUL_CHECK_TTL=30s
+      - CONSUL_CHECK_ID=service-check-cms-api-1
+      - CMS_PORT=${CMS_PORT}
+    ports:
+      - "8081:8081"
+    restart: unless-stopped
+
   postgres-cms:
     image: postgres:15-alpine
     container_name: postgres-cms
