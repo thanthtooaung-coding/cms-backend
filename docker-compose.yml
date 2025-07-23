@@ -1,0 +1,110 @@
+services:
+  consul:
+    image: hashicorp/consul:1.17
+    container_name: consul
+    networks:
+      - whole-system-network
+    ports:
+      - "8500:8500"
+      - "8600:8600/udp"
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+      - CONSUL_CLIENT_INTERFACE=eth0
+    command: >
+      consul agent -dev
+      -client=0.0.0.0
+      -bind=0.0.0.0
+      -datacenter=dc1
+      -ui
+      -log-level=INFO
+    volumes:
+      - consul-data:/consul/data
+      - consul-config:/consul/config
+    healthcheck:
+      test: ["CMD", "consul", "members"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    restart: unless-stopped
+
+  gateway:
+    build:
+      context: ./app/gateway
+      dockerfile: Dockerfile
+    networks:
+      - whole-system-network
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      - ALLOWED_ORIGINS=http://localhost:5173,http://localhost:5174,http://localhost:5175,https://localhost:5176
+    depends_on:
+      consul:
+        condition: service_healthy
+
+  postgres-cms:
+    image: postgres:15-alpine
+    container_name: postgres-cms
+    environment:
+      - POSTGRES_DB=${POSTGRES_CMS_DB}
+      - POSTGRES_USER=${POSTGRES_CMS_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_CMS_PASSWORD}
+    volumes:
+      - postgres-cms:/var/lib/postgresql/data
+    networks:
+      - whole-system-network
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_CMS_USER} -d ${POSTGRES_CMS_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres-lms:
+    image: postgres:15-alpine
+    container_name: postgres-lms
+    environment:
+      - POSTGRES_DB=${POSTGRES_LMS_DB}
+      - POSTGRES_USER=${POSTGRES_LMS_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_LMS_PASSWORD}
+    volumes:
+      - postgres-lms:/var/lib/postgresql/data
+    networks:
+      - whole-system-network
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_LMS_USER} -d ${POSTGRES_LMS_DB}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: dozzle
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8083:8080"
+    networks:
+      - whole-system-network
+    restart: unless-stopped
+    environment:
+      - DOZZLE_LEVEL=${DOZZLE_LEVEL}
+      - DOZZLE_TAIL=${DOZZLE_TAIL}
+
+networks:
+  whole-system-network:
+    driver: bridge
+
+volumes:
+  postgres-cms:
+    driver: local
+  postgres-lms:
+    driver: local
+  consul-data:
+    driver: local
+  consul-config:
+    driver: local
