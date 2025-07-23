@@ -81,6 +81,38 @@ services:
       - "8081:8081"
     restart: unless-stopped
 
+  lms-main-system:
+    build:
+      context: ./app/lms-sys
+      dockerfile: Dockerfile
+    networks:
+      - whole-system-network
+    depends_on:
+      postgres-lms:
+        condition: service_healthy
+      consul:
+        condition: service_healthy
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      - LMS_DB_HOST=postgres-lms
+      - LMS_DB_PORT=${LMS_DB_PORT}
+      - LMS_DB_NAME=${POSTGRES_LMS_DB}
+      - LMS_DB_USER=${POSTGRES_LMS_USER}
+      - LMS_DB_PASSWORD=${POSTGRES_LMS_PASSWORD}
+      - CONSUL_ENABLED=${CONSUL_ENABLED}
+      - LMS_CONSUL_ADDRESS=${LMS_CONSUL_ADDRESS}
+      - LMS_CONSUL_DATACENTER=${LMS_CONSUL_DATACENTER}
+      - LMS_CONSUL_SCHEME=${LMS_CONSUL_SCHEME}
+      - LMS_CONSUL_SERVICE_ID=lms-api-1
+      - LMS_CONSUL_SERVICE_NAME=lms-service
+      - LMS_CONSUL_SERVICE_TAGS=${LMS_SERVICE_TAGS}
+      - LMS_CONSUL_CHECK_TTL=30s
+      - CONSUL_CHECK_ID=service-check-lms-api-1
+      - LMS_PORT=${LMS_PORT}
+    restart: unless-stopped
+
   postgres-cms:
     image: postgres:15-alpine
     container_name: postgres-cms
@@ -112,7 +144,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_LMS_PASSWORD}
     volumes:
       - postgres-lms:/var/lib/postgresql/data
-      - ./schema/lms.sql:/docker-entrypoint-initdb.d/init-cms.sql
+      - ./schema/lms.sql:/docker-entrypoint-initdb.d/init-lms.sql
       - ./config/postgres/pg_hba.conf:/etc/postgresql/pg_hba.conf
     networks:
       - whole-system-network
