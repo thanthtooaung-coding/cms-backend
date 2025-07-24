@@ -2,12 +2,15 @@ spring:
   application:
     name: lms-service
   datasource:
-    url: jdbc:postgresql://localhost:5433/lms_db
+    url: jdbc:postgresql://localhost:1800/lms_db
     username: lms_user
     password: lms_password
+  sql:
+    init:
+      mode: always
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create # do none after first time create
     show-sql: true
     properties:
       hibernate:
@@ -16,7 +19,7 @@ spring:
   cloud:
     consul:
       host: localhost
-      port: 8500
+      port: 1801
       discovery:
         enabled: ${CONSUL_ENABLED:true}
         service-name: ${spring.application.name}

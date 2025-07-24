@@ -35,7 +35,6 @@ CREATE TYPE "enrollment_status" AS ENUM (
 CREATE TABLE "Tenants" (
                            "id" BIGSERIAL PRIMARY KEY,
                            "name" VARCHAR(255),
-                           "cms_owner_id" BIGINT,
                            "is_active" BOOLEAN DEFAULT true,
                            "created_at" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
                            "updated_at" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
