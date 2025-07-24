@@ -1,4 +1,12 @@
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/LmsApplication.java
+/home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/category/controller/CourseCategoryController.java
+/home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/category/dto/BaseCourseCategoryRequest.java
+/home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/category/dto/CourseCategoryResponse.java
+/home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/category/dto/CreateCourseCategoryRequest.java
+/home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/category/dto/UpdateCourseCategoryRequest.java
+/home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/category/mapper/CourseCategoryMapper.java
+/home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/category/service/CourseCategoryService.java
+/home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/category/service/impl/CourseCategoryServiceImpl.java
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/tenant/controller/TenantController.java
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/tenant/dto/TenantRequest.java
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/tenant/dto/TenantResponse.java
@@ -36,6 +44,7 @@
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/shared/entity/Tenant.java
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/shared/entity/User.java
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/shared/exception/ResourceNotFoundException.java
+/home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/shared/repository/CategoryRepository.java
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/shared/repository/RoleRepository.java
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/shared/repository/TenantRepository.java
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/shared/repository/UserRepository.java
