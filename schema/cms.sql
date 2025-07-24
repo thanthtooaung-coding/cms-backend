@@ -32,6 +32,10 @@ CREATE TABLE "Role" (
 
 --------------------------------------------------------------------------------
 
+-- Auto-insert default roles
+
+INSERT INTO "Role" ("name") VALUES ('Owner'), ('Admin'), ('Staff');
+
 -- Table Definition for Users
 -- Stores user account information.
 
