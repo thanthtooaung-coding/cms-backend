@@ -7,7 +7,7 @@ spring:
     password: lms_password
   sql:
     init:
-      mode: always
+      mode: always # do never after first time create
   jpa:
     hibernate:
       ddl-auto: create # do none after first time create
