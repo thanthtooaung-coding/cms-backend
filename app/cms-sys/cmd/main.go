@@ -25,6 +25,7 @@ import (
 
 type dISection struct {
 	ownerHandler       handler.OwnerHandle
+	pageRequestHandler handler.PageRequestHandle
 	consulClient       *api.Client
 }
 
@@ -183,9 +184,13 @@ func dependencyInjectionSection(
 	ownerRepo := repository.NewOwnerRepository(logger, db)
 	ownerService := service.NewOwnerService(logger, ownerRepo)
 	ownerHandler := handler.NewOwnerHandler(ownerService)
+	pageRequestRepo := repository.NewPageRequestRepository(logger, db)
+    pageRequestService := service.NewPageRequestService(logger, pageRequestRepo)
+    pageRequestHandler := handler.NewPageRequestHandler(pageRequestService)
 
 	return &dISection{
 		ownerHandler:       ownerHandler,
+		pageRequestHandler: pageRequestHandler,
 	}
 }
 
@@ -319,6 +324,7 @@ func main() {
 
     di := dependencyInjectionSection(appLogger, dbConnection.DB, consulClient)
 	routes.SetupOwnerRoutes(app, di.ownerHandler)
+	routes.SetupPageRequestRoutes(app, di.pageRequestHandler)
 
     port := utils.GetEnv("CMS_PORT", "8081")
 

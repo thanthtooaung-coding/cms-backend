@@ -78,8 +78,9 @@ type PageRequest struct {
     ID             uint          `gorm:"primaryKey" json:"id"`
     OwnerID        uint          `gorm:"not null" json:"owner_id"`
     RequestType    string        `gorm:"size:255;not null" json:"request_type"`
-    RequestDetails *string       `gorm:"type:text" json:"request_details"`
-    RequestDate    time.Time     `json:"request_date"`
+    Title          string        `gorm:"size:255;not null" json:"title"`
+    PageUrl        string        `gorm:"size:255;not null" json:"page_url"`
+    LogoUrl        string        `gorm:"size:255;not null" json:"logo_url"`
     Status         RequestStatus `gorm:"type:request_status;default:'Pending'" json:"status"`
     AdminID        *uint         `json:"admin_id"`
     CreatedAt      time.Time     `json:"created_at"`
