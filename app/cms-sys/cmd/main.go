@@ -7,6 +7,10 @@ import (
     "github.com/sirupsen/logrus"
     "github.com/hashicorp/consul/api"
     "github.com/thanthtooaung-coding/cms-backend/app/cms-sys/pkg/utils"
+    "github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/routes"
+    "github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/handler"
+    "github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/repository"
+    "github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/service"
     "github.com/gofiber/fiber/v2"
     loggMiddleware "github.com/gofiber/fiber/v2/middleware/logger"
     "strconv"
@@ -16,7 +20,13 @@ import (
     "errors"
     "syscall"
     "gorm.io/gorm/logger"
+    "gorm.io/gorm"
 )
+
+type dISection struct {
+	ownerHandler       handler.OwnerHandle
+	consulClient       *api.Client
+}
 
 type consulConfig struct {
 	Address    string
@@ -165,6 +175,20 @@ func deregisterService(client *api.Client, serviceID string, logger *logrus.Logg
 	return nil
 }
 
+func dependencyInjectionSection(
+	logger *logrus.Logger,
+	db *gorm.DB,
+	consulClient *api.Client,
+) *dISection {
+	ownerRepo := repository.NewOwnerRepository(logger, db)
+	ownerService := service.NewOwnerService(logger, ownerRepo)
+	ownerHandler := handler.NewOwnerHandler(ownerService)
+
+	return &dISection{
+		ownerHandler:       ownerHandler,
+	}
+}
+
 func main() {
     appLogger := utils.NewLogger(utils.LogConfig{
 		Level:      utils.GetEnv("CMS_LOG_LEVEL", "info"),
@@ -292,6 +316,9 @@ func main() {
 			"consul": "connected",
 		})
 	})
+
+    di := dependencyInjectionSection(appLogger, dbConnection.DB, consulClient)
+	routes.SetupOwnerRoutes(app, di.ownerHandler)
 
     port := utils.GetEnv("CMS_PORT", "8081")
 
