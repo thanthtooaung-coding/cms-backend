@@ -27,6 +27,7 @@ com/content_management_system/lms/features/course/dto/CourseResponse.class
 com/content_management_system/lms/shared/entity/Tenant.class
 com/content_management_system/lms/shared/entity/MasterData.class
 com/content_management_system/lms/features/lesson/service/LessonService.class
+com/content_management_system/lms/shared/config/SwaggerConfig.class
 com/content_management_system/lms/features/module/dto/ModuleResponse$CourseInfo$CourseInfoBuilder.class
 com/content_management_system/lms/features/module/dto/ModuleResponse$ModuleResponseBuilder.class
 com/content_management_system/lms/features/course/dto/UpdateCourseRequest.class

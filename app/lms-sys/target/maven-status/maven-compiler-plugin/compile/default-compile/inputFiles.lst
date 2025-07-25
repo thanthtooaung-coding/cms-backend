@@ -53,6 +53,7 @@
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/user/service/impl/UserServiceImpl.java
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/shared/config/DataInitializer.java
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/shared/config/PasswordEncoderConfig.java
+/home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/shared/config/SwaggerConfig.java
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/shared/constants/CourseStatus.java
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/shared/constants/EnrollmentStatus.java
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/shared/constants/LmsRoleName.java
