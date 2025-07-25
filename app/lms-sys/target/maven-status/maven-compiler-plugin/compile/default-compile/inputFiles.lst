@@ -7,6 +7,15 @@
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/category/mapper/CourseCategoryMapper.java
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/category/service/CourseCategoryService.java
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/category/service/impl/CourseCategoryServiceImpl.java
+/home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/course/controller/CourseController.java
+/home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/course/dto/ChangeCourseStatusRequest.java
+/home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/course/dto/CourseResponse.java
+/home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/course/dto/CreateCourseRequest.java
+/home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/course/dto/DeleteCoursesRequest.java
+/home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/course/dto/UpdateCourseRequest.java
+/home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/course/mapper/CourseMapper.java
+/home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/course/service/CourseService.java
+/home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/course/service/impl/CourseServiceImpl.java
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/tenant/controller/TenantController.java
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/tenant/dto/TenantRequest.java
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/features/tenant/dto/TenantResponse.java
@@ -45,6 +54,7 @@
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/shared/entity/User.java
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/shared/exception/ResourceNotFoundException.java
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/shared/repository/CategoryRepository.java
+/home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/shared/repository/CourseRepository.java
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/shared/repository/RoleRepository.java
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/shared/repository/TenantRepository.java
 /home/alvin/GitHub/cms-backend/app/lms-sys/src/main/java/com/content_management_system/lms/shared/repository/UserRepository.java

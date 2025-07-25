@@ -4,8 +4,10 @@ import com.content_management_system.lms.shared.constants.CourseStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 import java.util.List;
 
@@ -25,6 +27,7 @@ public class Course extends MasterData {
     
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "course_status")
+    @JdbcType(PostgreSQLEnumJdbcType.class)
     private CourseStatus status;
 
     @Column(name = "duration_day_count")
