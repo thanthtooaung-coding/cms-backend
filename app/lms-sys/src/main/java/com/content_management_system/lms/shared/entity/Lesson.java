@@ -4,8 +4,10 @@ import com.content_management_system.lms.shared.constants.MaterialType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 @Entity
 @Table(name = "\"Lesson\"")
@@ -22,6 +24,7 @@ public class Lesson extends MasterData {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "material_type", columnDefinition = "material_type")
+    @JdbcType(PostgreSQLEnumJdbcType.class)
     private MaterialType materialType;
 
     @ManyToOne(fetch = FetchType.LAZY)

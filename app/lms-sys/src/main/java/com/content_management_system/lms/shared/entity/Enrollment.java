@@ -4,8 +4,10 @@ import com.content_management_system.lms.shared.constants.EnrollmentStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -26,6 +28,7 @@ public class Enrollment extends MasterData {
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "enrollment_status")
+    @JdbcType(PostgreSQLEnumJdbcType.class)
     private EnrollmentStatus status;
 
     @Column(name = "due_date")
