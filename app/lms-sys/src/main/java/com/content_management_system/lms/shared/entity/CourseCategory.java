@@ -9,10 +9,10 @@ import org.hibernate.annotations.Where;
 import java.util.List;
 
 @Entity
-@Table(name = "\"course_category\"")
+@Table(name = "\"Course_Category\"")
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE \"course_category\" SET deleted_at = now() WHERE id = ?")
+@SQLDelete(sql = "UPDATE \"Course_Category\" SET deleted_at = now() WHERE id = ?")
 @Where(clause = "deleted_at IS NULL")
 public class CourseCategory extends MasterData {
 
