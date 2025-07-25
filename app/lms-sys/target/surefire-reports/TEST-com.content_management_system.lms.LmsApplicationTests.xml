@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.content_management_system.lms.LmsApplicationTests" time="5.148" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.content_management_system.lms.LmsApplicationTests" time="8.111" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -14,7 +14,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-21-openjdk-amd64/lib"/>
-    <property name="sun.java.command" value="/home/alvin/GitHub/cms-backend/app/lms-sys/target/surefire/surefirebooter-20250725100554235_3.jar /home/alvin/GitHub/cms-backend/app/lms-sys/target/surefire 2025-07-25T10-05-54_194-jvmRun1 surefire-20250725100554235_1tmp surefire_0-20250725100554235_2tmp"/>
+    <property name="sun.java.command" value="/home/alvin/GitHub/cms-backend/app/lms-sys/target/surefire/surefirebooter-20250725203613065_3.jar /home/alvin/GitHub/cms-backend/app/lms-sys/target/surefire 2025-07-25T20-36-12_993-jvmRun1 surefire-20250725203613065_1tmp surefire_0-20250725203613065_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/home/alvin/GitHub/cms-backend/app/lms-sys/target/test-classes:/home/alvin/GitHub/cms-backend/app/lms-sys/target/classes:/home/alvin/.m2/repository/org/springframework/cloud/spring-cloud-starter-gateway/4.1.6/spring-cloud-starter-gateway-4.1.6.jar:/home/alvin/.m2/repository/org/springframework/cloud/spring-cloud-starter/4.1.5/spring-cloud-starter-4.1.5.jar:/home/alvin/.m2/repository/org/springframework/cloud/spring-cloud-context/4.1.5/spring-cloud-context-4.1.5.jar:/home/alvin/.m2/repository/org/springframework/security/spring-security-crypto/6.3.10/spring-security-crypto-6.3.10.jar:/home/alvin/.m2/repository/org/springframework/cloud/spring-cloud-commons/4.1.5/spring-cloud-commons-4.1.5.jar:/home/alvin/.m2/repository/org/springframework/security/spring-security-rsa/1.1.3/spring-security-rsa-1.1.3.jar:/home/alvin/.m2/repository/org/bouncycastle/bcprov-jdk18on/1.78/bcprov-jdk18on-1.78.jar:/home/alvin/.m2/repository/org/springframework/cloud/spring-cloud-gateway-server/4.1.6/spring-cloud-gateway-server-4.1.6.jar:/home/alvin/.m2/repository/org/springframework/boot/spring-boot-starter-validation/3.3.13/spring-boot-starter-validation-3.3.13.jar:/home/alvin/.m2/repository/org/apache/tomcat/embed/tomcat-embed-el/10.1.42/tomcat-embed-el-10.1.42.jar:/home/alvin/.m2/repository/org/hibernate/validator/hibernate-validator/8.0.2.Final/hibernate-validator-8.0.2.Final.jar:/home/alvin/.m2/repository/jakarta/validation/jakarta.validation-api/3.0.2/jakarta.validation-api-3.0.2.jar:/home/alvin/.m2/repository/io/projectreactor/addons/reactor-extra/3.5.2/reactor-extra-3.5.2.jar:/home/alvin/.m2/repository/io/projectreactor/reactor-core/3.6.18/reactor-core-3.6.18.jar:/home/alvin/.m2/repository/org/reactivestreams/reactive-streams/1.0.4/reactive-streams-1.0.4.jar:/home/alvin/.m2/repository/org/springframework/boot/spring-boot-starter-webflux/3.3.13/spring-boot-starter-webflux-3.3.13.jar:/home/alvin/.m2/repository/org/springframework/boot/spring-boot-starter-json/3.3.13/spring-boot-starter-json-3.3.13.jar:/home/alvin/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jdk8/2.17.3/jackson-datatype-jdk8-2.17.3.jar:/home/alvin/.m2/repository/com/fasterxml/jackson/module/jackson-module-parameter-names/2.17.3/jackson-module-parameter-names-2.17.3.jar:/home/alvin/.m2/repository/org/springframework/boot/spring-boot-starter-reactor-netty/3.3.13/spring-boot-starter-reactor-netty-3.3.13.jar:/home/alvin/.m2/repository/io/projectreactor/netty/reactor-netty-http/1.1.31/reactor-netty-http-1.1.31.jar:/home/alvin/.m2/repository/io/netty/netty-codec-http/4.1.122.Final/netty-codec-http-4.1.122.Final.jar:/home/alvin/.m2/repository/io/netty/netty-common/4.1.122.Final/netty-common-4.1.122.Final.jar:/home/alvin/.m2/repository/io/netty/netty-buffer/4.1.122.Final/netty-buffer-4.1.122.Final.jar:/home/alvin/.m2/repository/io/netty/netty-transport/4.1.122.Final/netty-transport-4.1.122.Final.jar:/home/alvin/.m2/repository/io/netty/netty-codec/4.1.122.Final/netty-codec-4.1.122.Final.jar:/home/alvin/.m2/repository/io/netty/netty-handler/4.1.122.Final/netty-handler-4.1.122.Final.jar:/home/alvin/.m2/repository/io/netty/netty-codec-http2/4.1.122.Final/netty-codec-http2-4.1.122.Final.jar:/home/alvin/.m2/repository/io/netty/netty-resolver-dns/4.1.122.Final/netty-resolver-dns-4.1.122.Final.jar:/home/alvin/.m2/repository/io/netty/netty-resolver/4.1.122.Final/netty-resolver-4.1.122.Final.jar:/home/alvin/.m2/repository/io/netty/netty-codec-dns/4.1.122.Final/netty-codec-dns-4.1.122.Final.jar:/home/alvin/.m2/repository/io/netty/netty-resolver-dns-native-macos/4.1.122.Final/netty-resolver-dns-native-macos-4.1.122.Final-osx-x86_64.jar:/home/alvin/.m2/repository/io/netty/netty-resolver-dns-classes-macos/4.1.122.Final/netty-resolver-dns-classes-macos-4.1.122.Final.jar:/home/alvin/.m2/repository/io/netty/netty-transport-native-epoll/4.1.122.Final/netty-transport-native-epoll-4.1.122.Final-linux-x86_64.jar:/home/alvin/.m2/repository/io/netty/netty-transport-native-unix-common/4.1.122.Final/netty-transport-native-unix-common-4.1.122.Final.jar:/home/alvin/.m2/repository/io/netty/netty-transport-classes-epoll/4.1.122.Final/netty-transport-classes-epoll-4.1.122.Final.jar:/home/alvin/.m2/repository/io/projectreactor/netty/reactor-netty-core/1.1.31/reactor-netty-core-1.1.31.jar:/home/alvin/.m2/repository/io/netty/netty-handler-proxy/4.1.122.Final/netty-handler-proxy-4.1.122.Final.jar:/home/alvin/.m2/repository/io/netty/netty-codec-socks/4.1.122.Final/netty-codec-socks-4.1.122.Final.jar:/home/alvin/.m2/repository/org/springframework/spring-web/6.1.21/spring-web-6.1.21.jar:/home/alvin/.m2/repository/org/springframework/spring-webflux/6.1.21/spring-webflux-6.1.21.jar:/home/alvin/.m2/repository/org/springframework/cloud/spring-cloud-starter-consul-discovery/4.1.3/spring-cloud-starter-consul-discovery-4.1.3.jar:/home/alvin/.m2/repository/org/springframework/cloud/spring-cloud-starter-consul/4.1.3/spring-cloud-starter-consul-4.1.3.jar:/home/alvin/.m2/repository/org/springframework/cloud/spring-cloud-consul-core/4.1.3/spring-cloud-consul-core-4.1.3.jar:/home/alvin/.m2/repository/com/ecwid/consul/consul-api/1.4.5/consul-api-1.4.5.jar:/home/alvin/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:/home/alvin/.m2/repository/org/apache/httpcomponents/httpclient/4.5.14/httpclient-4.5.14.jar:/home/alvin/.m2/repository/commons-logging/commons-logging/1.2/commons-logging-1.2.jar:/home/alvin/.m2/repository/commons-codec/commons-codec/1.16.1/commons-codec-1.16.1.jar:/home/alvin/.m2/repository/org/apache/httpcomponents/httpcore/4.4.16/httpcore-4.4.16.jar:/home/alvin/.m2/repository/org/springframework/cloud/spring-cloud-consul-discovery/4.1.3/spring-cloud-consul-discovery-4.1.3.jar:/home/alvin/.m2/repository/org/springframework/cloud/spring-cloud-starter-loadbalancer/4.1.5/spring-cloud-starter-loadbalancer-4.1.5.jar:/home/alvin/.m2/repository/org/springframework/cloud/spring-cloud-loadbalancer/4.1.5/spring-cloud-loadbalancer-4.1.5.jar:/home/alvin/.m2/repository/com/stoyanr/evictor/1.0.0/evictor-1.0.0.jar:/home/alvin/.m2/repository/org/springframework/boot/spring-boot-starter-test/3.3.13/spring-boot-starter-test-3.3.13.jar:/home/alvin/.m2/repository/org/springframework/boot/spring-boot-starter/3.3.13/spring-boot-starter-3.3.13.jar:/home/alvin/.m2/repository/org/springframework/boot/spring-boot/3.3.13/spring-boot-3.3.13.jar:/home/alvin/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/3.3.13/spring-boot-autoconfigure-3.3.13.jar:/home/alvin/.m2/repository/org/springframework/boot/spring-boot-starter-logging/3.3.13/spring-boot-starter-logging-3.3.13.jar:/home/alvin/.m2/repository/ch/qos/logback/logback-classic/1.5.18/logback-classic-1.5.18.jar:/home/alvin/.m2/repository/ch/qos/logback/logback-core/1.5.18/logback-core-1.5.18.jar:/home/alvin/.m2/repository/org/apache/logging/log4j/log4j-to-slf4j/2.23.1/log4j-to-slf4j-2.23.1.jar:/home/alvin/.m2/repository/org/apache/logging/log4j/log4j-api/2.23.1/log4j-api-2.23.1.jar:/home/alvin/.m2/repository/org/slf4j/jul-to-slf4j/2.0.17/jul-to-slf4j-2.0.17.jar:/home/alvin/.m2/repository/jakarta/annotation/jakarta.annotation-api/2.1.1/jakarta.annotation-api-2.1.1.jar:/home/alvin/.m2/repository/org/yaml/snakeyaml/2.2/snakeyaml-2.2.jar:/home/alvin/.m2/repository/org/springframework/boot/spring-boot-test/3.3.13/spring-boot-test-3.3.13.jar:/home/alvin/.m2/repository/org/springframework/boot/spring-boot-test-autoconfigure/3.3.13/spring-boot-test-autoconfigure-3.3.13.jar:/home/alvin/.m2/repository/com/jayway/jsonpath/json-path/2.9.0/json-path-2.9.0.jar:/home/alvin/.m2/repository/org/slf4j/slf4j-api/2.0.17/slf4j-api-2.0.17.jar:/home/alvin/.m2/repository/jakarta/xml/bind/jakarta.xml.bind-api/4.0.2/jakarta.xml.bind-api-4.0.2.jar:/home/alvin/.m2/repository/jakarta/activation/jakarta.activation-api/2.1.3/jakarta.activation-api-2.1.3.jar:/home/alvin/.m2/repository/net/minidev/json-smart/2.5.2/json-smart-2.5.2.jar:/home/alvin/.m2/repository/net/minidev/accessors-smart/2.5.2/accessors-smart-2.5.2.jar:/home/alvin/.m2/repository/org/ow2/asm/asm/9.7.1/asm-9.7.1.jar:/home/alvin/.m2/repository/org/assertj/assertj-core/3.25.3/assertj-core-3.25.3.jar:/home/alvin/.m2/repository/net/bytebuddy/byte-buddy/1.14.19/byte-buddy-1.14.19.jar:/home/alvin/.m2/repository/org/awaitility/awaitility/4.2.2/awaitility-4.2.2.jar:/home/alvin/.m2/repository/org/hamcrest/hamcrest/2.2/hamcrest-2.2.jar:/home/alvin/.m2/repository/org/junit/jupiter/junit-jupiter/5.10.5/junit-jupiter-5.10.5.jar:/home/alvin/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.10.5/junit-jupiter-api-5.10.5.jar:/home/alvin/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/home/alvin/.m2/repository/org/junit/platform/junit-platform-commons/1.10.5/junit-platform-commons-1.10.5.jar:/home/alvin/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/alvin/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.10.5/junit-jupiter-params-5.10.5.jar:/home/alvin/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.10.5/junit-jupiter-engine-5.10.5.jar:/home/alvin/.m2/repository/org/junit/platform/junit-platform-engine/1.10.5/junit-platform-engine-1.10.5.jar:/home/alvin/.m2/repository/org/mockito/mockito-core/5.11.0/mockito-core-5.11.0.jar:/home/alvin/.m2/repository/net/bytebuddy/byte-buddy-agent/1.14.19/byte-buddy-agent-1.14.19.jar:/home/alvin/.m2/repository/org/objenesis/objenesis/3.3/objenesis-3.3.jar:/home/alvin/.m2/repository/org/mockito/mockito-junit-jupiter/5.11.0/mockito-junit-jupiter-5.11.0.jar:/home/alvin/.m2/repository/org/skyscreamer/jsonassert/1.5.3/jsonassert-1.5.3.jar:/home/alvin/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar:/home/alvin/.m2/repository/org/springframework/spring-core/6.1.21/spring-core-6.1.21.jar:/home/alvin/.m2/repository/org/springframework/spring-jcl/6.1.21/spring-jcl-6.1.21.jar:/home/alvin/.m2/repository/org/springframework/spring-test/6.1.21/spring-test-6.1.21.jar:/home/alvin/.m2/repository/org/xmlunit/xmlunit-core/2.9.1/xmlunit-core-2.9.1.jar:/home/alvin/.m2/repository/org/springframework/boot/spring-boot-starter-actuator/3.3.13/spring-boot-starter-actuator-3.3.13.jar:/home/alvin/.m2/repository/org/springframework/boot/spring-boot-actuator-autoconfigure/3.3.13/spring-boot-actuator-autoconfigure-3.3.13.jar:/home/alvin/.m2/repository/org/springframework/boot/spring-boot-actuator/3.3.13/spring-boot-actuator-3.3.13.jar:/home/alvin/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.17.3/jackson-databind-2.17.3.jar:/home/alvin/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.17.3/jackson-annotations-2.17.3.jar:/home/alvin/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.17.3/jackson-core-2.17.3.jar:/home/alvin/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.17.3/jackson-datatype-jsr310-2.17.3.jar:/home/alvin/.m2/repository/io/micrometer/micrometer-observation/1.13.15/micrometer-observation-1.13.15.jar:/home/alvin/.m2/repository/io/micrometer/micrometer-commons/1.13.15/micrometer-commons-1.13.15.jar:/home/alvin/.m2/repository/io/micrometer/micrometer-jakarta9/1.13.15/micrometer-jakarta9-1.13.15.jar:/home/alvin/.m2/repository/io/micrometer/micrometer-core/1.13.15/micrometer-core-1.13.15.jar:/home/alvin/.m2/repository/org/hdrhistogram/HdrHistogram/2.2.2/HdrHistogram-2.2.2.jar:/home/alvin/.m2/repository/org/latencyutils/LatencyUtils/2.0.3/LatencyUtils-2.0.3.jar:/home/alvin/.m2/repository/org/springframework/boot/spring-boot-starter-cache/3.3.13/spring-boot-starter-cache-3.3.13.jar:/home/alvin/.m2/repository/org/springframework/spring-context-support/6.1.21/spring-context-support-6.1.21.jar:/home/alvin/.m2/repository/org/springframework/spring-beans/6.1.21/spring-beans-6.1.21.jar:/home/alvin/.m2/repository/org/springframework/spring-context/6.1.21/spring-context-6.1.21.jar:/home/alvin/.m2/repository/org/springframework/spring-expression/6.1.21/spring-expression-6.1.21.jar:/home/alvin/.m2/repository/com/github/ben-manes/caffeine/caffeine/3.2.0/caffeine-3.2.0.jar:/home/alvin/.m2/repository/org/jspecify/jspecify/0.3.0/jspecify-0.3.0.jar:/home/alvin/.m2/repository/com/google/errorprone/error_prone_annotations/2.36.0/error_prone_annotations-2.36.0.jar:/home/alvin/.m2/repository/org/springframework/boot/spring-boot-starter-data-jpa/3.3.13/spring-boot-starter-data-jpa-3.3.13.jar:/home/alvin/.m2/repository/org/springframework/boot/spring-boot-starter-aop/3.3.13/spring-boot-starter-aop-3.3.13.jar:/home/alvin/.m2/repository/org/springframework/spring-aop/6.1.21/spring-aop-6.1.21.jar:/home/alvin/.m2/repository/org/aspectj/aspectjweaver/1.9.24/aspectjweaver-1.9.24.jar:/home/alvin/.m2/repository/org/springframework/boot/spring-boot-starter-jdbc/3.3.13/spring-boot-starter-jdbc-3.3.13.jar:/home/alvin/.m2/repository/com/zaxxer/HikariCP/5.1.0/HikariCP-5.1.0.jar:/home/alvin/.m2/repository/org/springframework/spring-jdbc/6.1.21/spring-jdbc-6.1.21.jar:/home/alvin/.m2/repository/org/hibernate/orm/hibernate-core/6.5.3.Final/hibernate-core-6.5.3.Final.jar:/home/alvin/.m2/repository/jakarta/persistence/jakarta.persistence-api/3.1.0/jakarta.persistence-api-3.1.0.jar:/home/alvin/.m2/repository/jakarta/transaction/jakarta.transaction-api/2.0.1/jakarta.transaction-api-2.0.1.jar:/home/alvin/.m2/repository/org/jboss/logging/jboss-logging/3.5.3.Final/jboss-logging-3.5.3.Final.jar:/home/alvin/.m2/repository/org/hibernate/common/hibernate-commons-annotations/6.0.6.Final/hibernate-commons-annotations-6.0.6.Final.jar:/home/alvin/.m2/repository/io/smallrye/jandex/3.1.2/jandex-3.1.2.jar:/home/alvin/.m2/repository/com/fasterxml/classmate/1.7.0/classmate-1.7.0.jar:/home/alvin/.m2/repository/org/glassfish/jaxb/jaxb-runtime/4.0.5/jaxb-runtime-4.0.5.jar:/home/alvin/.m2/repository/org/glassfish/jaxb/jaxb-core/4.0.5/jaxb-core-4.0.5.jar:/home/alvin/.m2/repository/org/eclipse/angus/angus-activation/2.0.2/angus-activation-2.0.2.jar:/home/alvin/.m2/repository/org/glassfish/jaxb/txw2/4.0.5/txw2-4.0.5.jar:/home/alvin/.m2/repository/com/sun/istack/istack-commons-runtime/4.1.2/istack-commons-runtime-4.1.2.jar:/home/alvin/.m2/repository/jakarta/inject/jakarta.inject-api/2.0.1/jakarta.inject-api-2.0.1.jar:/home/alvin/.m2/repository/org/antlr/antlr4-runtime/4.13.0/antlr4-runtime-4.13.0.jar:/home/alvin/.m2/repository/org/springframework/data/spring-data-jpa/3.3.13/spring-data-jpa-3.3.13.jar:/home/alvin/.m2/repository/org/springframework/data/spring-data-commons/3.3.13/spring-data-commons-3.3.13.jar:/home/alvin/.m2/repository/org/springframework/spring-orm/6.1.21/spring-orm-6.1.21.jar:/home/alvin/.m2/repository/org/springframework/spring-tx/6.1.21/spring-tx-6.1.21.jar:/home/alvin/.m2/repository/org/springframework/spring-aspects/6.1.21/spring-aspects-6.1.21.jar:/home/alvin/.m2/repository/org/postgresql/postgresql/42.7.7/postgresql-42.7.7.jar:/home/alvin/.m2/repository/org/checkerframework/checker-qual/3.49.3/checker-qual-3.49.3.jar:/home/alvin/.m2/repository/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -31,7 +31,7 @@
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="FILE_LOG_CHARSET" value="UTF-8"/>
     <property name="java.awt.headless" value="true"/>
-    <property name="surefire.real.class.path" value="/home/alvin/GitHub/cms-backend/app/lms-sys/target/surefire/surefirebooter-20250725100554235_3.jar"/>
+    <property name="surefire.real.class.path" value="/home/alvin/GitHub/cms-backend/app/lms-sys/target/surefire/surefirebooter-20250725203613065_3.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="21.0.7+6-Ubuntu-0ubuntu124.04"/>
     <property name="user.name" value="alvin"/>
@@ -49,7 +49,7 @@
     <property name="user.dir" value="/home/alvin/GitHub/cms-backend/app/lms-sys"/>
     <property name="os.arch" value="amd64"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
-    <property name="PID" value="121198"/>
+    <property name="PID" value="103797"/>
     <property name="CONSOLE_LOG_CHARSET" value="UTF-8"/>
     <property name="native.encoding" value="UTF-8"/>
     <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib"/>
@@ -61,10 +61,10 @@
     <property name="java.class.version" value="65.0"/>
     <property name="LOGGED_APPLICATION_NAME" value="[lms-service] "/>
   </properties>
-  <testcase name="contextLoads" classname="com.content_management_system.lms.LmsApplicationTests" time="0.359">
+  <testcase name="contextLoads" classname="com.content_management_system.lms.LmsApplicationTests" time="0.381">
     <system-out><![CDATA[Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
-10:05:54.729 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.content_management_system.lms.LmsApplicationTests]: LmsApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-10:05:54.805 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.content_management_system.lms.LmsApplication for test class com.content_management_system.lms.LmsApplicationTests
+20:36:13.910 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.content_management_system.lms.LmsApplicationTests]: LmsApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+20:36:13.994 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.content_management_system.lms.LmsApplication for test class com.content_management_system.lms.LmsApplicationTests
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -75,465 +75,80 @@
 
  :: Spring Boot ::               (v3.3.13)
 
-2025-07-25T10:05:55.119+07:00  INFO 121198 --- [lms-service] [           main] c.c.lms.LmsApplicationTests              : Starting LmsApplicationTests using Java 21.0.7 with PID 121198 (started by alvin in /home/alvin/GitHub/cms-backend/app/lms-sys)
-2025-07-25T10:05:55.120+07:00  INFO 121198 --- [lms-service] [           main] c.c.lms.LmsApplicationTests              : No active profile set, falling back to 1 default profile: "default"
-2025-07-25T10:05:55.928+07:00  INFO 121198 --- [lms-service] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2025-07-25T10:05:56.010+07:00  INFO 121198 --- [lms-service] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 77 ms. Found 5 JPA repository interfaces.
-2025-07-25T10:05:56.158+07:00  INFO 121198 --- [lms-service] [           main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=063a7279-519f-3212-afd2-af239cb896fc
-2025-07-25T10:05:56.378+07:00  INFO 121198 --- [lms-service] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2025-07-25T10:05:56.605+07:00  INFO 121198 --- [lms-service] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@39514976
-2025-07-25T10:05:56.606+07:00  INFO 121198 --- [lms-service] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2025-07-25T10:05:56.697+07:00  INFO 121198 --- [lms-service] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-07-25T10:05:56.754+07:00  INFO 121198 --- [lms-service] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
-2025-07-25T10:05:56.775+07:00  INFO 121198 --- [lms-service] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2025-07-25T10:05:56.970+07:00  INFO 121198 --- [lms-service] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2025-07-25T10:05:57.007+07:00  WARN 121198 --- [lms-service] [           main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2025-07-25T10:05:57.812+07:00  INFO 121198 --- [lms-service] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-Hibernate: 
-    alter table if exists "Assignment" 
-       drop constraint if exists FK1ikgu2t3oa2k68ht9n74msdwx
-Hibernate: 
-    alter table if exists "Certificate" 
-       drop constraint if exists FKq2gpvkguqkggjip5cebm3gqqx
-Hibernate: 
-    alter table if exists "Course" 
-       drop constraint if exists FK4wv2yhlwmamunq1l2bmfjid0h
-Hibernate: 
-    alter table if exists "Course" 
-       drop constraint if exists FK868f4bbu0in31433tmpik6024
-Hibernate: 
-    alter table if exists "Course_Category" 
-       drop constraint if exists FKnrdv4t616yqkjkcwtcf04ovrw
-Hibernate: 
-    alter table if exists "Enrollment" 
-       drop constraint if exists FKrduhjug5o4fnoasl1grsv18u6
-Hibernate: 
-    alter table if exists "Enrollment" 
-       drop constraint if exists FKlo428jmhoykiun1g1pygfc4ov
-Hibernate: 
-    alter table if exists "Lesson" 
-       drop constraint if exists FKembdxddr13c2dg4abqu3l3npe
-Hibernate: 
-    alter table if exists "Module" 
-       drop constraint if exists FKdnoex6pfklopf9c50o2nedkdf
-Hibernate: 
-    alter table if exists "Quiz" 
-       drop constraint if exists FKgvwp4llm6eie89ra9h6s7oi9i
-Hibernate: 
-    alter table if exists "Rating" 
-       drop constraint if exists FKd1ssfn13ouwjttcyxgnt8pd3b
-Hibernate: 
-    alter table if exists "Rating" 
-       drop constraint if exists FK24lln3futvxcskorqii1kq0wh
-Hibernate: 
-    alter table if exists "Report" 
-       drop constraint if exists FKgl2pm1rch5ga1gjydx0su9ypq
-Hibernate: 
-    alter table if exists "Review" 
-       drop constraint if exists FKmgdy1kiywsc46pakuaj1g1s0y
-Hibernate: 
-    alter table if exists "Review" 
-       drop constraint if exists FKobg5pktekx9i8ahjwon4martr
-Hibernate: 
-    alter table if exists "Student_Quiz" 
-       drop constraint if exists FKugeqhvkcoxuweh2e8wklw80u
-Hibernate: 
-    alter table if exists "Student_Quiz" 
-       drop constraint if exists FKifn2f6os3myy9xcvpqw6n0n64
-Hibernate: 
-    alter table if exists "Submission" 
-       drop constraint if exists FKhkx73tbuy49e5s2ynx7va4301
-Hibernate: 
-    alter table if exists "Submission" 
-       drop constraint if exists FK77e9sm039tw1pxxubya6xonv3
-Hibernate: 
-    alter table if exists "User" 
-       drop constraint if exists FKtpjexa0oma87d1760y02pjlwt
-Hibernate: 
-    alter table if exists "User" 
-       drop constraint if exists FKh8bh2ovcxmwvl4suqyw4kvhk5
-Hibernate: 
-    drop table if exists "Assignment" cascade
-Hibernate: 
-    drop table if exists "Certificate" cascade
-Hibernate: 
-    drop table if exists "Course" cascade
-Hibernate: 
-    drop table if exists "Course_Category" cascade
-Hibernate: 
-    drop table if exists "Enrollment" cascade
-Hibernate: 
-    drop table if exists "Lesson" cascade
-Hibernate: 
-    drop table if exists "Module" cascade
-Hibernate: 
-    drop table if exists "Quiz" cascade
-Hibernate: 
-    drop table if exists "Rating" cascade
-Hibernate: 
-    drop table if exists "Report" cascade
-Hibernate: 
-    drop table if exists "Review" cascade
-Hibernate: 
-    drop table if exists "Role" cascade
-Hibernate: 
-    drop table if exists "Student_Quiz" cascade
-Hibernate: 
-    drop table if exists "Submission" cascade
-Hibernate: 
-    drop table if exists "Tenants" cascade
-Hibernate: 
-    drop table if exists "User" cascade
-Hibernate: 
-    drop type if exists LmsRoleName cascade
-2025-07-25T10:05:57.878+07:00  WARN 121198 --- [lms-service] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
-2025-07-25T10:05:57.878+07:00  WARN 121198 --- [lms-service] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : drop cascades to 2 other objects
-Hibernate: 
-    drop type if exists MaterialType cascade
-2025-07-25T10:05:57.879+07:00  WARN 121198 --- [lms-service] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
-2025-07-25T10:05:57.879+07:00  WARN 121198 --- [lms-service] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : type "materialtype" does not exist, skipping
-Hibernate: 
-    drop type if exists EnrollmentStatus cascade
-2025-07-25T10:05:57.879+07:00  WARN 121198 --- [lms-service] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
-2025-07-25T10:05:57.879+07:00  WARN 121198 --- [lms-service] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : type "enrollmentstatus" does not exist, skipping
-Hibernate: 
-    drop type if exists CourseStatus cascade
-2025-07-25T10:05:57.880+07:00  WARN 121198 --- [lms-service] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
-2025-07-25T10:05:57.880+07:00  WARN 121198 --- [lms-service] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : type "coursestatus" does not exist, skipping
-Hibernate: 
-    create type CourseStatus as enum ('Archived','Pending','Published','Unpublished')
-Hibernate: 
-    create cast (varchar as CourseStatus) with inout as implicit
-Hibernate: 
-    create cast (CourseStatus as varchar) with inout as implicit
-Hibernate: 
-    create type EnrollmentStatus as enum ('Completed','Dropped','Enrolled','Pending')
-Hibernate: 
-    create cast (varchar as EnrollmentStatus) with inout as implicit
-Hibernate: 
-    create cast (EnrollmentStatus as varchar) with inout as implicit
-Hibernate: 
-    create type MaterialType as enum ('Link','PDF','Slide','Video')
-Hibernate: 
-    create cast (varchar as MaterialType) with inout as implicit
-Hibernate: 
-    create cast (MaterialType as varchar) with inout as implicit
-Hibernate: 
-    create type LmsRoleName as enum ('Admin','Owner','Staff')
-Hibernate: 
-    create cast (varchar as LmsRoleName) with inout as implicit
-Hibernate: 
-    create cast (LmsRoleName as varchar) with inout as implicit
-Hibernate: 
-    create table "Assignment" (
-        course_id bigint,
-        created_at timestamp(6) with time zone not null,
-        deleted_at timestamp(6) with time zone,
-        id bigint generated by default as identity,
-        updated_at timestamp(6) with time zone,
-        title varchar(255),
-        instructions oid,
-        primary key (id)
-    )
-Hibernate: 
-    create table "Certificate" (
-        created_at timestamp(6) with time zone not null,
-        deleted_at timestamp(6) with time zone,
-        enrollment_id bigint unique,
-        id bigint generated by default as identity,
-        issue_date timestamp(6) with time zone,
-        updated_at timestamp(6) with time zone,
-        certificate_url varchar(2048),
-        primary key (id)
-    )
-Hibernate: 
-    create table "Course" (
-        duration_day_count integer,
-        overall_rating integer,
-        category_id bigint,
-        created_at timestamp(6) with time zone not null,
-        deleted_at timestamp(6) with time zone,
-        id bigint generated by default as identity,
-        instructor_id bigint,
-        updated_at timestamp(6) with time zone,
-        description varchar(255),
-        title varchar(255),
-        status course_status,
-        primary key (id)
-    )
-Hibernate: 
-    create table "Course_Category" (
-        created_at timestamp(6) with time zone not null,
-        deleted_at timestamp(6) with time zone,
-        id bigint generated by default as identity,
-        tenant_id bigint,
-        updated_at timestamp(6) with time zone,
-        description varchar(255),
-        name varchar(255),
-        primary key (id)
-    )
-Hibernate: 
-    create table "Enrollment" (
-        progress numeric(5,2),
-        course_id bigint,
-        created_at timestamp(6) with time zone not null,
-        deleted_at timestamp(6) with time zone,
-        due_date timestamp(6) with time zone,
-        enrollment_date timestamp(6) with time zone,
-        id bigint generated by default as identity,
-        student_id bigint,
-        updated_at timestamp(6) with time zone,
-        status enrollment_status,
-        primary key (id)
-    )
-Hibernate: 
-    create table "Lesson" (
-        created_at timestamp(6) with time zone not null,
-        deleted_at timestamp(6) with time zone,
-        id bigint generated by default as identity,
-        module_id bigint,
-        updated_at timestamp(6) with time zone,
-        title varchar(255),
-        content oid,
-        material_type material_type,
-        primary key (id)
-    )
-Hibernate: 
-    create table "Module" (
-        course_id bigint,
-        created_at timestamp(6) with time zone not null,
-        deleted_at timestamp(6) with time zone,
-        id bigint generated by default as identity,
-        updated_at timestamp(6) with time zone,
-        description varchar(255),
-        name varchar(255),
-        primary key (id)
-    )
-Hibernate: 
-    create table "Quiz" (
-        created_at timestamp(6) with time zone not null,
-        deleted_at timestamp(6) with time zone,
-        id bigint generated by default as identity,
-        module_id bigint,
-        updated_at timestamp(6) with time zone,
-        answer varchar(255),
-        question varchar(255),
-        primary key (id)
-    )
-Hibernate: 
-    create table "Rating" (
-        rating_count integer,
-        course_id bigint,
-        created_at timestamp(6) with time zone not null,
-        deleted_at timestamp(6) with time zone,
-        id bigint generated by default as identity,
-        updated_at timestamp(6) with time zone,
-        user_id bigint,
-        primary key (id)
-    )
-Hibernate: 
-    create table "Report" (
-        generated_by_user_id bigint,
-        generated_date timestamp(6) with time zone,
-        report_id bigint generated by default as identity,
-        report_name varchar(255),
-        data_snapshot oid,
-        primary key (report_id)
-    )
-Hibernate: 
-    create table "Review" (
-        course_id bigint,
-        created_at timestamp(6) with time zone not null,
-        deleted_at timestamp(6) with time zone,
-        id bigint generated by default as identity,
-        updated_at timestamp(6) with time zone,
-        user_id bigint,
-        title varchar(255),
-        description oid,
-        primary key (id)
-    )
-Hibernate: 
-    create table "Role" (
-        created_at timestamp(6) with time zone not null,
-        deleted_at timestamp(6) with time zone,
-        id bigint generated by default as identity,
-        updated_at timestamp(6) with time zone,
-        name lms_role_name not null unique,
-        primary key (id)
-    )
-Hibernate: 
-    create table "Student_Quiz" (
-        attempt integer,
-        score integer,
-        created_at timestamp(6) with time zone not null,
-        deleted_at timestamp(6) with time zone,
-        id bigint generated by default as identity,
-        quiz_id bigint,
-        student_id bigint,
-        updated_at timestamp(6) with time zone,
-        primary key (id)
-    )
-Hibernate: 
-    create table "Submission" (
-        assignment_id bigint,
-        created_at timestamp(6) with time zone not null,
-        deleted_at timestamp(6) with time zone,
-        id bigint generated by default as identity,
-        student_id bigint,
-        submitted_at timestamp(6) with time zone,
-        updated_at timestamp(6) with time zone,
-        file_url varchar(2048),
-        primary key (id)
-    )
-Hibernate: 
-    create table "Tenants" (
-        is_active boolean,
-        created_at timestamp(6) with time zone not null,
-        deleted_at timestamp(6) with time zone,
-        id bigint generated by default as identity,
-        updated_at timestamp(6) with time zone,
-        name varchar(255),
-        primary key (id)
-    )
-Hibernate: 
-    create table "User" (
-        created_at timestamp(6) with time zone not null,
-        deleted_at timestamp(6) with time zone,
-        id bigint generated by default as identity,
-        registration_date timestamp(6) with time zone,
-        role_id bigint,
-        tenant_id bigint,
-        updated_at timestamp(6) with time zone,
-        address varchar(255),
-        email varchar(255) not null unique,
-        name varchar(255),
-        password varchar(255) not null,
-        phone_number varchar(255),
-        username varchar(255) not null unique,
-        primary key (id)
-    )
-Hibernate: 
-    alter table if exists "Assignment" 
-       add constraint FK1ikgu2t3oa2k68ht9n74msdwx 
-       foreign key (course_id) 
-       references "Course"
-Hibernate: 
-    alter table if exists "Certificate" 
-       add constraint FKq2gpvkguqkggjip5cebm3gqqx 
-       foreign key (enrollment_id) 
-       references "Enrollment"
-Hibernate: 
-    alter table if exists "Course" 
-       add constraint FK4wv2yhlwmamunq1l2bmfjid0h 
-       foreign key (category_id) 
-       references "Course_Category"
-Hibernate: 
-    alter table if exists "Course" 
-       add constraint FK868f4bbu0in31433tmpik6024 
-       foreign key (instructor_id) 
-       references "User"
-Hibernate: 
-    alter table if exists "Course_Category" 
-       add constraint FKnrdv4t616yqkjkcwtcf04ovrw 
-       foreign key (tenant_id) 
-       references "Tenants"
-Hibernate: 
-    alter table if exists "Enrollment" 
-       add constraint FKrduhjug5o4fnoasl1grsv18u6 
-       foreign key (course_id) 
-       references "Course"
-Hibernate: 
-    alter table if exists "Enrollment" 
-       add constraint FKlo428jmhoykiun1g1pygfc4ov 
-       foreign key (student_id) 
-       references "User"
-Hibernate: 
-    alter table if exists "Lesson" 
-       add constraint FKembdxddr13c2dg4abqu3l3npe 
-       foreign key (module_id) 
-       references "Module"
-Hibernate: 
-    alter table if exists "Module" 
-       add constraint FKdnoex6pfklopf9c50o2nedkdf 
-       foreign key (course_id) 
-       references "Course"
-Hibernate: 
-    alter table if exists "Quiz" 
-       add constraint FKgvwp4llm6eie89ra9h6s7oi9i 
-       foreign key (module_id) 
-       references "Module"
-Hibernate: 
-    alter table if exists "Rating" 
-       add constraint FKd1ssfn13ouwjttcyxgnt8pd3b 
-       foreign key (course_id) 
-       references "Course"
-Hibernate: 
-    alter table if exists "Rating" 
-       add constraint FK24lln3futvxcskorqii1kq0wh 
-       foreign key (user_id) 
-       references "User"
-Hibernate: 
-    alter table if exists "Report" 
-       add constraint FKgl2pm1rch5ga1gjydx0su9ypq 
-       foreign key (generated_by_user_id) 
-       references "User"
-Hibernate: 
-    alter table if exists "Review" 
-       add constraint FKmgdy1kiywsc46pakuaj1g1s0y 
-       foreign key (course_id) 
-       references "Course"
-Hibernate: 
-    alter table if exists "Review" 
-       add constraint FKobg5pktekx9i8ahjwon4martr 
-       foreign key (user_id) 
-       references "User"
-Hibernate: 
-    alter table if exists "Student_Quiz" 
-       add constraint FKugeqhvkcoxuweh2e8wklw80u 
-       foreign key (quiz_id) 
-       references "Quiz"
-Hibernate: 
-    alter table if exists "Student_Quiz" 
-       add constraint FKifn2f6os3myy9xcvpqw6n0n64 
-       foreign key (student_id) 
-       references "User"
-Hibernate: 
-    alter table if exists "Submission" 
-       add constraint FKhkx73tbuy49e5s2ynx7va4301 
-       foreign key (assignment_id) 
-       references "Assignment"
-Hibernate: 
-    alter table if exists "Submission" 
-       add constraint FK77e9sm039tw1pxxubya6xonv3 
-       foreign key (student_id) 
-       references "User"
-Hibernate: 
-    alter table if exists "User" 
-       add constraint FKtpjexa0oma87d1760y02pjlwt 
-       foreign key (role_id) 
-       references "Role"
-Hibernate: 
-    alter table if exists "User" 
-       add constraint FKh8bh2ovcxmwvl4suqyw4kvhk5 
-       foreign key (tenant_id) 
-       references "Tenants"
-2025-07-25T10:05:57.995+07:00  INFO 121198 --- [lms-service] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2025-07-25T10:05:58.731+07:00  INFO 121198 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
-2025-07-25T10:05:58.731+07:00  INFO 121198 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
-2025-07-25T10:05:58.731+07:00  INFO 121198 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
-2025-07-25T10:05:58.731+07:00  INFO 121198 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
-2025-07-25T10:05:58.731+07:00  INFO 121198 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
-2025-07-25T10:05:58.731+07:00  INFO 121198 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
-2025-07-25T10:05:58.731+07:00  INFO 121198 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
-2025-07-25T10:05:58.731+07:00  INFO 121198 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
-2025-07-25T10:05:58.731+07:00  INFO 121198 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
-2025-07-25T10:05:58.731+07:00  INFO 121198 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
-2025-07-25T10:05:58.731+07:00  INFO 121198 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
-2025-07-25T10:05:58.731+07:00  INFO 121198 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
-2025-07-25T10:05:58.731+07:00  INFO 121198 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
-2025-07-25T10:05:58.731+07:00  INFO 121198 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
-2025-07-25T10:05:59.018+07:00  INFO 121198 --- [lms-service] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 18 endpoints beneath base path '/actuator'
-2025-07-25T10:05:59.269+07:00  INFO 121198 --- [lms-service] [           main] c.c.lms.LmsApplicationTests              : Started LmsApplicationTests in 4.379 seconds (process running for 4.997)
+2025-07-25T20:36:14.500+07:00  INFO 103797 --- [lms-service] [           main] c.c.lms.LmsApplicationTests              : Starting LmsApplicationTests using Java 21.0.7 with PID 103797 (started by alvin in /home/alvin/GitHub/cms-backend/app/lms-sys)
+2025-07-25T20:36:14.502+07:00  INFO 103797 --- [lms-service] [           main] c.c.lms.LmsApplicationTests              : No active profile set, falling back to 1 default profile: "default"
+2025-07-25T20:36:15.597+07:00  INFO 103797 --- [lms-service] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-07-25T20:36:15.724+07:00  INFO 103797 --- [lms-service] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 121 ms. Found 8 JPA repository interfaces.
+2025-07-25T20:36:15.942+07:00  INFO 103797 --- [lms-service] [           main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=f23646d3-8791-35fd-8f9e-e5319aef7647
+2025-07-25T20:36:16.389+07:00  INFO 103797 --- [lms-service] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-07-25T20:36:16.463+07:00  INFO 103797 --- [lms-service] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2025-07-25T20:36:16.503+07:00  INFO 103797 --- [lms-service] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-07-25T20:36:16.802+07:00  INFO 103797 --- [lms-service] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-07-25T20:36:16.831+07:00  INFO 103797 --- [lms-service] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-07-25T20:36:17.246+07:00  INFO 103797 --- [lms-service] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6719f206
+2025-07-25T20:36:17.249+07:00  INFO 103797 --- [lms-service] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-07-25T20:36:17.297+07:00  WARN 103797 --- [lms-service] [           main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-07-25T20:36:18.676+07:00  INFO 103797 --- [lms-service] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-07-25T20:36:18.679+07:00  INFO 103797 --- [lms-service] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-07-25T20:36:19.029+07:00  INFO 103797 --- [lms-service] [           main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-07-25T20:36:20.506+07:00  INFO 103797 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2025-07-25T20:36:20.506+07:00  INFO 103797 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2025-07-25T20:36:20.506+07:00  INFO 103797 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2025-07-25T20:36:20.507+07:00  INFO 103797 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2025-07-25T20:36:20.507+07:00  INFO 103797 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2025-07-25T20:36:20.507+07:00  INFO 103797 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2025-07-25T20:36:20.507+07:00  INFO 103797 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2025-07-25T20:36:20.507+07:00  INFO 103797 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2025-07-25T20:36:20.508+07:00  INFO 103797 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2025-07-25T20:36:20.508+07:00  INFO 103797 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2025-07-25T20:36:20.508+07:00  INFO 103797 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2025-07-25T20:36:20.508+07:00  INFO 103797 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-07-25T20:36:20.508+07:00  INFO 103797 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2025-07-25T20:36:20.508+07:00  INFO 103797 --- [lms-service] [           main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-07-25T20:36:20.991+07:00  INFO 103797 --- [lms-service] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 18 endpoints beneath base path '/actuator'
+2025-07-25T20:36:21.355+07:00  INFO 103797 --- [lms-service] [           main] c.c.lms.LmsApplicationTests              : Started LmsApplicationTests in 7.221 seconds (process running for 8.232)
+2025-07-25T20:36:21.353+07:00 ERROR 103797 --- [lms-service] [TaskScheduler-1] o.s.c.c.discovery.ConsulCatalogWatch     : Error watching Consul CatalogServices
+
+com.ecwid.consul.transport.TransportException: org.apache.http.conn.HttpHostConnectException: Connect to localhost:1801 [localhost/127.0.0.1] failed: Connection refused
+	at com.ecwid.consul.transport.AbstractHttpTransport.executeRequest(AbstractHttpTransport.java:83) ~[consul-api-1.4.5.jar:na]
+	at com.ecwid.consul.transport.AbstractHttpTransport.makeGetRequest(AbstractHttpTransport.java:36) ~[consul-api-1.4.5.jar:na]
+	at com.ecwid.consul.v1.ConsulRawClient.makeGetRequest(ConsulRawClient.java:139) ~[consul-api-1.4.5.jar:na]
+	at com.ecwid.consul.v1.catalog.CatalogConsulClient.getCatalogServices(CatalogConsulClient.java:143) ~[consul-api-1.4.5.jar:na]
+	at com.ecwid.consul.v1.ConsulClient.getCatalogServices(ConsulClient.java:400) ~[consul-api-1.4.5.jar:na]
+	at org.springframework.cloud.consul.discovery.ConsulCatalogWatch.catalogServicesWatch(ConsulCatalogWatch.java:131) ~[spring-cloud-consul-discovery-4.1.3.jar:4.1.3]
+	at org.springframework.scheduling.support.DelegatingErrorHandlingRunnable.run(DelegatingErrorHandlingRunnable.java:54) ~[spring-context-6.1.21.jar:6.1.21]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572) ~[na:na]
+	at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:358) ~[na:na]
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: org.apache.http.conn.HttpHostConnectException: Connect to localhost:1801 [localhost/127.0.0.1] failed: Connection refused
+	at org.apache.http.impl.conn.DefaultHttpClientConnectionOperator.connect(DefaultHttpClientConnectionOperator.java:156) ~[httpclient-4.5.14.jar:4.5.14]
+	at org.apache.http.impl.conn.PoolingHttpClientConnectionManager.connect(PoolingHttpClientConnectionManager.java:376) ~[httpclient-4.5.14.jar:4.5.14]
+	at org.apache.http.impl.execchain.MainClientExec.establishRoute(MainClientExec.java:393) ~[httpclient-4.5.14.jar:4.5.14]
+	at org.apache.http.impl.execchain.MainClientExec.execute(MainClientExec.java:236) ~[httpclient-4.5.14.jar:4.5.14]
+	at org.apache.http.impl.execchain.ProtocolExec.execute(ProtocolExec.java:186) ~[httpclient-4.5.14.jar:4.5.14]
+	at org.apache.http.impl.execchain.RetryExec.execute(RetryExec.java:89) ~[httpclient-4.5.14.jar:4.5.14]
+	at org.apache.http.impl.execchain.RedirectExec.execute(RedirectExec.java:110) ~[httpclient-4.5.14.jar:4.5.14]
+	at org.apache.http.impl.client.InternalHttpClient.doExecute(InternalHttpClient.java:185) ~[httpclient-4.5.14.jar:4.5.14]
+	at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:72) ~[httpclient-4.5.14.jar:4.5.14]
+	at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:221) ~[httpclient-4.5.14.jar:4.5.14]
+	at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:165) ~[httpclient-4.5.14.jar:4.5.14]
+	at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:140) ~[httpclient-4.5.14.jar:4.5.14]
+	at com.ecwid.consul.transport.AbstractHttpTransport.executeRequest(AbstractHttpTransport.java:70) ~[consul-api-1.4.5.jar:na]
+	... 12 common frames omitted
+Caused by: java.net.ConnectException: Connection refused
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:542) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:592) ~[na:na]
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327) ~[na:na]
+	at java.base/java.net.Socket.connect(Socket.java:751) ~[na:na]
+	at org.apache.http.conn.socket.PlainConnectionSocketFactory.connectSocket(PlainConnectionSocketFactory.java:75) ~[httpclient-4.5.14.jar:4.5.14]
+	at org.apache.http.impl.conn.DefaultHttpClientConnectionOperator.connect(DefaultHttpClientConnectionOperator.java:142) ~[httpclient-4.5.14.jar:4.5.14]
+	... 24 common frames omitted
+
 Hibernate: 
     select
         r1_0.id 
@@ -547,14 +162,6 @@ Hibernate:
     fetch
         first ? rows only
 Hibernate: 
-    insert 
-    into
-        "Role"
-        (created_at, deleted_at, name) 
-    values
-        (?, ?, ?) 
-    returning id
-Hibernate: 
     select
         r1_0.id 
     from
@@ -567,14 +174,6 @@ Hibernate:
     fetch
         first ? rows only
 Hibernate: 
-    insert 
-    into
-        "Role"
-        (created_at, deleted_at, name) 
-    values
-        (?, ?, ?) 
-    returning id
-Hibernate: 
     select
         r1_0.id 
     from
@@ -586,14 +185,6 @@ Hibernate:
         and r1_0.name=? 
     fetch
         first ? rows only
-Hibernate: 
-    insert 
-    into
-        "Role"
-        (created_at, deleted_at, name) 
-    values
-        (?, ?, ?) 
-    returning id
 ]]></system-out>
     <system-err><![CDATA[WARNING: A Java agent has been loaded dynamically (/home/alvin/.m2/repository/net/bytebuddy/byte-buddy-agent/1.14.19/byte-buddy-agent-1.14.19.jar)
 WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
