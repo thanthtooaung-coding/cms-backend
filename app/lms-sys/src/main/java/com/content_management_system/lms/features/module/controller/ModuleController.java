@@ -21,7 +21,7 @@ import com.content_management_system.lms.features.module.service.ModuleService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/v1/lms/modules")
+@RequestMapping("/lms/modules")
 @RequiredArgsConstructor
 public class ModuleController {
 

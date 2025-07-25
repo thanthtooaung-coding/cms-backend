@@ -21,7 +21,7 @@ import com.content_management_system.lms.features.category.service.CourseCategor
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/v1/lms/categories")
+@RequestMapping("/lms/categories")
 @RequiredArgsConstructor
 public class CourseCategoryController {
 
