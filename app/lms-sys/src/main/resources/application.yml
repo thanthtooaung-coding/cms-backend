@@ -34,7 +34,7 @@ spring:
         enabled: ${CONSUL_ENABLED:true}
         service-name: ${spring.application.name}
         instance-id: ${spring.application.name}-1
-        health-check-path: /actuator/health
+        health-check-path: /health
         health-check-interval: 15s
 
 server:

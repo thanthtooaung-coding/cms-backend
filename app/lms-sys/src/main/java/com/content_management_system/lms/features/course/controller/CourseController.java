@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/lms/courses")
+@RequestMapping("/courses")
 @RequiredArgsConstructor
 public class CourseController {
 

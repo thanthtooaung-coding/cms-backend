@@ -21,7 +21,7 @@ import com.content_management_system.lms.features.lesson.service.LessonService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/lms/lessons")
+@RequestMapping("/lessons")
 @RequiredArgsConstructor
 public class LessonController {
 

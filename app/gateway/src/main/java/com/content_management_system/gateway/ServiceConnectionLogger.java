@@ -24,7 +24,7 @@ public class ServiceConnectionLogger {
     private final DiscoveryClient discoveryClient;
     private final RestTemplate restTemplate;
 
-    private static final String DEFAULT_HEALTH_PATH = "/actuator/health";
+    private static final String DEFAULT_HEALTH_PATH = "/health";
 
     @Autowired
     public ServiceConnectionLogger(final DiscoveryClient discoveryClient) {

@@ -48,7 +48,7 @@ CREATE TABLE "Tenants" (
 
 CREATE TABLE "Role" (
                         "id" BIGSERIAL PRIMARY KEY,
-                        "name" lms_role_name NOT NULL UNIQUE,
+                        "name" VARCHAR(255) NOT NULL UNIQUE,
                         "created_at" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
                         "updated_at" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
                         "deleted_at" TIMESTAMP WITH TIME ZONE
@@ -105,7 +105,7 @@ CREATE TABLE "Course" (
                           "category_id" BIGINT,
                           "instructor_id" BIGINT,
                           "overall_rating" INT,
-                          "status" course_status DEFAULT 'Pending',
+                          "status" VARCHAR(255) DEFAULT 'Pending',
                           "duration_day_count" INT,
                           "created_at" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
                           "updated_at" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
@@ -190,7 +190,7 @@ CREATE TABLE "Lesson" (
                           "id" BIGSERIAL PRIMARY KEY,
                           "title" VARCHAR(255),
                           "content" TEXT,
-                          "material_type" material_type,
+                          "material_type" VARCHAR(255) ,
                           "module_id" BIGINT,
                           "created_at" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
                           "updated_at" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
@@ -209,7 +209,7 @@ CREATE TABLE "Enrollment" (
                               "course_id" BIGINT,
                               "enrollment_date" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
                               "progress" DECIMAL(5, 2),
-                              "status" enrollment_status DEFAULT 'Pending',
+                              "status" VARCHAR(255) DEFAULT 'Pending',
                               "due_date" TIMESTAMP WITH TIME ZONE,
                               "created_at" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
                               "updated_at" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
