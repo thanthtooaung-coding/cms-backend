@@ -17,7 +17,7 @@ import (
 )
 
 type PageRequestService interface {
-	CreatePageRequest(req request.CreatePageRequest, logoUrl string) (*response.PageRequestResponse, error)
+	CreatePageRequest(req request.CreatePageRequest) (*response.PageRequestResponse, error)
 	GetAllPageRequests(req *request.PaginateRequest) ([]*response.PageRequestResponse, *utils.Pagination, error)
 	ChangeStatus(req request.ChangeStatusPageRequest, currentUserID uint) error
 }
@@ -37,14 +37,14 @@ func NewPageRequestService(logger *logrus.Logger, repo repository.PageRequestRep
 	}
 }
 
-func (s *PageRequestServiceImpl) CreatePageRequest(req request.CreatePageRequest, logoUrl string) (*response.PageRequestResponse, error) {
+func (s *PageRequestServiceImpl) CreatePageRequest(req request.CreatePageRequest) (*response.PageRequestResponse, error) {
 
 	pageRequest := &models.PageRequest{
 		OwnerID:     req.OwnerID,
 		RequestType: req.RequestType,
 		Title:       req.Title,
 		PageUrl:     req.PageUrl,
-		LogoUrl:     logoUrl,
+		LogoUrl:     req.LogoUrl,
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	}

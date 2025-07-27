@@ -37,9 +37,6 @@ func (h *PageRequestHandler) Create(c *fiber.Ctx) error {
 		if form == nil {
 			return utils.BadRequestResponse(c, "Invalid request body", err.Error())
 		}
-		if files := form.File["logo"]; len(files) > 0 {
-			req.LogoFile = files[0]
-		}
 	}
 
 	if err := c.BodyParser(&req); err != nil {
@@ -50,16 +47,7 @@ func (h *PageRequestHandler) Create(c *fiber.Ctx) error {
 		return utils.BadRequestResponse(c, "Validation failed", err.Error())
 	}
 
-	var logoURL string
-	if req.LogoFile != nil {
-// 		uploadedURL, err := h.s3Service.UploadFile(req.LogoFile)
-// 		if err != nil {
-// 			return utils.InternalServerErrorResponse(c, "Failed to upload logo", err.Error())
-// 		}
-		logoURL = "abcd"
-	}
-
-	pageRequestResponse, err := h.service.CreatePageRequest(req, logoURL)
+	pageRequestResponse, err := h.service.CreatePageRequest(req)
 	if err != nil {
 		return utils.InternalServerErrorResponse(c, "Failed to create page request", err.Error())
 	}

@@ -1,0 +1,5 @@
+com/content_management_system/fileservice/storage/CloudinaryStorageService.class
+com/content_management_system/fileservice/controller/FileController.class
+com/content_management_system/fileservice/FileServiceApplication.class
+com/content_management_system/fileservice/storage/StorageService.class
+com/content_management_system/fileservice/config/CloudinaryConfig.class

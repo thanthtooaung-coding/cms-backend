@@ -2,7 +2,6 @@ package request
 
 import (
     "github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/models"
-    "mime/multipart"
 )
 
 type CreatePageRequest struct {
@@ -11,7 +10,7 @@ type CreatePageRequest struct {
 	Title       string                `json:"title"`
 	Description string                `json:"description"`
 	PageUrl     string               `json:"pageUrl"`
-	LogoFile    *multipart.FileHeader `json:"logo"`
+	LogoUrl    string               `json:"logoUrl"`
 }
 
 type ChangeStatusPageRequest struct {
