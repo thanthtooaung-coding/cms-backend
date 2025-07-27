@@ -1,0 +1,5 @@
+/home/alvin/GitHub/cms-backend/app/file-service/src/main/java/com/content_management_system/fileservice/FileServiceApplication.java
+/home/alvin/GitHub/cms-backend/app/file-service/src/main/java/com/content_management_system/fileservice/config/CloudinaryConfig.java
+/home/alvin/GitHub/cms-backend/app/file-service/src/main/java/com/content_management_system/fileservice/controller/FileController.java
+/home/alvin/GitHub/cms-backend/app/file-service/src/main/java/com/content_management_system/fileservice/storage/CloudinaryStorageService.java
+/home/alvin/GitHub/cms-backend/app/file-service/src/main/java/com/content_management_system/fileservice/storage/StorageService.java

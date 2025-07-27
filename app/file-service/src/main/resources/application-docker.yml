@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: file-service
+  cloud:
+    consul:
+      host: ${LMS_CONSUL_ADDRESS:consul}
+      port: 8500
+      discovery:
+        enabled: ${CONSUL_ENABLED:true}
+        service-name: ${spring.application.name}
+        instance-id: ${spring.application.name}-1
+        health-check-path: /health
+        health-check-interval: 15s
+
+server:
+  port: ${FILE_SERVICE_PORT:8084}
+
+management:
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
