@@ -6,6 +6,8 @@ import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import java.util.List;
+
 @Entity
 @Table(name = "\"Student_Quiz\"")
 @Getter
@@ -24,4 +26,7 @@ public class StudentQuiz extends MasterData {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "quiz_id")
     private Quiz quiz;
+
+    @OneToMany(mappedBy = "studentQuiz", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudentAnswer> studentAnswers;
 }

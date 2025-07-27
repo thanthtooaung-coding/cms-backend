@@ -16,12 +16,14 @@ import java.util.List;
 @Where(clause = "deleted_at IS NULL")
 public class Quiz extends MasterData {
 
-    private String question;
-    private String answer;
+    private String title;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "module_id")
     private Module module;
+
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Question> questions;
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudentQuiz> studentQuizzes;
