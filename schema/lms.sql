@@ -154,13 +154,33 @@ CREATE TABLE "Module" (
 
 CREATE TABLE "Quiz" (
                         "id" BIGSERIAL PRIMARY KEY,
-                        "question" VARCHAR(255),
-                        "answer" VARCHAR(255),
+                        "title" VARCHAR(255) NOT NULL,
                         "module_id" BIGINT,
                         "created_at" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
                         "updated_at" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
                         "deleted_at" TIMESTAMP WITH TIME ZONE,
                         CONSTRAINT "fk_quiz_module" FOREIGN KEY ("module_id") REFERENCES "Module" ("id") ON DELETE CASCADE
+);
+
+CREATE TABLE "Question" (
+                        "id" BIGSERIAL PRIMARY KEY,
+                        "quiz_id" BIGINT NOT NULL,
+                        "question_text" TEXT NOT NULL,
+                        "created_at" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
+                        "updated_at" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
+                        "deleted_at" TIMESTAMP WITH TIME ZONE,
+                        CONSTRAINT "fk_question_quiz" FOREIGN KEY ("quiz_id") REFERENCES "Quiz" ("id") ON DELETE CASCADE
+);
+
+CREATE TABLE "Answer" (
+                        "id" BIGSERIAL PRIMARY KEY,
+                        "question_id" BIGINT NOT NULL,
+                        "answer_text" TEXT NOT NULL,
+                        "is_correct" BOOLEAN DEFAULT FALSE,
+                        "created_at" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
+                        "updated_at" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
+                        "deleted_at" TIMESTAMP WITH TIME ZONE,
+                        CONSTRAINT "fk_answer_question" FOREIGN KEY ("question_id") REFERENCES "Question" ("id") ON DELETE CASCADE
 );
 
 --------------------------------------------------------------------------------
@@ -179,6 +199,19 @@ CREATE TABLE "Student_Quiz" (
                                 "deleted_at" TIMESTAMP WITH TIME ZONE,
                                 CONSTRAINT "fk_student_quiz_student" FOREIGN KEY ("student_id") REFERENCES "User" ("id") ON DELETE CASCADE,
                                 CONSTRAINT "fk_student_quiz_quiz" FOREIGN KEY ("quiz_id") REFERENCES "Quiz" ("id") ON DELETE CASCADE
+);
+
+CREATE TABLE "Student_Answer" (
+                                "id" BIGSERIAL PRIMARY KEY,
+                                "student_quiz_id" BIGINT,
+                                "question_id" BIGINT,
+                                "answer_id" BIGINT,
+                                "created_at" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
+                                "updated_at" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
+                                "deleted_at" TIMESTAMP WITH TIME ZONE,
+                                CONSTRAINT "fk_student_answer_attempt" FOREIGN KEY ("student_quiz_id") REFERENCES "Student_Quiz" ("id") ON DELETE CASCADE,
+                                CONSTRAINT "fk_student_answer_question" FOREIGN KEY ("question_id") REFERENCES "Question" ("id") ON DELETE CASCADE,
+                                CONSTRAINT "fk_student_answer_answer" FOREIGN KEY ("answer_id") REFERENCES "Answer" ("id") ON DELETE CASCADE
 );
 
 --------------------------------------------------------------------------------
@@ -316,8 +349,13 @@ CREATE INDEX ON "Rating" ("user_id");
 CREATE INDEX ON "Rating" ("course_id");
 CREATE INDEX ON "Module" ("course_id");
 CREATE INDEX ON "Quiz" ("module_id");
+CREATE INDEX ON "Question" ("quiz_id");
+CREATE INDEX ON "Answer" ("question_id");
 CREATE INDEX ON "Student_Quiz" ("student_id");
 CREATE INDEX ON "Student_Quiz" ("quiz_id");
+CREATE INDEX ON "Student_Answer" ("student_quiz_id");
+CREATE INDEX ON "Student_Answer" ("question_id");
+CREATE INDEX ON "Student_Answer" ("answer_id");
 CREATE INDEX ON "Lesson" ("module_id");
 CREATE INDEX ON "Enrollment" ("student_id");
 CREATE INDEX ON "Enrollment" ("course_id");
