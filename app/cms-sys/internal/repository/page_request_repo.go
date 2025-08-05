@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/models"
 	"github.com/sirupsen/logrus"
+	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/models"
 	"gorm.io/gorm"
 )
 
@@ -38,7 +38,7 @@ func (r *PageRequestRepositoryImpl) CreatePageRequest(pageRequest *models.PageRe
 
 func (r *PageRequestRepositoryImpl) GetAllPageRequests(offset, limit int) ([]*models.PageRequest, error) {
 	var pageRequests []*models.PageRequest
-	if err := r.db.Offset(offset).Limit(limit).Find(&pageRequests).Error; err != nil {
+	if err := r.db.Preload("Owner").Offset(offset).Limit(limit).Find(&pageRequests).Error; err != nil {
 		r.logger.WithError(err).Error("Failed to get all page requests")
 		return nil, err
 	}
@@ -54,7 +54,6 @@ func (r *PageRequestRepositoryImpl) CountPageRequests() (int64, error) {
 	return count, nil
 }
 
-
 func (r *PageRequestRepositoryImpl) GetById(id uint) (*models.PageRequest, error) {
 	var pageRequest models.PageRequest
 	if err := r.db.Where("id = ?", id).First(&pageRequest).Error; err != nil {
@@ -65,13 +64,13 @@ func (r *PageRequestRepositoryImpl) GetById(id uint) (*models.PageRequest, error
 }
 
 func (r *PageRequestRepositoryImpl) UpdateStatus(id uint, status models.RequestStatus) error {
-    result := r.db.Model(&models.PageRequest{}).Where("id = ?", id).Update("status", status)
-    if result.Error != nil {
-        r.logger.WithError(result.Error).Error("Failed to update status of page request")
-        return result.Error
-    }
-    if result.RowsAffected == 0 {
-        return gorm.ErrRecordNotFound
-    }
-    return nil
+	result := r.db.Model(&models.PageRequest{}).Where("id = ?", id).Update("status", status)
+	if result.Error != nil {
+		r.logger.WithError(result.Error).Error("Failed to update status of page request")
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
 }
