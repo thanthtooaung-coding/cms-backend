@@ -38,7 +38,7 @@ services:
       - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
-      - ALLOWED_ORIGINS=http://localhost:5173,http://localhost:5174,http://localhost:5175,https://localhost:5176
+      - ALLOWED_ORIGINS=http://localhost:5173,http://localhost:5174,http://localhost:5175,http://localhost:5176
     depends_on:
       consul:
         condition: service_healthy
@@ -209,6 +209,33 @@ services:
       - FILE_SERVICE_PORT=${FILE_SERVICE_PORT}
     restart: unless-stopped
 
+  email-service:
+    build:
+      context: ./app/email-service
+      dockerfile: Dockerfile
+    networks:
+      - whole-system-network
+    depends_on:
+      consul:
+        condition: service_healthy
+    ports:
+      - "8085:8085"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EMAIL_SERVICE_PORT=${EMAIL_SERVICE_PORT}
+
+      - CONSUL_ENABLED=true
+      - EMAIL_SERVICE_CONSUL_ADDRESS=consul
+      - EMAIL_SERVICE_CONSUL_SERVICE_NAME=email-service
+      - EMAIL_SERVICE_CONSUL_SERVICE_ID=email-api-1
+
+      - SPRING_MAIL_HOST=${SPRING_MAIL_HOST}
+      - SPRING_MAIL_PORT=${SPRING_MAIL_PORT}
+      - SPRING_MAIL_USERNAME=${SPRING_MAIL_USERNAME}
+      - SPRING_MAIL_PASSWORD=${SPRING_MAIL_PASSWORD}
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH=${SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH}
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE=${SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE}
+    restart: unless-stopped
 networks:
   whole-system-network:
     driver: bridge

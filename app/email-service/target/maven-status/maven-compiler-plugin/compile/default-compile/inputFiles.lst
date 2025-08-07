@@ -1,0 +1,8 @@
+/home/alvin/GitHub/cms-backend/app/email-service/src/main/java/com/content_management_system/emailservice/EmailServiceApplication.java
+/home/alvin/GitHub/cms-backend/app/email-service/src/main/java/com/content_management_system/emailservice/config/MailConfig.java
+/home/alvin/GitHub/cms-backend/app/email-service/src/main/java/com/content_management_system/emailservice/controller/EmailController.java
+/home/alvin/GitHub/cms-backend/app/email-service/src/main/java/com/content_management_system/emailservice/dto/EmailRequest.java
+/home/alvin/GitHub/cms-backend/app/email-service/src/main/java/com/content_management_system/emailservice/event/EmailSentEvent.java
+/home/alvin/GitHub/cms-backend/app/email-service/src/main/java/com/content_management_system/emailservice/listener/EmailEventListener.java
+/home/alvin/GitHub/cms-backend/app/email-service/src/main/java/com/content_management_system/emailservice/service/EmailService.java
+/home/alvin/GitHub/cms-backend/app/email-service/src/main/java/com/content_management_system/emailservice/service/impl/EmailServiceImpl.java
