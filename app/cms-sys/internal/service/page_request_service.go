@@ -6,13 +6,13 @@ import (
 	"gorm.io/gorm"
 	"math"
 
-	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/mapper"
-	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/repository"
-	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/models"
-	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/response"
-	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/request"
-	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/pkg/utils"
 	"github.com/sirupsen/logrus"
+	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/mapper"
+	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/models"
+	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/repository"
+	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/request"
+	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/response"
+	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/pkg/utils"
 	"time"
 )
 
@@ -25,15 +25,16 @@ type PageRequestService interface {
 type PageRequestServiceImpl struct {
 	logger      *logrus.Logger
 	repo        repository.PageRequestRepository
-	ownerRepo   repository.OwnerRepository
+	pageService PageService
 }
 
 var _ PageRequestService = (*PageRequestServiceImpl)(nil)
 
-func NewPageRequestService(logger *logrus.Logger, repo repository.PageRequestRepository) *PageRequestServiceImpl {
+func NewPageRequestService(logger *logrus.Logger, repo repository.PageRequestRepository, pageService PageService) *PageRequestServiceImpl {
 	return &PageRequestServiceImpl{
-		logger: logger,
-		repo:   repo,
+		logger:      logger,
+		repo:        repo,
+		pageService: pageService,
 	}
 }
 
@@ -89,7 +90,7 @@ func (s *PageRequestServiceImpl) GetAllPageRequests(req *request.PaginateRequest
 
 func (s *PageRequestServiceImpl) ChangeStatus(req request.ChangeStatusPageRequest, currentUserID uint) error {
 
-	_, err := s.repo.GetById(req.RequestID)
+	pageRequest, err := s.repo.GetById(req.RequestID)
 	if err != nil || errors.Is(err, gorm.ErrRecordNotFound) {
 		return fmt.Errorf("invalid pageRequestId: %w", err)
 	}
@@ -98,39 +99,24 @@ func (s *PageRequestServiceImpl) ChangeStatus(req request.ChangeStatusPageReques
 		return err
 	}
 
-// 	if req.Status == "APPROVED" {
-// 		requestUUID, err := uuid.Parse(req.RequestID)
-// 		if err != nil {
-// 			return errors.New("invalid request ID format")
-// 		}
-//
-// 		pageRequest, err := s.repo.GetById(requestUUID)
-// 		if err != nil {
-// 			return fmt.Errorf("failed to fetch page request: %w", err)
-// 		}
+	if req.Status == models.RequestApproved {
+		s.logger.Infof("Page request %d approved. Attempting to create a new page.", req.RequestID)
 
-// 		createReq := &request.PageCreateRequest{
-// 			PageRequestID: requestUUID,
-// 			Title:         pageRequest.Title,
-// 			Content:       utils.SafeString(pageRequest.Description),
-// 			ImageUrl:      utils.SafeString(pageRequest.LogoUrl),
-// 			OwnerId:       pageRequest.OwnerID,
-// 			PublisherId:   currentUserID,
-// 			Status:        utils.StringPtr("PUBLISHED"),
-// 		}
+		pageCreateReq := request.PageCreateRequest{
+			Title:              pageRequest.Title,
+			ImageURL:           pageRequest.LogoUrl,
+			OwnerID:            pageRequest.OwnerID,
+			PublishedByStaffID: &currentUserID,
+		}
 
-// 		_, err = s.pageService.Create(createReq)
-// 		if err != nil {
-// 			return fmt.Errorf("failed to auto-create page: %w", err)
-// 		}
+		// 5. Call the page service to create the actual page.
+		createdPage, err := s.pageService.Create(pageCreateReq)
+		if err != nil {
+			s.logger.WithError(err).Errorf("Failed to create page from approved request ID %d", req.RequestID)
+			return fmt.Errorf("failed to create page after approval: %w", err)
+		}
 
-// 		owner, err := s.ownerRepo.GetOwnerById(pageRequest.OwnerID)
-// 		if err != nil {
-// 			return fmt.Errorf("failed to fetch owner: %w", err)
-// 		}
-// 		log.Printf("Owner fetched: %+v\n", owner)
-//
-// 	}
-
+		s.logger.Infof("Successfully created page with ID %d from approved request ID %d", createdPage.ID, req.RequestID)
+	}
 	return nil
 }
