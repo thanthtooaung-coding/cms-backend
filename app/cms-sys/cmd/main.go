@@ -1,31 +1,32 @@
 package main
 
 import (
-    "time"
-    "fmt"
-    "net"
-    "github.com/sirupsen/logrus"
-    "github.com/hashicorp/consul/api"
-    "github.com/thanthtooaung-coding/cms-backend/app/cms-sys/pkg/utils"
-    "github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/routes"
-    "github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/handler"
-    "github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/repository"
-    "github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/service"
-    "github.com/gofiber/fiber/v2"
-    loggMiddleware "github.com/gofiber/fiber/v2/middleware/logger"
-    "strconv"
-    "strings"
-    "os"
-    "os/signal"
-    "errors"
-    "syscall"
-    "gorm.io/gorm/logger"
-    "gorm.io/gorm"
+	"errors"
+	"fmt"
+	"github.com/gofiber/fiber/v2"
+	loggMiddleware "github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/hashicorp/consul/api"
+	"github.com/sirupsen/logrus"
+	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/handler"
+	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/repository"
+	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/routes"
+	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/service"
+	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/pkg/utils"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
+	"net"
+	"os"
+	"os/signal"
+	"strconv"
+	"strings"
+	"syscall"
+	"time"
 )
 
 type dISection struct {
 	ownerHandler       handler.OwnerHandle
 	pageRequestHandler handler.PageRequestHandle
+	pageHandler        handler.PageHandle
 	consulClient       *api.Client
 }
 
@@ -67,8 +68,8 @@ func registerService(client *api.Client, config consulConfig, logger *logrus.Log
 	}
 
 	cmsService := &api.AgentServiceRegistration{
-		ID:   config.ServiceID,
-		Name: config.Name,
+		ID:      config.ServiceID,
+		Name:    config.Name,
 		Port:    config.Port,
 		Address: localIP,
 		Meta: map[string]string{
@@ -184,18 +185,24 @@ func dependencyInjectionSection(
 	ownerRepo := repository.NewOwnerRepository(logger, db)
 	ownerService := service.NewOwnerService(logger, ownerRepo)
 	ownerHandler := handler.NewOwnerHandler(ownerService)
+
+	pageRepo := repository.NewPageRepository(logger, db)
+	pageService := service.NewPageService(logger, pageRepo)
+	pageHandler := handler.NewPageHandler(pageService)
+
 	pageRequestRepo := repository.NewPageRequestRepository(logger, db)
-    pageRequestService := service.NewPageRequestService(logger, pageRequestRepo)
-    pageRequestHandler := handler.NewPageRequestHandler(pageRequestService)
+	pageRequestService := service.NewPageRequestService(logger, pageRequestRepo, pageService)
+	pageRequestHandler := handler.NewPageRequestHandler(pageRequestService)
 
 	return &dISection{
 		ownerHandler:       ownerHandler,
 		pageRequestHandler: pageRequestHandler,
+		pageHandler:        pageHandler,
 	}
 }
 
 func main() {
-    appLogger := utils.NewLogger(utils.LogConfig{
+	appLogger := utils.NewLogger(utils.LogConfig{
 		Level:      utils.GetEnv("CMS_LOG_LEVEL", "info"),
 		FilePath:   utils.GetEnv("CMS_LOG_FILE_PATH", "logs/app.log"),
 		MaxSize:    utils.GetEnvAsInt("CMS_LOG_MAX_SIZE", 100),
@@ -208,27 +215,27 @@ func main() {
 	appLogger.Info("Starting Content Management System")
 
 	dbConfig := utils.DatabaseConfig{
-        Host:            utils.GetEnv("CMS_DB_HOST", "localhost"),
-        Port:            utils.GetEnvAsInt("CMS_DB_PORT", 5432),
-        User:            utils.GetEnv("CMS_DB_USER", "postgres"),
-        Password:        utils.GetEnv("CMS_DB_PASSWORD", "cms_password_123"),
-        DBName:          utils.GetEnv("CMS_DB_NAME", "cms_db"),
-        SSLMode:         utils.GetEnv("CMS_DB_SSL_MODE", "disable"),
-        MaxOpenConns:    utils.GetEnvAsInt("CMS_DB_MAX_OPEN_CONNS", 25),
-        MaxIdleConns:    utils.GetEnvAsInt("CMS_DB_MAX_IDLE_CONNS", 10),
-        ConnMaxLifetime: utils.GetEnvAsDuration("CMS_DB_CONN_MAX_LIFETIME", 5*time.Minute),
-        ConnMaxIdleTime: utils.GetEnvAsDuration("CMS_DB_CONN_MAX_IDLE_TIME", 2*time.Minute),
-        RetryAttempts:   utils.GetEnvAsInt("CMS_DB_RETRY_ATTEMPTS", 5),
-        RetryDelay:      utils.GetEnvAsDuration("CMS_DB_RETRY_DELAY", 2*time.Second),
-        LogLevel:        logger.Info,
-    }
+		Host:            utils.GetEnv("CMS_DB_HOST", "localhost"),
+		Port:            utils.GetEnvAsInt("CMS_DB_PORT", 5432),
+		User:            utils.GetEnv("CMS_DB_USER", "postgres"),
+		Password:        utils.GetEnv("CMS_DB_PASSWORD", "cms_password_123"),
+		DBName:          utils.GetEnv("CMS_DB_NAME", "cms_db"),
+		SSLMode:         utils.GetEnv("CMS_DB_SSL_MODE", "disable"),
+		MaxOpenConns:    utils.GetEnvAsInt("CMS_DB_MAX_OPEN_CONNS", 25),
+		MaxIdleConns:    utils.GetEnvAsInt("CMS_DB_MAX_IDLE_CONNS", 10),
+		ConnMaxLifetime: utils.GetEnvAsDuration("CMS_DB_CONN_MAX_LIFETIME", 5*time.Minute),
+		ConnMaxIdleTime: utils.GetEnvAsDuration("CMS_DB_CONN_MAX_IDLE_TIME", 2*time.Minute),
+		RetryAttempts:   utils.GetEnvAsInt("CMS_DB_RETRY_ATTEMPTS", 5),
+		RetryDelay:      utils.GetEnvAsDuration("CMS_DB_RETRY_DELAY", 2*time.Second),
+		LogLevel:        logger.Info,
+	}
 
 	dbConnection := utils.NewDatabaseConnection(dbConfig, appLogger)
-    if err := dbConnection.Connect(); err != nil {
-        appLogger.WithError(err).Fatal("Failed to initialize database connection")
-    }
+	if err := dbConnection.Connect(); err != nil {
+		appLogger.WithError(err).Fatal("Failed to initialize database connection")
+	}
 
-    consulConfig := loadConsulConfig()
+	consulConfig := loadConsulConfig()
 	consulEnabled := utils.GetEnvAsBool("CONSUL_ENABLED", false)
 
 	var consulClient *api.Client
@@ -240,9 +247,9 @@ func main() {
 		}
 	}
 
-    healthChecker := utils.NewHealthChecker(dbConnection.DB, appLogger)
+	healthChecker := utils.NewHealthChecker(dbConnection.DB, appLogger)
 
-    app := fiber.New(fiber.Config{
+	app := fiber.New(fiber.Config{
 		AppName: "Content Management System ",
 		ErrorHandler: func(c *fiber.Ctx, err error) error {
 			code := fiber.StatusInternalServerError
@@ -271,7 +278,7 @@ func main() {
 		Output: appLogger.Writer(),
 	}))
 
-    app.Get("/", func(c *fiber.Ctx) error {
+	app.Get("/", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{
 			"message": "CMS Multi-Tenant API",
 			"status":  "success",
@@ -322,11 +329,12 @@ func main() {
 		})
 	})
 
-    di := dependencyInjectionSection(appLogger, dbConnection.DB, consulClient)
+	di := dependencyInjectionSection(appLogger, dbConnection.DB, consulClient)
 	routes.SetupOwnerRoutes(app, di.ownerHandler)
 	routes.SetupPageRequestRoutes(app, di.pageRequestHandler)
+	routes.SetupPageRoutes(app, di.pageHandler)
 
-    port := utils.GetEnv("CMS_PORT", "8081")
+	port := utils.GetEnv("CMS_PORT", "8081")
 
 	if consulEnabled && consulClient != nil {
 		if err := registerService(consulClient, consulConfig, appLogger); err != nil {
