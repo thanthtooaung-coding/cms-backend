@@ -5,6 +5,7 @@ import com.content_management_system.lms.features.user.dto.UpdateUserRequest;
 import com.content_management_system.lms.features.user.dto.UserResponse;
 import com.content_management_system.lms.features.user.mapper.UserMapper;
 import com.content_management_system.lms.features.user.service.UserService;
+import com.content_management_system.lms.shared.constants.LmsRoleName;
 import com.content_management_system.lms.shared.entity.Role;
 import com.content_management_system.lms.shared.entity.Tenant;
 import com.content_management_system.lms.shared.entity.User;
@@ -56,7 +57,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<UserResponse> findAll() {
+    public List<UserResponse> findAll(String roleName) {
+        if (roleName != null && !roleName.isEmpty()) {
+            try {
+                LmsRoleName role = LmsRoleName.valueOf(roleName);
+                return userRepository.findAllByRoleName(role).stream()
+                        .map(UserMapper::toResponse)
+                        .collect(Collectors.toList());
+            } catch (IllegalArgumentException e) {
+                throw new ResourceNotFoundException("Role not found with name: " + roleName);
+            }
+        }
         return userRepository.findAll().stream()
                 .map(UserMapper::toResponse)
                 .collect(Collectors.toList());

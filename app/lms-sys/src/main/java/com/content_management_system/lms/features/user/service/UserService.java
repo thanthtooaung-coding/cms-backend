@@ -10,7 +10,7 @@ public interface UserService {
 
     UserResponse create(CreateUserRequest request);
 
-    List<UserResponse> findAll();
+    List<UserResponse> findAll(String roleName);
 
     UserResponse findById(Long id);
 
