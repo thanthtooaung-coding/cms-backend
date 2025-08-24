@@ -25,8 +25,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getAllUsers() {
-        List<UserResponse> responses = userService.findAll();
+    public ResponseEntity<List<UserResponse>> getAllUsers(@RequestParam(required = false) String role) {
+        List<UserResponse> responses = userService.findAll(role);
         return ResponseEntity.ok(responses);
     }
 
