@@ -1,0 +1,11 @@
+# Web Framework
+fastapi
+uvicorn
+
+# LangChain and Google Gemini Integration
+langchain
+langchain-google-genai
+python-dotenv
+
+# For Consul Integration
+python-consul2

@@ -236,6 +236,24 @@ services:
       - SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH=${SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH}
       - SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE=${SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE}
     restart: unless-stopped
+
+  ai-service:
+    build:
+      context: ./app/ai-service
+      dockerfile: Dockerfile
+    container_name: ai-service
+    networks:
+      - whole-system-network
+    ports:
+      - "8086:8086"
+    environment:
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - CONSUL_HOST=consul
+      - SERVICE_PORT=8086
+    depends_on:
+      consul:
+        condition: service_healthy
+    restart: unless-stopped
 networks:
   whole-system-network:
     driver: bridge
