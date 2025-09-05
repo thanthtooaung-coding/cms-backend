@@ -15,4 +15,6 @@ public interface QuizService {
     QuizResponse update(Long id, UpdateQuizRequest request);
 
     void delete(DeleteQuizRequest request);
+
+    QuizResponse getById(Long id);
 }

@@ -56,4 +56,10 @@ public class LessonController {
         lessonService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/modules/{moduleId}")
+    public ResponseEntity<List<LessonResponse>> getLessonsByModuleId(@PathVariable Long moduleId) {
+        List<LessonResponse> responses = lessonService.findAllByModuleId(moduleId);
+        return ResponseEntity.ok(responses);
+    }
 }

@@ -79,4 +79,15 @@ public class LessonServiceImpl implements LessonService {
         }
         lessonRepository.deleteById(id);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<LessonResponse> findAllByModuleId(Long moduleId) {
+        Module module = moduleRepository.findById(moduleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Module not found with id: " + moduleId));
+
+        return lessonRepository.findAllByModule(module).stream()
+                .map(LessonMapper::toResponse)
+                .collect(Collectors.toList());
+    }
 }

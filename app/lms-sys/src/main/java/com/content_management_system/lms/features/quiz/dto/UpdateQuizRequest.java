@@ -8,6 +8,6 @@ import java.util.List;
 @Data
 @Builder
 public class UpdateQuizRequest {
-    private String question;
-    private List<UpdateAnswerOptionRequest> answerOptions;
+    private String title;
+    private List<QuestionRequest> questions;
 }

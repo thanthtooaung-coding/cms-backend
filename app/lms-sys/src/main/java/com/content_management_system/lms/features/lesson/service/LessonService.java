@@ -16,4 +16,6 @@ public interface LessonService {
     LessonResponse update(Long id, UpdateLessonRequest request);
     
     void deleteById(Long id);
+
+    List<LessonResponse> findAllByModuleId(Long moduleId);
 }

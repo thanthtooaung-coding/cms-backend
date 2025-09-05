@@ -40,4 +40,10 @@ public class QuizController {
         quizService.delete(request);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<QuizResponse> getQuizById(@PathVariable Long id) {
+        QuizResponse quizResponse = quizService.getById(id);
+        return ResponseEntity.ok(quizResponse);
+    }
 }
