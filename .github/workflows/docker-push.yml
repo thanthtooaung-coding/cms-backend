@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [ cms-sys, gateway, lms-sys ]
+        service: [ cms-sys, gateway, lms-sys, file-service, email-service, ai-service ]
 
     steps:
       - name: Checkout repository
