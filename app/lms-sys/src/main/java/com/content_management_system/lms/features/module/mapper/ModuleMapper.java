@@ -15,6 +15,7 @@ public class ModuleMapper {
         }
 
         return ModuleResponse.builder()
+                .id(module.getId())
                 .name(module.getName())
                 .description(module.getDescription())
                 .course(courseInfo)

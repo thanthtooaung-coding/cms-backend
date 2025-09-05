@@ -29,7 +29,7 @@ spring:
             - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
     consul:
       host: localhost
-      port: 1801
+      port: 8500
       discovery:
         enabled: ${CONSUL_ENABLED:true}
         service-name: ${spring.application.name}
@@ -38,7 +38,7 @@ spring:
         health-check-interval: 15s
 
 server:
-  port: 8082
+  port: 8089
   error:
     whitelabel:
       enabled: false

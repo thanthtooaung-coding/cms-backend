@@ -7,6 +7,7 @@ import lombok.Data;
 @Builder
 public class ModuleResponse {
 
+    private Long id;
     private String name;
     private String description;
     private CourseInfo course;

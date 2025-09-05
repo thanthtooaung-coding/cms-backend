@@ -70,25 +70,35 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     @Transactional
-    public QuizResponse update(Long id, UpdateQuizRequest request) {
-        Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Question with id " + id + " not found"));
+    public QuizResponse update(Long quizId, UpdateQuizRequest request) {
+        Quiz quiz = quizRepository.findById(quizId)
+                .orElseThrow(() -> new ResourceNotFoundException("Quiz with id " + quizId + " not found"));
 
-        question.setQuestionText(request.getQuestion());
+        quiz.setTitle(request.getTitle());
 
-        for (UpdateAnswerOptionRequest answerOptionRequest : request.getAnswerOptions()) {
-            Answer answer = answerRepository.findById(answerOptionRequest.getId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Answer with id " + answerOptionRequest.getId() + " not found"));
+        quiz.getQuestions().clear();
 
-            if (answer.getQuestion().getId().equals(question.getId())) {
-                answer.setAnswerText(answerOptionRequest.getAnswer());
-                answer.setCorrect(answerOptionRequest.getIsCorrect());
-                answerRepository.save(answer);
-            }
+        for (QuestionRequest questionRequest : request.getQuestions()) {
+            Question question = new Question();
+            question.setQuestionText(questionRequest.getQuestion());
+            question.setQuiz(quiz);
+
+            List<Answer> answers = questionRequest.getAnswerOptions().stream()
+                    .map(answerOptionRequest -> {
+                        Answer answer = new Answer();
+                        answer.setAnswerText(answerOptionRequest.getAnswer());
+                        answer.setCorrect(answerOptionRequest.isCorrect());
+                        answer.setQuestion(question);
+                        return answer;
+                    }).collect(Collectors.toList());
+
+            question.setAnswers(answers);
+            quiz.getQuestions().add(question);
         }
 
-        question = questionRepository.save(question);
-        return QuizMapper.toQuizResponse(question.getQuiz());
+        quizRepository.save(quiz);
+
+        return QuizMapper.toQuizResponse(quiz);
     }
 
     @Override
@@ -103,5 +113,13 @@ public class QuizServiceImpl implements QuizService {
                 });
             });
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public QuizResponse getById(Long id) {
+        Quiz quiz = quizRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Quiz with id " + id + " not found"));
+        return QuizMapper.toQuizResponse(quiz);
     }
 }
