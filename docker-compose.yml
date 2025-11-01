@@ -35,7 +35,7 @@ services:
     networks:
       - whole-system-network
     ports:
-      - "8080:8080"
+      - "4001:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
       - ALLOWED_ORIGINS=http://localhost:5173,http://localhost:5174,http://localhost:5175,http://localhost:5176
@@ -78,7 +78,7 @@ services:
       - CONSUL_CHECK_ID=service-check-cms-api-1
       - CMS_PORT=${CMS_PORT}
     ports:
-      - "8081:8081"
+      - "4002:8081"
     restart: unless-stopped
 
   lms-main-system:
@@ -93,7 +93,7 @@ services:
       consul:
         condition: service_healthy
     ports:
-      - "8082:8082"
+      - "4003:8082"
     environment:
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
       - LMS_DB_HOST=postgres-lms
@@ -113,6 +113,38 @@ services:
       - LMS_PORT=${LMS_PORT}
     restart: unless-stopped
 
+  # bms-main-system:
+  #   build:
+  #     context: ./app/bms-sys
+  #     dockerfile: Dockerfile
+  #   networks:
+  #     - whole-system-network
+  #   depends_on:
+  #     postgres-bms:
+  #       condition: service_healthy
+  #     consul:
+  #       condition: service_healthy
+  #   ports:
+  #     - "8087:8087"
+  #   environment:
+  #     - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+  #     - BMS_DB_HOST=postgres-bms
+  #     - BMS_DB_PORT=${BMS_DB_PORT}
+  #     - BMS_DB_NAME=${POSTGRES_BMS_DB}
+  #     - BMS_DB_USER=${POSTGRES_BMS_USER}
+  #     - BMS_DB_PASSWORD=${POSTGRES_BMS_PASSWORD}
+  #     - CONSUL_ENABLED=${CONSUL_ENABLED}
+  #     - BMS_CONSUL_ADDRESS=${BMS_CONSUL_ADDRESS}
+  #     - BMS_CONSUL_DATACENTER=${BMS_CONSUL_DATACENTER}
+  #     - BMS_CONSUL_SCHEME=${BMS_CONSUL_SCHEME}
+  #     - BMS_CONSUL_SERVICE_ID=bms-api-1
+  #     - BMS_CONSUL_SERVICE_NAME=bms-service
+  #     - BMS_CONSUL_SERVICE_TAGS=${BMS_SERVICE_TAGS}
+  #     - BMS_CONSUL_CHECK_TTL=30s
+  #     - CONSUL_CHECK_ID=service-check-bms-api-1
+  #     - BMS_PORT=${BMS_PORT}
+  #   restart: unless-stopped
+
   postgres-cms:
     image: postgres:15-alpine
     container_name: postgres-cms
@@ -127,7 +159,7 @@ services:
     networks:
       - whole-system-network
     ports:
-      - "5432:5432"
+      - "5401:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_CMS_USER} -d ${POSTGRES_CMS_DB}"]
       interval: 10s
@@ -149,13 +181,35 @@ services:
     networks:
       - whole-system-network
     ports:
-      - "5433:5432"
+      - "5402:5432"
     healthcheck:
       test: ["CMD-SHELL", "psql -U ${POSTGRES_LMS_USER} -d ${POSTGRES_LMS_DB} -c 'SELECT 1 FROM \"Role\" LIMIT 1'"]
       interval: 10s
       timeout: 5s
       retries: 5
     command: postgres -c 'hba_file=/etc/postgresql/pg_hba.conf'
+  
+  # postgres-bms:
+  #   image: postgres:15-alpine
+  #   container_name: postgres-bms
+  #   environment:
+  #     - POSTGRES_DB=${POSTGRES_BMS_DB}
+  #     - POSTGRES_USER=${POSTGRES_BMS_USER}
+  #     - POSTGRES_PASSWORD=${POSTGRES_BMS_PASSWORD}
+  #   volumes:
+  #     - postgres-lms:/var/lib/postgresql/data
+  #     - ./schema/lms.sql:/docker-entrypoint-initdb.d/init-bms.sql
+  #     - ./config/postgres/pg_hba.conf:/etc/postgresql/pg_hba.conf
+  #   networks:
+  #     - whole-system-network
+  #   ports:
+  #     - "5434:5432"
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "psql -U ${POSTGRES_BMS_USER} -d ${POSTGRES_BMS_DB} -c 'SELECT 1 FROM \"Role\" LIMIT 1'"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   command: postgres -c 'hba_file=/etc/postgresql/pg_hba.conf'
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -164,7 +218,7 @@ services:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
       - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
     ports:
-      - "8000:80"
+      - "4008:80"
     volumes:
       - ./config/pgadmin/servers.json:/pgadmin4/servers.json
     networks:
@@ -172,6 +226,7 @@ services:
     depends_on:
       - postgres-cms
       - postgres-lms
+      # - postgres-bms
     restart: unless-stopped
 
   dozzle:
@@ -180,7 +235,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
-      - "8083:8080"
+      - "4004:8080"
     networks:
       - whole-system-network
     restart: unless-stopped
@@ -198,7 +253,7 @@ services:
       consul:
         condition: service_healthy
     ports:
-      - "8084:8084"
+      - "4005:8084"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - CONSUL_ENABLED=true
@@ -219,7 +274,7 @@ services:
       consul:
         condition: service_healthy
     ports:
-      - "8085:8085"
+      - "4006:8085"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - EMAIL_SERVICE_PORT=${EMAIL_SERVICE_PORT}
@@ -245,7 +300,7 @@ services:
     networks:
       - whole-system-network
     ports:
-      - "8086:8086"
+      - "4007:8086"
     environment:
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
       - CONSUL_HOST=consul
@@ -263,6 +318,8 @@ volumes:
     driver: local
   postgres-lms:
     driver: local
+  # postgres-bms:
+  #   driver: local
   consul-data:
     driver: local
   consul-config:

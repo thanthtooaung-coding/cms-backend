@@ -26,15 +26,17 @@ type PageRequestServiceImpl struct {
 	logger      *logrus.Logger
 	repo        repository.PageRequestRepository
 	pageService PageService
+	lmsService  LmsService
 }
 
 var _ PageRequestService = (*PageRequestServiceImpl)(nil)
 
-func NewPageRequestService(logger *logrus.Logger, repo repository.PageRequestRepository, pageService PageService) *PageRequestServiceImpl {
+func NewPageRequestService(logger *logrus.Logger, repo repository.PageRequestRepository, pageService PageService, lmsService LmsService) *PageRequestServiceImpl {
 	return &PageRequestServiceImpl{
 		logger:      logger,
 		repo:        repo,
 		pageService: pageService,
+		lmsService:  lmsService,
 	}
 }
 
@@ -95,6 +97,8 @@ func (s *PageRequestServiceImpl) ChangeStatus(req request.ChangeStatusPageReques
 		return fmt.Errorf("invalid pageRequestId: %w", err)
 	}
 
+	pageRequest.AdminID = &currentUserID
+
 	if err := s.repo.UpdateStatus(req.RequestID, req.Status); err != nil {
 		return err
 	}
@@ -117,6 +121,32 @@ func (s *PageRequestServiceImpl) ChangeStatus(req request.ChangeStatusPageReques
 		}
 
 		s.logger.Infof("Successfully created page with ID %d from approved request ID %d", createdPage.ID, req.RequestID)
+
+		switch pageRequest.RequestType {
+		case "LMS":
+			s.logger.Infof("RequestType is LMS. Triggering setup for new LMS tenant for Owner %d", pageRequest.OwnerID)
+			
+			lmsReq := LmsTenantRequest{
+				Name:    pageRequest.Title,
+				OwnerID: pageRequest.OwnerID,
+				CmsPageID: createdPage.ID,
+			}
+
+			if err := s.lmsService.CreateTenant(lmsReq); err != nil {
+				s.logger.WithError(err).Error("Failed to setup new LMS tenant")				
+				return fmt.Errorf("failed to setup LMS tenant: %w", err)
+			}
+			s.logger.Infof("Successfully triggered LMS tenant creation for Page ID %d", createdPage.ID)
+
+		case "E-COMMERCE":
+			s.logger.Infof("RequestType is E-COMMERCE. Setup logic not implemented yet.")
+
+		case "BOOKING":
+			s.logger.Infof("RequestType is BOOKING. Setup logic not implemented yet.")
+
+		default:
+			s.logger.Warnf("No specific setup logic for RequestType: %s", pageRequest.RequestType)
+		}
 	}
 	return nil
 }

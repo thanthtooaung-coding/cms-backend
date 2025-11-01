@@ -181,6 +181,7 @@ func dependencyInjectionSection(
 	logger *logrus.Logger,
 	db *gorm.DB,
 	consulClient *api.Client,
+	lmsServiceURL string,
 ) *dISection {
 	ownerRepo := repository.NewOwnerRepository(logger, db)
 	ownerService := service.NewOwnerService(logger, ownerRepo)
@@ -190,8 +191,10 @@ func dependencyInjectionSection(
 	pageService := service.NewPageService(logger, pageRepo)
 	pageHandler := handler.NewPageHandler(pageService)
 
+	lmsService := service.NewLmsService(logger, lmsServiceURL)
+
 	pageRequestRepo := repository.NewPageRequestRepository(logger, db)
-	pageRequestService := service.NewPageRequestService(logger, pageRequestRepo, pageService)
+	pageRequestService := service.NewPageRequestService(logger, pageRequestRepo, pageService, lmsService)
 	pageRequestHandler := handler.NewPageRequestHandler(pageRequestService)
 
 	return &dISection{
@@ -234,6 +237,11 @@ func main() {
 	if err := dbConnection.Connect(); err != nil {
 		appLogger.WithError(err).Fatal("Failed to initialize database connection")
 	}
+
+	lmsServiceURL := utils.GetEnv("LMS_SERVICE_URL", "http://lms-sys:8081")
+	if lmsServiceURL == "" {
+		appLogger.Fatal("LMS_SERVICE_URL environment variable is not set")
+	}  
 
 	consulConfig := loadConsulConfig()
 	consulEnabled := utils.GetEnvAsBool("CONSUL_ENABLED", false)
@@ -329,7 +337,7 @@ func main() {
 		})
 	})
 
-	di := dependencyInjectionSection(appLogger, dbConnection.DB, consulClient)
+	di := dependencyInjectionSection(appLogger, dbConnection.DB, consulClient, lmsServiceURL)
 	routes.SetupOwnerRoutes(app, di.ownerHandler)
 	routes.SetupPageRequestRoutes(app, di.pageRequestHandler)
 	routes.SetupPageRoutes(app, di.pageHandler)
