@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: bms-service
+  datasource:
+    url: jdbc:postgresql://${BMS_DB_HOST:localhost}:${BMS_DB_PORT:5434}/${BMS_DB_NAME:bms-db}
+    username: ${BMS_DB_USER:user}
+    password: ${BMS_DB_PASSWORD:password}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  cloud:
+    consul:
+      host: ${BMS_CONSUL_ADDRESS:consul}
+      port: 8500
+      discovery:
+        enabled: ${CONSUL_ENABLED:true}
+        service-name: ${spring.application.name}
+        instance-id: ${spring.application.name}-1
+        health-check-path: /health
+        health-check-interval: 15s
+
+server:
+  port: ${BMS_PORT:8087}
+
+management:
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+      

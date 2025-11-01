@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #121212;">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td align="center" style="padding: 20px 0;">
+            <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #1a1a2e; border-radius: 8px; color: #ffffff; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
+                <tr>
+                    <td align="center" style="padding: 30px 20px;">
+                        <h1 style="margin: 0; color: #e0b0ff; font-size: 36px; font-weight: bold; letter-spacing: 2px;">CELESTIX</h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 20px 40px;">
+                        <h2 style="margin: 0; color: #ffffff; font-size: 24px; text-align: center;">Your Booking is Confirmed!</h2>
+                        <p style="margin-top: 20px; color: #d1d1d1; font-size: 16px; line-height: 1.6;">
+                            Hi <strong th:text="${customerName}">Customer Name</strong>,
+                        </p>
+                        <p style="color: #d1d1d1; font-size: 16px; line-height: 1.6;">
+                            Thank you for booking with Celestix. Here are the details of your booking:
+                        </p>
+                        <div style="margin-top: 30px; padding: 20px; background-color: #2a2a3e; border-radius: 6px;">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td style="padding: 10px 0; border-bottom: 1px solid #4a4a5e; color: #e0b0ff; font-size: 16px; font-weight: bold;" width="150">Movie:</td>
+                                    <td style="padding: 10px 0; border-bottom: 1px solid #4a4a5e; color: #ffffff; font-size: 16px;" th:text="${movieTitle}">Black Widow</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 0; border-bottom: 1px solid #4a4a5e; color: #e0b0ff; font-size: 16px; font-weight: bold;">Theater:</td>
+                                    <td style="padding: 10px 0; border-bottom: 1px solid #4a4a5e; color: #ffffff; font-size: 16px;" th:text="${theaterName}">IMAX Hall 1</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 0; border-bottom: 1px solid #4a4a5e; color: #e0b0ff; font-size: 16px; font-weight: bold;">Date:</td>
+                                    <td style="padding: 10px 0; border-bottom: 1px solid #4a4a5e; color: #ffffff; font-size: 16px;" th:text="${showtimeDate}">Sat, 30 Aug 2025</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 0; border-bottom: 1px solid #4a4a5e; color: #e0b0ff; font-size: 16px; font-weight: bold;">Time:</td>
+                                    <td style="padding: 10px 0; border-bottom: 1px solid #4a4a5e; color: #ffffff; font-size: 16px;" th:text="${showtimeTime}">03:20 PM</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 0; border-bottom: 1px solid #4a4a5e; color: #e0b0ff; font-size: 16px; font-weight: bold;">Seats:</td>
+                                    <td style="padding: 10px 0; border-bottom: 1px solid #4a4a5e; color: #ffffff; font-size: 16px;" th:text="${seats}">C5, C6</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 0; color: #e0b0ff; font-size: 16px; font-weight: bold;">Total Amount:</td>
+                                    <td style="padding: 10px 0; color: #ffffff; font-size: 16px;" th:text="'$' + ${#numbers.formatDecimal(totalAmount, 1, 2)}">$25.00</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <p style="margin-top: 30px; color: #d1d1d1; font-size: 16px; line-height: 1.6; text-align: center;">
+                            We look forward to seeing you at the movies!
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" style="padding: 30px 20px;">
+                        <p style="margin: 0; color: #8a8a9e; font-size: 12px;">
+                            Booking ID: <span th:text="${bookingId}">uuid-goes-here</span>
+                        </p>
+                        <p style="margin: 10px 0 0; color: #8a8a9e; font-size: 12px;">
+                            &copy; 2025 Celestix. All rights reserved.
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
