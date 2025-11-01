@@ -53,6 +53,51 @@ CREATE TABLE "User" (
                         CONSTRAINT "fk_user_role" FOREIGN KEY ("role_id") REFERENCES "Role" ("id") ON DELETE SET NULL
 );
 
+INSERT INTO "User" ("username", "password", "email", "name", "role_id")
+VALUES
+(
+  'admin',
+  '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92s.ag/iHjM6lYSkGf70O', 
+  'admin@example.com',
+  'Admin User',
+  (SELECT "id" FROM "Role" WHERE "name" = 'Admin')
+),
+(
+  'owner1',
+  '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92s.ag/iHjM6lYSkGf70O',
+  'owner1@example.com',
+  'Owner One',
+  (SELECT "id" FROM "Role" WHERE "name" = 'Owner')
+),
+(
+  'owner2',
+  '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92s.ag/iHjM6lYSkGf70O',
+  'owner2@example.com',
+  'Owner Two',
+  (SELECT "id" FROM "Role" WHERE "name" = 'Owner')
+),
+(
+  'owner3',
+  '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92s.ag/iHjM6lYSkGf70O',
+  'owner3@example.com',
+  'Owner Three',
+  (SELECT "id" FROM "Role" WHERE "name" = 'Owner')
+),
+(
+  'owner4',
+  '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92s.ag/iHjM6lYSkGf70O',
+  'owner4@example.com',
+  'Owner Four',
+  (SELECT "id" FROM "Role" WHERE "name" = 'Owner')
+),
+(
+  'owner5',
+  '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92s.ag/iHjM6lYSkGf70O',
+  'owner5@example.com',
+  'Owner Five',
+  (SELECT "id" FROM "Role" WHERE "name" = 'Owner')
+);
+
 --------------------------------------------------------------------------------
 
 -- Table Definition for Pages

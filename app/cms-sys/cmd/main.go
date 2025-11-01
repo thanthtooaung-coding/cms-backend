@@ -238,7 +238,7 @@ func main() {
 		appLogger.WithError(err).Fatal("Failed to initialize database connection")
 	}
 
-	lmsServiceURL := utils.GetEnv("LMS_SERVICE_URL", "http://lms-sys:8081")
+	lmsServiceURL := utils.GetEnv("LMS_SERVICE_URL", "http://lms-sys:4003")
 	if lmsServiceURL == "" {
 		appLogger.Fatal("LMS_SERVICE_URL environment variable is not set")
 	}  

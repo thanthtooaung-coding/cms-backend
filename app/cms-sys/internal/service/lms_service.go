@@ -44,7 +44,7 @@ func (s *lmsServiceImpl) CreateTenant(req LmsTenantRequest) error {
 		return fmt.Errorf("failed to marshal request: %w", err)
 	}
 
-	targetURL := fmt.Sprintf("%s/api/v1/tenants", s.lmsBaseURL)
+	targetURL := fmt.Sprintf("%s/tenants", s.lmsBaseURL)
 
 	httpReq, err := http.NewRequest("POST", targetURL, bytes.NewBuffer(jsonData))
 	if err != nil {
