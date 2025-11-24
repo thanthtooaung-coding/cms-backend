@@ -16,12 +16,21 @@ This CMS platform implements a sophisticated microservices architecture with mul
 
 ---
 
+## 🚀 Quick Start - Running the Project
+
+**Ready to get started?** For detailed instructions on how to run this project, including prerequisites, setup steps, service endpoints, and troubleshooting guides, please refer to **[RUN.md](./RUN.md)**. The guide provides everything you need to get all services up and running quickly and efficiently.
+
+---
+
 ## 📁 Complete Project Structure
 
 ```
 .
-├── README.md
-├── Makefile                              # Build automation and tasks
+├── README.md                              # Project overview and architecture
+├── RUN.md                                 # Step-by-step guide to run the project
+├── SETUP.md                               # Detailed setup instructions
+├── Makefile                               # Build automation and tasks
+├── docker-compose.yml                     # Main service orchestration
 ├── backend/
 │   ├── cms-sys/                          # Core CMS Service (Go)
 │   ├── gateway/                          # API Gateway Service (Spring Boot)
@@ -29,7 +38,6 @@ This CMS platform implements a sophisticated microservices architecture with mul
 │   └── ems-sys/                          # E-Commerce Management System (Spring Boot)
 │   └── bms-sys/                          # Booking Management System (Spring Boot)
 │   └── ams-sys/                          # Agency Management System (Spring Boot)
-├── docker-compose.yml                     # Main Orchestration
 ```
 
 ---

@@ -54,6 +54,8 @@ CREATE TABLE "Role" (
                         "deleted_at" TIMESTAMP WITH TIME ZONE
 );
 
+INSERT INTO "Role" ("name") VALUES ('Owner'), ('Admin'), ('Staff');
+
 --------------------------------------------------------------------------------
 
 -- Table Definition for Users

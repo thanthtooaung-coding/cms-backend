@@ -5,8 +5,8 @@ services:
     networks:
       - whole-system-network
     ports:
-      - "8500:8500"
-      - "8600:8600/udp"
+      - "8501:8500"
+      - "8601:8600/udp"
     environment:
       - CONSUL_BIND_INTERFACE=eth0
       - CONSUL_CLIENT_INTERFACE=eth0
@@ -79,7 +79,7 @@ services:
       - CMS_PORT=${CMS_PORT}
       - LMS_SERVICE_URL=http://lms-main-system:8082
     ports:
-      - "4002:8081"
+      - "4011:8081"
     restart: unless-stopped
 
   lms-main-system:
@@ -219,7 +219,7 @@ services:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
       - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
     ports:
-      - "4008:80"
+      - "4010:80"
     volumes:
       - ./config/pgadmin/servers.json:/pgadmin4/servers.json
     networks:
@@ -236,7 +236,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
-      - "4004:8080"
+      - "4009:8080"
     networks:
       - whole-system-network
     restart: unless-stopped
@@ -254,7 +254,7 @@ services:
       consul:
         condition: service_healthy
     ports:
-      - "4005:8084"
+      - "4014:8084"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - CONSUL_ENABLED=true
@@ -275,7 +275,7 @@ services:
       consul:
         condition: service_healthy
     ports:
-      - "4006:8085"
+      - "4013:8085"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - EMAIL_SERVICE_PORT=${EMAIL_SERVICE_PORT}
@@ -301,7 +301,7 @@ services:
     networks:
       - whole-system-network
     ports:
-      - "4007:8086"
+      - "4012:8086"
     environment:
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
       - CONSUL_HOST=consul

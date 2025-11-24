@@ -16,6 +16,13 @@ import (
 	"time"
 )
 
+func safeDerefString(s *string) string {
+	if s != nil {
+		return *s
+	}
+	return ""
+}
+
 type PageRequestService interface {
 	CreatePageRequest(req request.CreatePageRequest) (*response.PageRequestResponse, error)
 	GetAllPageRequests(req *request.PaginateRequest) ([]*response.PageRequestResponse, *utils.Pagination, error)
@@ -27,16 +34,18 @@ type PageRequestServiceImpl struct {
 	repo        repository.PageRequestRepository
 	pageService PageService
 	lmsService  LmsService
+	ownerRepo   repository.OwnerRepository
 }
 
 var _ PageRequestService = (*PageRequestServiceImpl)(nil)
 
-func NewPageRequestService(logger *logrus.Logger, repo repository.PageRequestRepository, pageService PageService, lmsService LmsService) *PageRequestServiceImpl {
+func NewPageRequestService(logger *logrus.Logger, repo repository.PageRequestRepository, pageService PageService, lmsService LmsService, ownerRepo repository.OwnerRepository) *PageRequestServiceImpl {
 	return &PageRequestServiceImpl{
 		logger:      logger,
 		repo:        repo,
 		pageService: pageService,
 		lmsService:  lmsService,
+		ownerRepo:   ownerRepo,
 	}
 }
 
@@ -113,7 +122,6 @@ func (s *PageRequestServiceImpl) ChangeStatus(req request.ChangeStatusPageReques
 			PublishedByStaffID: &currentUserID,
 		}
 
-		// 5. Call the page service to create the actual page.
 		createdPage, err := s.pageService.Create(pageCreateReq)
 		if err != nil {
 			s.logger.WithError(err).Errorf("Failed to create page from approved request ID %d", req.RequestID)
@@ -125,6 +133,12 @@ func (s *PageRequestServiceImpl) ChangeStatus(req request.ChangeStatusPageReques
 		switch pageRequest.RequestType {
 		case "LMS":
 			s.logger.Infof("RequestType is LMS. Triggering setup for new LMS tenant for Owner %d", pageRequest.OwnerID)
+
+			owner, err := s.ownerRepo.GetOwnerByID(pageRequest.OwnerID)
+			if err != nil {
+				s.logger.WithError(err).Errorf("Failed to find Owner with ID %d for LMS setup", pageRequest.OwnerID)
+				return fmt.Errorf("failed to find owner %d: %w", pageRequest.OwnerID, err)
+			}
 			
 			lmsReq := LmsTenantRequest{
 				Name:    pageRequest.Title,
@@ -132,11 +146,37 @@ func (s *PageRequestServiceImpl) ChangeStatus(req request.ChangeStatusPageReques
 				CmsPageID: createdPage.ID,
 			}
 
-			if err := s.lmsService.CreateTenant(lmsReq); err != nil {
-				s.logger.WithError(err).Error("Failed to setup new LMS tenant")				
+			createdTenant, err := s.lmsService.CreateTenant(lmsReq)
+			if err != nil {
+				s.logger.WithError(err).Error("Failed to setup new LMS tenant")
 				return fmt.Errorf("failed to setup LMS tenant: %w", err)
 			}
 			s.logger.Infof("Successfully triggered LMS tenant creation for Page ID %d", createdPage.ID)
+
+			generatedPassword, err := utils.GenerateSecurePassword(16)
+			if err != nil {
+				s.logger.WithError(err).Error("Failed to generate secure password for new LMS owner")
+				return fmt.Errorf("failed to generate password: %w", err)
+			}
+			s.logger.Warnf("GENERATED PASSWORD FOR owner %d: %s", owner.ID, generatedPassword)
+
+			lmsOwnerReq := LmsOwnerRequest{
+				Username:    owner.Email,
+				Password:    generatedPassword,
+				Email:       owner.Email,
+				Name:        safeDerefString(owner.Name),
+				TenantID:    createdTenant.ID,
+				RoleID:      1,
+				Address:     safeDerefString(owner.Address),
+				PhoneNumber: safeDerefString(owner.PhoneNumber),
+			}
+
+			if err := s.lmsService.CreateLmsOwner(lmsOwnerReq); err != nil {
+				s.logger.WithError(err).Error("Failed to create LMS owner user after tenant creation")
+				return fmt.Errorf("failed to create LMS owner user: %w", err)
+			}
+
+			s.logger.Infof("Successfully created LMS owner for Tenant ID %d", createdTenant.ID)
 
 		case "E-COMMERCE":
 			s.logger.Infof("RequestType is E-COMMERCE. Setup logic not implemented yet.")

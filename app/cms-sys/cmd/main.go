@@ -194,7 +194,7 @@ func dependencyInjectionSection(
 	lmsService := service.NewLmsService(logger, lmsServiceURL)
 
 	pageRequestRepo := repository.NewPageRequestRepository(logger, db)
-	pageRequestService := service.NewPageRequestService(logger, pageRequestRepo, pageService, lmsService)
+	pageRequestService := service.NewPageRequestService(logger, pageRequestRepo, pageService, lmsService, ownerRepo)
 	pageRequestHandler := handler.NewPageRequestHandler(pageRequestService)
 
 	return &dISection{
