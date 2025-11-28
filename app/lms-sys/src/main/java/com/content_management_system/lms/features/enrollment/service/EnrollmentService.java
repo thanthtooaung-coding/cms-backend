@@ -6,13 +6,13 @@ import com.content_management_system.lms.features.enrollment.dto.EnrollmentRespo
 import java.util.List;
 
 public interface EnrollmentService {
-    EnrollmentResponse create(CreateEnrollmentRequest request);
+    EnrollmentResponse create(CreateEnrollmentRequest request, Long userId);
 
-    List<EnrollmentResponse> findAll(Long tenantId);
+    List<EnrollmentResponse> findAll(Long tenantId, Long userId);
 
-    List<EnrollmentResponse> search(String studentEmail, Long courseId, Long categoryId);
+    List<EnrollmentResponse> search(String studentEmail, Long courseId, Long categoryId, Long userId);
 
-    void deleteById(Long id);
+    void deleteById(Long id, Long userId);
 
-    void cancelEnrollment(Long id);
+    void cancelEnrollment(Long id, Long userId);
 }

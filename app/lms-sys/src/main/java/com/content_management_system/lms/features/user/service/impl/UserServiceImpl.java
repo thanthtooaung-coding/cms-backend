@@ -64,14 +64,9 @@ public class UserServiceImpl implements UserService {
         if (tenantId != null) {
             // Filter by tenant
             if (roleName != null && !roleName.isEmpty()) {
-                try {
-                    LmsRoleName role = LmsRoleName.valueOf(roleName);
-                    users = userRepository.findAllByRoleName(role).stream()
-                            .filter(user -> user.getTenant() != null && user.getTenant().getId().equals(tenantId))
-                            .collect(Collectors.toList());
-                } catch (IllegalArgumentException e) {
-                    throw new ResourceNotFoundException("Role not found with name: " + roleName);
-                }
+                users = userRepository.findAllByRoleName(roleName).stream()
+                        .filter(user -> user.getTenant() != null && user.getTenant().getId().equals(tenantId))
+                        .collect(Collectors.toList());
             } else {
                 users = userRepository.findAll().stream()
                         .filter(user -> user.getTenant() != null && user.getTenant().getId().equals(tenantId))
@@ -80,12 +75,7 @@ public class UserServiceImpl implements UserService {
         } else {
             // No tenant filter
             if (roleName != null && !roleName.isEmpty()) {
-                try {
-                    LmsRoleName role = LmsRoleName.valueOf(roleName);
-                    users = userRepository.findAllByRoleName(role);
-                } catch (IllegalArgumentException e) {
-                    throw new ResourceNotFoundException("Role not found with name: " + roleName);
-                }
+                users = userRepository.findAllByRoleName(roleName);
             } else {
                 users = userRepository.findAll();
             }

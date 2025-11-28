@@ -1,10 +1,5 @@
 -- ENUM types for various status and type fields.
-
-CREATE TYPE "lms_role_name" AS ENUM (
-  'Owner',
-  'Admin',
-  'Staff'
-);
+-- Note: Role name is stored as VARCHAR(50) instead of enum for easier management
 
 CREATE TYPE "course_status" AS ENUM (
   'Pending',
@@ -48,13 +43,13 @@ CREATE TABLE "Tenants" (
 
 CREATE TABLE "Role" (
                         "id" BIGSERIAL PRIMARY KEY,
-                        "name" VARCHAR(255) NOT NULL UNIQUE,
+                        "name" VARCHAR(50) NOT NULL UNIQUE,
                         "created_at" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
                         "updated_at" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
                         "deleted_at" TIMESTAMP WITH TIME ZONE
 );
 
-INSERT INTO "Role" ("name") VALUES ('Owner'), ('Admin'), ('Staff');
+INSERT INTO "Role" ("name") VALUES ('Owner'), ('Admin'), ('Staff'), ('Instructor');
 
 --------------------------------------------------------------------------------
 

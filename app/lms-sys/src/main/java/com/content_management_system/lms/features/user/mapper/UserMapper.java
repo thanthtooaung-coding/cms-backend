@@ -10,7 +10,7 @@ public class UserMapper {
         if (user.getRole() != null) {
             roleInfo = UserResponse.RoleInfo.builder()
                     .id(user.getRole().getId())
-                    .name(user.getRole().getName().name().toLowerCase())
+                    .name(user.getRole().getName())
                     .build();
         }
 

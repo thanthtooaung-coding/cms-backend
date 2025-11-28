@@ -22,13 +22,15 @@ public class DataInitializer implements ApplicationRunner {
         createRoleIfNotFound(LmsRoleName.Owner);
         createRoleIfNotFound(LmsRoleName.Admin);
         createRoleIfNotFound(LmsRoleName.Staff);
+        createRoleIfNotFound(LmsRoleName.Instructor);
 //        createTenantIfNotFound();
     }
 
     private void createRoleIfNotFound(LmsRoleName roleName) {
-        if (!roleRepository.existsByName(roleName)) {
+        String roleNameString = roleName.name();
+        if (!roleRepository.existsByName(roleNameString)) {
             Role role = new Role();
-            role.setName(roleName);
+            role.setName(roleNameString);
             roleRepository.save(role);
         }
     }

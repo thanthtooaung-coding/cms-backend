@@ -10,7 +10,7 @@ public class RoleMapper {
         }
         return RoleResponse.builder()
                 .id(role.getId())
-                .name(role.getName().name())
+                .name(role.getName())
                 .build();
     }
 }

@@ -32,14 +32,9 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional(readOnly = true)
     public RoleResponse findByName(String name) {
-        try {
-            LmsRoleName roleName = LmsRoleName.valueOf(name);
-            Role role = roleRepository.findByName(roleName)
-                    .orElseThrow(() -> new ResourceNotFoundException("Role not found with name: " + name));
-            return RoleMapper.toResponse(role);
-        } catch (IllegalArgumentException e) {
-            throw new ResourceNotFoundException("Invalid role name: " + name);
-        }
+        Role role = roleRepository.findByName(name)
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found with name: " + name));
+        return RoleMapper.toResponse(role);
     }
 }
 

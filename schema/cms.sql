@@ -57,42 +57,42 @@ INSERT INTO "User" ("username", "password", "email", "name", "role_id")
 VALUES
 (
   'admin',
-  '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92s.ag/iHjM6lYSkGf70O', 
+  '$2a$12$ivx6bULb3fcJGJ5vJai1K.PObcspVX.4tKbz0cwRtPoRhsnnurFtC', 
   'admin@example.com',
   'Admin User',
   (SELECT "id" FROM "Role" WHERE "name" = 'Admin')
 ),
 (
   'owner1',
-  '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92s.ag/iHjM6lYSkGf70O',
+  '$2a$12$ivx6bULb3fcJGJ5vJai1K.PObcspVX.4tKbz0cwRtPoRhsnnurFtC',
   'owner1@example.com',
   'Owner One',
   (SELECT "id" FROM "Role" WHERE "name" = 'Owner')
 ),
 (
   'owner2',
-  '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92s.ag/iHjM6lYSkGf70O',
+  '$2a$12$ivx6bULb3fcJGJ5vJai1K.PObcspVX.4tKbz0cwRtPoRhsnnurFtC',
   'owner2@example.com',
   'Owner Two',
   (SELECT "id" FROM "Role" WHERE "name" = 'Owner')
 ),
 (
   'owner3',
-  '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92s.ag/iHjM6lYSkGf70O',
+  '$2a$12$ivx6bULb3fcJGJ5vJai1K.PObcspVX.4tKbz0cwRtPoRhsnnurFtC',
   'owner3@example.com',
   'Owner Three',
   (SELECT "id" FROM "Role" WHERE "name" = 'Owner')
 ),
 (
   'owner4',
-  '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92s.ag/iHjM6lYSkGf70O',
+  '$2a$12$ivx6bULb3fcJGJ5vJai1K.PObcspVX.4tKbz0cwRtPoRhsnnurFtC',
   'owner4@example.com',
   'Owner Four',
   (SELECT "id" FROM "Role" WHERE "name" = 'Owner')
 ),
 (
   'owner5',
-  '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92s.ag/iHjM6lYSkGf70O',
+  '$2a$12$ivx6bULb3fcJGJ5vJai1K.PObcspVX.4tKbz0cwRtPoRhsnnurFtC',
   'owner5@example.com',
   'Owner Five',
   (SELECT "id" FROM "Role" WHERE "name" = 'Owner')

@@ -18,14 +18,18 @@ public class EnrollmentController {
     private final EnrollmentService enrollmentService;
 
     @PostMapping
-    public ResponseEntity<EnrollmentResponse> createEnrollment(@RequestBody CreateEnrollmentRequest request) {
-        EnrollmentResponse response = enrollmentService.create(request);
+    public ResponseEntity<EnrollmentResponse> createEnrollment(
+            @RequestBody CreateEnrollmentRequest request,
+            @RequestHeader(value = "X-User-Id", required = false) Long userId) {
+        EnrollmentResponse response = enrollmentService.create(request, userId);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<EnrollmentResponse>> getAllEnrollments(@RequestParam(required = false) Long tenantId) {
-        List<EnrollmentResponse> responses = enrollmentService.findAll(tenantId);
+    public ResponseEntity<List<EnrollmentResponse>> getAllEnrollments(
+            @RequestParam(required = false) Long tenantId,
+            @RequestHeader(value = "X-User-Id", required = false) Long userId) {
+        List<EnrollmentResponse> responses = enrollmentService.findAll(tenantId, userId);
         return ResponseEntity.ok(responses);
     }
 
@@ -33,20 +37,25 @@ public class EnrollmentController {
     public ResponseEntity<List<EnrollmentResponse>> searchEnrollments(
             @RequestParam(required = false) String studentEmail,
             @RequestParam(required = false) Long courseId,
-            @RequestParam(required = false) Long categoryId) {
-        List<EnrollmentResponse> responses = enrollmentService.search(studentEmail, courseId, categoryId);
+            @RequestParam(required = false) Long categoryId,
+            @RequestHeader(value = "X-User-Id", required = false) Long userId) {
+        List<EnrollmentResponse> responses = enrollmentService.search(studentEmail, courseId, categoryId, userId);
         return ResponseEntity.ok(responses);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEnrollment(@PathVariable Long id) {
-        enrollmentService.deleteById(id);
+    public ResponseEntity<Void> deleteEnrollment(
+            @PathVariable Long id,
+            @RequestHeader(value = "X-User-Id", required = false) Long userId) {
+        enrollmentService.deleteById(id, userId);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}/cancel")
-    public ResponseEntity<Void> cancelEnrollment(@PathVariable Long id) {
-        enrollmentService.cancelEnrollment(id);
+    public ResponseEntity<Void> cancelEnrollment(
+            @PathVariable Long id,
+            @RequestHeader(value = "X-User-Id", required = false) Long userId) {
+        enrollmentService.cancelEnrollment(id, userId);
         return ResponseEntity.noContent().build();
     }
 }
