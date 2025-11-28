@@ -49,7 +49,7 @@ CREATE TABLE "Role" (
                         "deleted_at" TIMESTAMP WITH TIME ZONE
 );
 
-INSERT INTO "Role" ("name") VALUES ('Owner'), ('Admin'), ('Staff'), ('Instructor');
+INSERT INTO "Role" ("name") VALUES ('Owner'), ('Admin'), ('Staff'), ('Instructor'), ('Student');
 
 --------------------------------------------------------------------------------
 
@@ -251,18 +251,22 @@ CREATE TABLE "Enrollment" (
 --------------------------------------------------------------------------------
 
 -- Table Definition for Certificates
--- Stores certificates issued to students upon course completion.
+-- Tracks certificates issued to students upon course completion.
 
 CREATE TABLE "Certificate" (
-                               "id" BIGSERIAL PRIMARY KEY,
-                               "enrollment_id" BIGINT UNIQUE,
-                               "issue_date" TIMESTAMP WITH TIME ZONE,
-                               "certificate_url" VARCHAR(2048),
-                               "created_at" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
-                               "updated_at" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
-                               "deleted_at" TIMESTAMP WITH TIME ZONE,
-                               CONSTRAINT "fk_certificate_enrollment" FOREIGN KEY ("enrollment_id") REFERENCES "Enrollment" ("id") ON DELETE CASCADE
+                              "id" BIGSERIAL PRIMARY KEY,
+                              "student_id" BIGINT NOT NULL,
+                              "course_id" BIGINT NOT NULL,
+                              "certificate_number" VARCHAR(255) UNIQUE NOT NULL,
+                              "issued_date" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
+                              "score_percentage" DECIMAL(5, 2) NOT NULL,
+                              "created_at" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
+                              "updated_at" TIMESTAMP WITH TIME ZONE DEFAULT (now()),
+                              "deleted_at" TIMESTAMP WITH TIME ZONE,
+                              CONSTRAINT "fk_certificate_student" FOREIGN KEY ("student_id") REFERENCES "User" ("id") ON DELETE CASCADE,
+                              CONSTRAINT "fk_certificate_course" FOREIGN KEY ("course_id") REFERENCES "Course" ("id") ON DELETE CASCADE
 );
+
 
 --------------------------------------------------------------------------------
 

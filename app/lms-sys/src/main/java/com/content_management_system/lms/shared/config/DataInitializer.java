@@ -23,6 +23,7 @@ public class DataInitializer implements ApplicationRunner {
         createRoleIfNotFound(LmsRoleName.Admin);
         createRoleIfNotFound(LmsRoleName.Staff);
         createRoleIfNotFound(LmsRoleName.Instructor);
+        createRoleIfNotFound(LmsRoleName.Student);
 //        createTenantIfNotFound();
     }
 

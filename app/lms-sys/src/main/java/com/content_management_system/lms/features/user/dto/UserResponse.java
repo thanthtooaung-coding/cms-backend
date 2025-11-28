@@ -15,6 +15,8 @@ public class UserResponse {
     private String phoneNumber;
     private RoleInfo role;
     private TenantInfo tenant;
+    private Integer totalCourses;
+    private Integer totalStudents;
 
     @Data
     @Builder

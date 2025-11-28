@@ -10,6 +10,8 @@ public interface CourseService {
 
     List<CourseResponse> findAll(Long tenantId, Long userId);
 
+    List<CourseResponse> findPublishedCourses(Long tenantId);
+
     CourseResponse findById(Long id, Long userId);
 
     CourseResponse update(Long id, UpdateCourseRequest request, Long userId);
@@ -17,4 +19,6 @@ public interface CourseService {
     void deleteCourses(DeleteCoursesRequest request, Long userId);
 
     void changeStatus(Long id, ChangeCourseStatusRequest request, Long userId);
+
+    CourseLessonResponse getCourseLessonContent(Long courseId, Long userId);
 }

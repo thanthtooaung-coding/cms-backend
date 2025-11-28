@@ -68,6 +68,24 @@ class QuizGenerationRequest(BaseModel):
     num_questions: int = 4
     difficulty: str = "beginner"
 
+class RelatedTopic(BaseModel):
+    id: int = Field(description="A unique identifier for the topic (1, 2, or 3).")
+    name: str = Field(description="The name of the related topic.")
+
+class RelatedTopicsResponse(BaseModel):
+    topics: List[RelatedTopic] = Field(description="A list of exactly 3 related topics.")
+
+class LessonContent(BaseModel):
+    title: str = Field(description="The title of the lesson.")
+    content: str = Field(description="The content of the lesson (could be video URL, slide content, link, or text).")
+    material_type: str = Field(description="The type of material: Video, Slide, Link, PDF, or Article.")
+
+class RelatedTopicsRequest(BaseModel):
+    course_title: str = Field(description="The title of the course.")
+    course_description: str = Field(description="The description of the course.")
+    category: str = Field(description="The category of the course.")
+    lessons: List[LessonContent] = Field(default=[], description="List of lessons in the course with their content.")
+
 # Initialize Google Generative AI model following LangChain documentation
 # See: https://docs.langchain.com/oss/python/integrations/chat/google_generative_ai
 try:
@@ -139,6 +157,78 @@ async def generate_quiz(request: QuizGenerationRequest):
     except Exception as e:
         logger.error(f"Error during quiz generation: {e}")
         raise HTTPException(status_code=500, detail=f"An error occurred while generating the quiz. Details: {str(e)}")
+
+# Related Topics Generation
+related_topics_output_parser = PydanticOutputParser(pydantic_object=RelatedTopicsResponse)
+
+related_topics_prompt_template = PromptTemplate(
+    template="""
+    You are an expert educational content curator for a Learning Management System.
+    Your task is to analyze the actual course content (lessons) and generate exactly 3 related learning topics that students might be interested in after completing this course.
+    
+    IMPORTANT: You must analyze the actual lesson content provided below. Look at:
+    - Lesson titles to understand what topics are covered
+    - Lesson content (video descriptions, slide text, article content, links)
+    - Material types (Video, Slide, Link, PDF, Article) to understand the format
+    
+    Based on the REAL course content, generate 3 specific, relevant topics that:
+    1. Are directly related to what students learned in the course
+    2. Build upon the concepts covered in the lessons
+    3. Are valuable next steps for students to continue learning
+    4. Are specific and actionable (not generic topics)
+
+    {format_instructions}
+
+    Course Title: {course_title}
+    Course Description: {course_description}
+    Course Category: {category}
+
+    Course Lessons (analyze these carefully):
+    {lessons_content}
+
+    Generate exactly 3 related topics based on the ACTUAL course content analyzed above.
+    """,
+    input_variables=["course_title", "course_description", "category", "lessons_content"],
+    partial_variables={"format_instructions": related_topics_output_parser.get_format_instructions()}
+)
+
+@app.post("/generate-related-topics", response_model=RelatedTopicsResponse)
+async def generate_related_topics(request: RelatedTopicsRequest):
+    if not llm:
+        raise HTTPException(status_code=500, detail="AI model is not initialized. Check server logs.")
+
+    # Format lessons content for the prompt
+    lessons_content_parts = []
+    if request.lessons and len(request.lessons) > 0:
+        for idx, lesson in enumerate(request.lessons, 1):
+            lesson_text = f"Lesson {idx}: {lesson.title}\n"
+            lesson_text += f"  Type: {lesson.material_type}\n"
+            if lesson.content:
+                # Truncate very long content to avoid token limits
+                content_preview = lesson.content[:500] if len(lesson.content) > 500 else lesson.content
+                lesson_text += f"  Content: {content_preview}"
+                if len(lesson.content) > 500:
+                    lesson_text += "... (truncated)"
+            else:
+                lesson_text += "  Content: (No content available)"
+            lessons_content_parts.append(lesson_text)
+        lessons_content = "\n\n".join(lessons_content_parts)
+    else:
+        lessons_content = "No lessons available in this course yet."
+
+    chain = related_topics_prompt_template | llm | related_topics_output_parser
+    
+    try:
+        response = await chain.ainvoke({
+            "course_title": request.course_title,
+            "course_description": request.course_description,
+            "category": request.category,
+            "lessons_content": lessons_content
+        })
+        return response
+    except Exception as e:
+        logger.error(f"Error during related topics generation: {e}")
+        raise HTTPException(status_code=500, detail=f"An error occurred while generating related topics. Details: {str(e)}")
 
 if __name__ == "__main__":
     service_port = int(os.getenv("SERVICE_PORT", 8086))

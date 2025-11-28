@@ -54,13 +54,15 @@ public class CourseCategoryServiceImpl implements CourseCategoryService {
     @Override
     public List<CourseCategoryResponse> findAll(Long tenantId) {
         List<CourseCategory> categories;
+        // Always filter by tenant if provided (required for students)
         if (tenantId != null) {
             categories = courseCategoryRepo.findAll().stream()
                     .filter(category -> category.getTenant() != null 
                             && category.getTenant().getId().equals(tenantId))
                     .collect(Collectors.toList());
         } else {
-            categories = courseCategoryRepo.findAll();
+            // If no tenantId provided, return empty list (tenant is required)
+            categories = new java.util.ArrayList<>();
         }
         return categories.stream()
                 .map(CourseCategoryMapper::toResponse)

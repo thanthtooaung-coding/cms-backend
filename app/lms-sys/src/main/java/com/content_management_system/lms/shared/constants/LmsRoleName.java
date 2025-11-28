@@ -4,5 +4,6 @@ public enum LmsRoleName {
     Owner,
     Admin,
     Staff,
-    Instructor
+    Instructor,
+    Student
 }

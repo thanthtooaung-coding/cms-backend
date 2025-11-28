@@ -41,7 +41,4 @@ public class Enrollment extends MasterData {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id")
     private Course course;
-
-    @OneToOne(mappedBy = "enrollment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Certificate certificate;
 }

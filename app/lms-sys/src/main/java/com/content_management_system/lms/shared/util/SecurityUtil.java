@@ -69,6 +69,13 @@ public class SecurityUtil {
     }
 
     /**
+     * Check if user is a student
+     */
+    public boolean isStudent(User user) {
+        return hasRole(user, LmsRoleName.Student.name());
+    }
+
+    /**
      * Verify user has required role, throw exception if not
      */
     public void requireRole(User user, LmsRoleName requiredRole) {

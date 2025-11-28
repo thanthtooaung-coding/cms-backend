@@ -58,4 +58,20 @@ public class EnrollmentController {
         enrollmentService.cancelEnrollment(id, userId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/check/{studentId}/{courseId}")
+    public ResponseEntity<java.util.Map<String, Boolean>> checkEnrollment(
+            @PathVariable Long studentId,
+            @PathVariable Long courseId) {
+        boolean enrolled = enrollmentService.isStudentEnrolled(studentId, courseId);
+        return ResponseEntity.ok(java.util.Map.of("enrolled", enrolled));
+    }
+
+    @GetMapping("/student/{studentId}/courses")
+    public ResponseEntity<List<com.content_management_system.lms.features.enrollment.dto.EnrolledCourseResponse>> getEnrolledCourses(
+            @PathVariable Long studentId,
+            @RequestHeader(value = "X-User-Id", required = false) Long userId) {
+        List<com.content_management_system.lms.features.enrollment.dto.EnrolledCourseResponse> courses = enrollmentService.getEnrolledCourses(studentId, userId);
+        return ResponseEntity.ok(courses);
+    }
 }

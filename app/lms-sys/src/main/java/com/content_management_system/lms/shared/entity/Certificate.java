@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -16,13 +17,20 @@ import java.time.OffsetDateTime;
 @Where(clause = "deleted_at IS NULL")
 public class Certificate extends MasterData {
 
-    @Column(name = "issue_date")
-    private OffsetDateTime issueDate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id", nullable = false)
+    private User student;
 
-    @Column(name = "certificate_url", length = 2048)
-    private String certificateUrl;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "enrollment_id", unique = true)
-    private Enrollment enrollment;
+    @Column(name = "certificate_number", unique = true, nullable = false)
+    private String certificateNumber;
+
+    @Column(name = "issued_date", nullable = false)
+    private OffsetDateTime issuedDate;
+
+    @Column(name = "score_percentage", nullable = false, precision = 5, scale = 2)
+    private BigDecimal scorePercentage;
 }

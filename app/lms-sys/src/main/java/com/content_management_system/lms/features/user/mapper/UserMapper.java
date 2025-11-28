@@ -6,6 +6,10 @@ import com.content_management_system.lms.shared.entity.User;
 public class UserMapper {
 
     public static UserResponse toResponse(User user) {
+        return toResponse(user, null, null);
+    }
+
+    public static UserResponse toResponse(User user, Integer totalCourses, Integer totalStudents) {
         UserResponse.RoleInfo roleInfo = null;
         if (user.getRole() != null) {
             roleInfo = UserResponse.RoleInfo.builder()
@@ -31,6 +35,8 @@ public class UserMapper {
                 .phoneNumber(user.getPhoneNumber())
                 .role(roleInfo)
                 .tenant(tenantInfo)
+                .totalCourses(totalCourses)
+                .totalStudents(totalStudents)
                 .build();
     }
 }
