@@ -24,8 +24,8 @@ public class EnrollmentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<EnrollmentResponse>> getAllEnrollments() {
-        List<EnrollmentResponse> responses = enrollmentService.findAll();
+    public ResponseEntity<List<EnrollmentResponse>> getAllEnrollments(@RequestParam(required = false) Long tenantId) {
+        List<EnrollmentResponse> responses = enrollmentService.findAll(tenantId);
         return ResponseEntity.ok(responses);
     }
 

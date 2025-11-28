@@ -60,8 +60,30 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<EnrollmentResponse> findAll() {
-        return enrollmentRepository.findAll().stream()
+    public List<EnrollmentResponse> findAll(Long tenantId) {
+        List<Enrollment> enrollments;
+        if (tenantId != null) {
+            // Filter enrollments by tenant through student or course category
+            enrollments = enrollmentRepository.findAll().stream()
+                    .filter(enrollment -> {
+                        User student = enrollment.getStudent();
+                        Course course = enrollment.getCourse();
+                        if (student != null && student.getTenant() != null 
+                                && student.getTenant().getId().equals(tenantId)) {
+                            return true;
+                        }
+                        if (course != null && course.getCategory() != null 
+                                && course.getCategory().getTenant() != null
+                                && course.getCategory().getTenant().getId().equals(tenantId)) {
+                            return true;
+                        }
+                        return false;
+                    })
+                    .collect(Collectors.toList());
+        } else {
+            enrollments = enrollmentRepository.findAll();
+        }
+        return enrollments.stream()
                 .map(EnrollmentMapper::toResponse)
                 .collect(Collectors.toList());
     }

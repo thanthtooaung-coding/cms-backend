@@ -13,6 +13,7 @@ type PageRequestHandle interface {
 	Create(c *fiber.Ctx) error
 	GetAll(c *fiber.Ctx) error
 	ChangeStatus(c *fiber.Ctx) error
+	GetTenantInfoBySlug(c *fiber.Ctx) error
 }
 
 type PageRequestHandler struct {
@@ -32,6 +33,12 @@ func NewPageRequestHandler(
 }
 
 func (h *PageRequestHandler) Create(c *fiber.Ctx) error {
+	// Get user ID from JWT token (set by AuthMiddleware)
+	userID, ok := c.Locals("userID").(uint)
+	if !ok {
+		return utils.UnauthorizedResponse(c, "User ID not found in token")
+	}
+
 	var req request.CreatePageRequest
 	if form, err := c.MultipartForm(); err != nil {
 		if form == nil {
@@ -42,6 +49,9 @@ func (h *PageRequestHandler) Create(c *fiber.Ctx) error {
 	if err := c.BodyParser(&req); err != nil {
 		return utils.BadRequestResponse(c, "Invalid request body", err.Error())
 	}
+
+	// Set owner ID from authenticated user
+	req.OwnerID = userID
 
 	if err := h.validator.Struct(req); err != nil {
 		return utils.BadRequestResponse(c, "Validation failed", err.Error())
@@ -79,6 +89,12 @@ func (h *PageRequestHandler) GetAll(c *fiber.Ctx) error {
 }
 
 func (h *PageRequestHandler) ChangeStatus(c *fiber.Ctx) error {
+	// Get user ID from JWT token (set by AuthMiddleware)
+	userID, ok := c.Locals("userID").(uint)
+	if !ok {
+		return utils.UnauthorizedResponse(c, "User ID not found in token")
+	}
+
 	var req request.ChangeStatusPageRequest
 
 	if err := c.BodyParser(&req); err != nil {
@@ -93,9 +109,23 @@ func (h *PageRequestHandler) ChangeStatus(c *fiber.Ctx) error {
 		return utils.BadRequestResponse(c, "Invalid request status", "Status must be PENDING, APPROVED or REJECTED")
 	}
 
-	if err := h.service.ChangeStatus(req, req.UserID); err != nil {
+	if err := h.service.ChangeStatus(req, userID); err != nil {
 		return utils.InternalServerErrorResponse(c, "Failed to change page request status", err.Error())
 	}
 
 	return utils.SuccessResponse(c, "Page request status updated successfully", nil)
+}
+
+func (h *PageRequestHandler) GetTenantInfoBySlug(c *fiber.Ctx) error {
+	slug := c.Params("slug")
+	if slug == "" {
+		return utils.BadRequestResponse(c, "Missing slug parameter", "slug is required")
+	}
+
+	tenantInfo, err := h.service.GetTenantInfoBySlug(slug)
+	if err != nil {
+		return utils.NotFoundResponse(c, "Tenant not found")
+	}
+
+	return utils.SuccessResponse(c, "Tenant info retrieved successfully", tenantInfo)
 }

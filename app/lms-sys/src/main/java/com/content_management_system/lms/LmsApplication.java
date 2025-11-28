@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 public class LmsApplication {
 
 	public static void main(String[] args) {
+		System.out.println("LmsApplication is running");
 		SpringApplication.run(LmsApplication.class, args);
 	}
 

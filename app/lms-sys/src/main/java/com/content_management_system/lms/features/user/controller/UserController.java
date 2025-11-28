@@ -25,8 +25,10 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getAllUsers(@RequestParam(required = false) String role) {
-        List<UserResponse> responses = userService.findAll(role);
+    public ResponseEntity<List<UserResponse>> getAllUsers(
+            @RequestParam(required = false) String role,
+            @RequestParam(required = false) Long tenantId) {
+        List<UserResponse> responses = userService.findAll(role, tenantId);
         return ResponseEntity.ok(responses);
     }
 

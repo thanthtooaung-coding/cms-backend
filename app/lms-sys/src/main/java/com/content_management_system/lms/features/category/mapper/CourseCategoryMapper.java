@@ -16,6 +16,7 @@ public class CourseCategoryMapper {
                 .id(courseCategory.getId())
                 .name(courseCategory.getName())
                 .description(courseCategory.getDescription())
+                .createdAt(courseCategory.getCreatedAt())
                 .tenant(tenantInfo)
                 .build();
     }

@@ -12,6 +12,8 @@ type PageRequestRepository interface {
 	CountPageRequests() (int64, error)
 	GetById(id uint) (*models.PageRequest, error)
 	UpdateStatus(id uint, status models.RequestStatus) error
+	GetByOwnerID(ownerID uint) ([]*models.PageRequest, error)
+	GetByUrlSlug(urlSlug string) (*models.PageRequest, error)
 }
 
 type PageRequestRepositoryImpl struct {
@@ -73,4 +75,27 @@ func (r *PageRequestRepositoryImpl) UpdateStatus(id uint, status models.RequestS
 		return gorm.ErrRecordNotFound
 	}
 	return nil
+}
+
+func (r *PageRequestRepositoryImpl) GetByOwnerID(ownerID uint) ([]*models.PageRequest, error) {
+	var pageRequests []*models.PageRequest
+	if err := r.db.Where("owner_id = ?", ownerID).Order("created_at DESC").Find(&pageRequests).Error; err != nil {
+		r.logger.WithError(err).Error("Failed to get page requests by owner ID")
+		return nil, err
+	}
+	return pageRequests, nil
+}
+
+func (r *PageRequestRepositoryImpl) GetByUrlSlug(urlSlug string) (*models.PageRequest, error) {
+	var pageRequest models.PageRequest
+	// Match URL patterns like http://localhost:5176/lms/triple-a-language-school
+	// or /lms/triple-a-language-school
+	urlPattern := "%/lms/" + urlSlug
+	if err := r.db.Where("page_url LIKE ? AND status = ?", urlPattern, models.RequestApproved).
+		Preload("Owner").
+		First(&pageRequest).Error; err != nil {
+		r.logger.WithError(err).Errorf("Failed to get page request by URL slug: %s", urlSlug)
+		return nil, err
+	}
+	return &pageRequest, nil
 }

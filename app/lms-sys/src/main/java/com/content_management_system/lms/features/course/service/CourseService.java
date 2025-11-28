@@ -8,7 +8,7 @@ public interface CourseService {
 
     CourseResponse create(CreateCourseRequest request);
 
-    List<CourseResponse> findAll();
+    List<CourseResponse> findAll(Long tenantId);
 
     CourseResponse findById(Long id);
 

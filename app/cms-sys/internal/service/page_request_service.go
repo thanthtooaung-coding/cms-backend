@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"gorm.io/gorm"
 	"math"
+	"strings"
+	"time"
 
 	"github.com/sirupsen/logrus"
 	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/mapper"
@@ -13,7 +15,6 @@ import (
 	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/request"
 	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/response"
 	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/pkg/utils"
-	"time"
 )
 
 func safeDerefString(s *string) string {
@@ -27,6 +28,7 @@ type PageRequestService interface {
 	CreatePageRequest(req request.CreatePageRequest) (*response.PageRequestResponse, error)
 	GetAllPageRequests(req *request.PaginateRequest) ([]*response.PageRequestResponse, *utils.Pagination, error)
 	ChangeStatus(req request.ChangeStatusPageRequest, currentUserID uint) error
+	GetTenantInfoBySlug(urlSlug string) (*response.TenantInfoResponse, error)
 }
 
 type PageRequestServiceImpl struct {
@@ -34,17 +36,19 @@ type PageRequestServiceImpl struct {
 	repo        repository.PageRequestRepository
 	pageService PageService
 	lmsService  LmsService
+	emailService EmailService
 	ownerRepo   repository.OwnerRepository
 }
 
 var _ PageRequestService = (*PageRequestServiceImpl)(nil)
 
-func NewPageRequestService(logger *logrus.Logger, repo repository.PageRequestRepository, pageService PageService, lmsService LmsService, ownerRepo repository.OwnerRepository) *PageRequestServiceImpl {
+func NewPageRequestService(logger *logrus.Logger, repo repository.PageRequestRepository, pageService PageService, lmsService LmsService, emailService EmailService, ownerRepo repository.OwnerRepository) *PageRequestServiceImpl {
 	return &PageRequestServiceImpl{
 		logger:      logger,
 		repo:        repo,
 		pageService: pageService,
 		lmsService:  lmsService,
+		emailService: emailService,
 		ownerRepo:   ownerRepo,
 	}
 }
@@ -160,13 +164,20 @@ func (s *PageRequestServiceImpl) ChangeStatus(req request.ChangeStatusPageReques
 			}
 			s.logger.Warnf("GENERATED PASSWORD FOR owner %d: %s", owner.ID, generatedPassword)
 
+			// Get the Owner role ID from LMS service
+			ownerRole, err := s.lmsService.GetRoleByName("Owner")
+			if err != nil {
+				s.logger.WithError(err).Error("Failed to get Owner role from LMS service")
+				return fmt.Errorf("failed to get Owner role: %w", err)
+			}
+
 			lmsOwnerReq := LmsOwnerRequest{
 				Username:    owner.Email,
 				Password:    generatedPassword,
 				Email:       owner.Email,
 				Name:        safeDerefString(owner.Name),
 				TenantID:    createdTenant.ID,
-				RoleID:      1,
+				RoleID:      ownerRole.ID,
 				Address:     safeDerefString(owner.Address),
 				PhoneNumber: safeDerefString(owner.PhoneNumber),
 			}
@@ -177,6 +188,38 @@ func (s *PageRequestServiceImpl) ChangeStatus(req request.ChangeStatusPageReques
 			}
 
 			s.logger.Infof("Successfully created LMS owner for Tenant ID %d", createdTenant.ID)
+
+			// Send email with LMS credentials
+			emailSubject := fmt.Sprintf("Your LMS Dashboard Access - %s", pageRequest.Title)
+			emailBody := fmt.Sprintf(`Dear %s,
+
+Your page request "%s" has been approved!
+
+Your LMS Dashboard and Client access credentials:
+
+Username: %s
+Password: %s
+
+LMS Dashboard: http://localhost:5176/lms/%s
+LMS Client: http://localhost:5175/lms/%s
+
+Please keep these credentials secure and do not share them with anyone.
+
+Best regards,
+CMS Team`, 
+				safeDerefString(owner.Name),
+				pageRequest.Title,
+				owner.Email,
+				generatedPassword,
+				extractSlugFromUrl(pageRequest.PageUrl),
+				extractSlugFromUrl(pageRequest.PageUrl))
+
+			if err := s.emailService.SendEmail(owner.Email, emailSubject, emailBody); err != nil {
+				s.logger.WithError(err).Error("Failed to send email with LMS credentials")
+				// Don't fail the whole operation if email fails
+			} else {
+				s.logger.Infof("Successfully sent LMS credentials email to %s", owner.Email)
+			}
 
 		case "E-COMMERCE":
 			s.logger.Infof("RequestType is E-COMMERCE. Setup logic not implemented yet.")
@@ -189,4 +232,48 @@ func (s *PageRequestServiceImpl) ChangeStatus(req request.ChangeStatusPageReques
 		}
 	}
 	return nil
+}
+
+func (s *PageRequestServiceImpl) GetTenantInfoBySlug(urlSlug string) (*response.TenantInfoResponse, error) {
+	pageRequest, err := s.repo.GetByUrlSlug(urlSlug)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("page request not found for slug: %s", urlSlug)
+		}
+		s.logger.WithError(err).Errorf("Failed to get page request by URL slug: %s", urlSlug)
+		return nil, err
+	}
+
+	if pageRequest.Status != models.RequestApproved {
+		return nil, fmt.Errorf("page request is not approved")
+	}
+
+	// Get tenant info from LMS by name (tenant name is the page request title)
+	tenant, err := s.lmsService.GetTenantByName(pageRequest.Title)
+	if err != nil {
+		s.logger.WithError(err).Errorf("Failed to get tenant by name: %s", pageRequest.Title)
+		return nil, fmt.Errorf("failed to get tenant info: %w", err)
+	}
+
+	tenantInfo := &response.TenantInfoResponse{
+		TenantID:   tenant.ID,
+		TenantName: tenant.Name,
+		PageTitle:  pageRequest.Title,
+		PageUrl:    pageRequest.PageUrl,
+		LogoUrl:    pageRequest.LogoUrl,
+		OwnerID:    pageRequest.OwnerID,
+		OwnerEmail: pageRequest.Owner.Email,
+	}
+
+	return tenantInfo, nil
+}
+
+func extractSlugFromUrl(pageUrl string) string {
+	// Extract slug from URL like http://localhost:5176/lms/triple-a-language-school
+	// or /lms/triple-a-language-school
+	parts := strings.Split(pageUrl, "/lms/")
+	if len(parts) > 1 {
+		return strings.TrimSuffix(parts[1], "/")
+	}
+	return ""
 }

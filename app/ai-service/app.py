@@ -68,8 +68,22 @@ class QuizGenerationRequest(BaseModel):
     num_questions: int = 4
     difficulty: str = "beginner"
 
+# Initialize Google Generative AI model following LangChain documentation
+# See: https://docs.langchain.com/oss/python/integrations/chat/google_generative_ai
 try:
-    llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0.7)
+    google_api_key = os.getenv("GOOGLE_API_KEY")
+    if not google_api_key:
+        logger.warning("GOOGLE_API_KEY not found in environment variables")
+        llm = None
+    else:
+        # ChatGoogleGenerativeAI automatically reads GOOGLE_API_KEY from environment
+        # Using gemini-2.5-flash as shown in LangChain documentation
+        llm = ChatGoogleGenerativeAI(
+            model="gemini-2.5-flash",
+            temperature=0.7,
+            max_retries=2,
+        )
+        logger.info("Successfully initialized Google Generative AI with gemini-2.5-flash")
 except Exception as e:
     logger.error(f"Failed to initialize Google Generative AI. Ensure GOOGLE_API_KEY is set. Error: {e}")
     llm = None

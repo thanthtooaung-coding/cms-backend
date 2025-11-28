@@ -27,8 +27,8 @@ public class CourseController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CourseResponse>> getAllCourses() {
-        List<CourseResponse> responses = courseService.findAll();
+    public ResponseEntity<List<CourseResponse>> getAllCourses(@RequestParam(required = false) Long tenantId) {
+        List<CourseResponse> responses = courseService.findAll(tenantId);
         return ResponseEntity.ok(responses);
     }
 

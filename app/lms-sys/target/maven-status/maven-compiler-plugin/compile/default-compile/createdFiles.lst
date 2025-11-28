@@ -16,6 +16,9 @@ com/content_management_system/lms/features/user/dto/CreateUserRequest.class
 com/content_management_system/lms/features/lesson/dto/LessonResponse$ModuleInfo$ModuleInfoBuilder.class
 com/content_management_system/lms/features/quiz/dto/UpdateQuizRequest$UpdateQuizRequestBuilder.class
 com/content_management_system/lms/shared/entity/User.class
+com/content_management_system/lms/features/user/dto/LoginRequest.class
+com/content_management_system/lms/features/role/service/RoleService.class
+com/content_management_system/lms/features/auth/controller/AuthController.class
 com/content_management_system/lms/features/user/service/impl/UserServiceImpl.class
 com/content_management_system/lms/features/module/dto/UpdateModuleRequest$UpdateModuleRequestBuilder.class
 com/content_management_system/lms/features/course/dto/CreateCourseRequest$CreateCourseRequestBuilder.class
@@ -26,6 +29,7 @@ com/content_management_system/lms/shared/entity/Quiz.class
 com/content_management_system/lms/features/user/dto/UserResponse.class
 com/content_management_system/lms/features/course/dto/UpdateCourseRequest$UpdateCourseRequestBuilder.class
 com/content_management_system/lms/features/course/dto/CourseResponse.class
+com/content_management_system/lms/features/role/service/impl/RoleServiceImpl.class
 com/content_management_system/lms/shared/entity/Tenant.class
 com/content_management_system/lms/shared/entity/MasterData.class
 com/content_management_system/lms/features/lesson/service/LessonService.class
@@ -42,6 +46,7 @@ com/content_management_system/lms/features/quiz/service/QuizService.class
 com/content_management_system/lms/features/lesson/dto/CreateLessonRequest$CreateLessonRequestBuilderImpl.class
 com/content_management_system/lms/features/tenant/dto/TenantRequest$TenantRequestBuilder.class
 com/content_management_system/lms/features/enrollment/repository/EnrollmentRepository.class
+com/content_management_system/lms/shared/exception/UnauthorizedException.class
 com/content_management_system/lms/features/enrollment/dto/CreateEnrollmentRequest.class
 com/content_management_system/lms/features/user/service/UserService.class
 com/content_management_system/lms/shared/entity/Role.class
@@ -79,9 +84,11 @@ com/content_management_system/lms/features/course/controller/CourseController.cl
 com/content_management_system/lms/features/category/dto/UpdateCourseCategoryRequest$UpdateCourseCategoryRequestBuilder.class
 com/content_management_system/lms/features/quiz/controller/QuizController.class
 com/content_management_system/lms/shared/entity/Assignment.class
+com/content_management_system/lms/shared/exception/BadRequestException.class
 com/content_management_system/lms/features/lesson/dto/UpdateLessonRequest.class
 com/content_management_system/lms/features/course/dto/CourseResponse$InstructorInfo.class
 com/content_management_system/lms/features/tenant/mapper/TenantMapper.class
+com/content_management_system/lms/features/category/dto/BulkDeleteRequest.class
 com/content_management_system/lms/features/quiz/dto/QuestionRequest$QuestionRequestBuilder.class
 com/content_management_system/lms/features/category/service/impl/CourseCategoryServiceImpl.class
 com/content_management_system/lms/shared/entity/Submission.class
@@ -95,6 +102,7 @@ com/content_management_system/lms/features/course/dto/ChangeCourseStatusRequest.
 com/content_management_system/lms/features/quiz/dto/QuestionResponse$QuestionResponseBuilder.class
 com/content_management_system/lms/features/quiz/dto/QuizResponse$QuizResponseBuilder.class
 com/content_management_system/lms/features/category/dto/CourseCategoryResponse$TenantInfo.class
+com/content_management_system/lms/shared/exception/GlobalExceptionHandler.class
 com/content_management_system/lms/shared/entity/Rating.class
 com/content_management_system/lms/shared/config/PasswordEncoderConfig.class
 com/content_management_system/lms/features/enrollment/dto/EnrollmentResponse$CourseInfo.class
@@ -137,6 +145,7 @@ com/content_management_system/lms/features/lesson/dto/BaseLessonRequest$BaseLess
 com/content_management_system/lms/features/category/dto/UpdateCourseCategoryRequest$UpdateCourseCategoryRequestBuilderImpl.class
 com/content_management_system/lms/features/user/dto/UpdateUserRequest$UpdateUserRequestBuilder.class
 com/content_management_system/lms/features/user/mapper/UserMapper.class
+com/content_management_system/lms/features/role/dto/RoleResponse.class
 com/content_management_system/lms/features/enrollment/dto/EnrollmentResponse$CategoryInfo.class
 com/content_management_system/lms/shared/entity/StudentQuiz.class
 com/content_management_system/lms/features/user/controller/UserController.class
@@ -151,8 +160,11 @@ com/content_management_system/lms/features/category/dto/BaseCourseCategoryReques
 com/content_management_system/lms/features/quiz/dto/CreateQuizRequest$CreateQuizRequestBuilder.class
 com/content_management_system/lms/features/category/dto/BaseCourseCategoryRequest.class
 com/content_management_system/lms/shared/repository/AnswerRepository.class
+com/content_management_system/lms/features/role/dto/RoleResponse$RoleResponseBuilder.class
 com/content_management_system/lms/features/lesson/dto/BaseLessonRequest.class
 com/content_management_system/lms/features/lesson/controller/LessonController.class
 com/content_management_system/lms/features/course/dto/CourseResponse$CategoryInfo$CategoryInfoBuilder.class
 com/content_management_system/lms/features/category/dto/BaseCourseCategoryRequest$BaseCourseCategoryRequestBuilderImpl.class
+com/content_management_system/lms/features/role/mapper/RoleMapper.class
+com/content_management_system/lms/features/role/controller/RoleController.class
 com/content_management_system/lms/features/module/mapper/ModuleMapper.class

@@ -10,11 +10,13 @@ public interface UserService {
 
     UserResponse create(CreateUserRequest request);
 
-    List<UserResponse> findAll(String roleName);
+    List<UserResponse> findAll(String roleName, Long tenantId);
 
     UserResponse findById(Long id);
 
     UserResponse update(Long id, UpdateUserRequest request);
 
     void deleteById(Long id);
+
+    UserResponse login(String username, String password, Long tenantId);
 }

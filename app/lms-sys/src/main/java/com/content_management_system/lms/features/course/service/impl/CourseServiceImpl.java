@@ -53,8 +53,19 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CourseResponse> findAll() {
-        return courseRepository.findAll().stream()
+    public List<CourseResponse> findAll(Long tenantId) {
+        List<Course> courses;
+        if (tenantId != null) {
+            // Filter courses by tenant through category
+            courses = courseRepository.findAll().stream()
+                    .filter(course -> course.getCategory() != null 
+                            && course.getCategory().getTenant() != null
+                            && course.getCategory().getTenant().getId().equals(tenantId))
+                    .collect(Collectors.toList());
+        } else {
+            courses = courseRepository.findAll();
+        }
+        return courses.stream()
                 .map(CourseMapper::toResponse)
                 .collect(Collectors.toList());
     }

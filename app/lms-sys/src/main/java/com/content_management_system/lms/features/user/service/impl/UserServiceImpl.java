@@ -10,6 +10,7 @@ import com.content_management_system.lms.shared.entity.Role;
 import com.content_management_system.lms.shared.entity.Tenant;
 import com.content_management_system.lms.shared.entity.User;
 import com.content_management_system.lms.shared.exception.ResourceNotFoundException;
+import com.content_management_system.lms.shared.exception.UnauthorizedException;
 import com.content_management_system.lms.shared.repository.RoleRepository;
 import com.content_management_system.lms.shared.repository.TenantRepository;
 import com.content_management_system.lms.shared.repository.UserRepository;
@@ -57,18 +58,40 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<UserResponse> findAll(String roleName) {
-        if (roleName != null && !roleName.isEmpty()) {
-            try {
-                LmsRoleName role = LmsRoleName.valueOf(roleName);
-                return userRepository.findAllByRoleName(role).stream()
-                        .map(UserMapper::toResponse)
+    public List<UserResponse> findAll(String roleName, Long tenantId) {
+        List<User> users;
+        
+        if (tenantId != null) {
+            // Filter by tenant
+            if (roleName != null && !roleName.isEmpty()) {
+                try {
+                    LmsRoleName role = LmsRoleName.valueOf(roleName);
+                    users = userRepository.findAllByRoleName(role).stream()
+                            .filter(user -> user.getTenant() != null && user.getTenant().getId().equals(tenantId))
+                            .collect(Collectors.toList());
+                } catch (IllegalArgumentException e) {
+                    throw new ResourceNotFoundException("Role not found with name: " + roleName);
+                }
+            } else {
+                users = userRepository.findAll().stream()
+                        .filter(user -> user.getTenant() != null && user.getTenant().getId().equals(tenantId))
                         .collect(Collectors.toList());
-            } catch (IllegalArgumentException e) {
-                throw new ResourceNotFoundException("Role not found with name: " + roleName);
+            }
+        } else {
+            // No tenant filter
+            if (roleName != null && !roleName.isEmpty()) {
+                try {
+                    LmsRoleName role = LmsRoleName.valueOf(roleName);
+                    users = userRepository.findAllByRoleName(role);
+                } catch (IllegalArgumentException e) {
+                    throw new ResourceNotFoundException("Role not found with name: " + roleName);
+                }
+            } else {
+                users = userRepository.findAll();
             }
         }
-        return userRepository.findAll().stream()
+        
+        return users.stream()
                 .map(UserMapper::toResponse)
                 .collect(Collectors.toList());
     }
@@ -108,5 +131,18 @@ public class UserServiceImpl implements UserService {
             throw new ResourceNotFoundException("User not found with id: " + id);
         }
         userRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserResponse login(String username, String password, Long tenantId) {
+        User user = userRepository.findByUsernameAndTenantId(username, tenantId)
+                .orElseThrow(() -> new UnauthorizedException("Invalid username or password"));
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new UnauthorizedException("Invalid username or password");
+        }
+
+        return UserMapper.toResponse(user);
     }
 }

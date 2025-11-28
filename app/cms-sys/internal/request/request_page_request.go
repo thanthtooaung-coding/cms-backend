@@ -5,16 +5,15 @@ import (
 )
 
 type CreatePageRequest struct {
-	OwnerID     uint                  `json:"ownerId" validate:"required"`
-	RequestType string                `json:"requestType"`
-	Title       string                `json:"title"`
+	OwnerID     uint                  `json:"ownerId"` // Will be set from JWT token, not required in request
+	RequestType string                `json:"requestType" validate:"required"`
+	Title       string                `json:"title" validate:"required"`
 	Description string                `json:"description"`
-	PageUrl     string               `json:"pageUrl"`
-	LogoUrl    string               `json:"logoUrl"`
+	PageUrl     string               `json:"pageUrl" validate:"required"`
+	LogoUrl    string               `json:"logoUrl" validate:"required"`
 }
 
 type ChangeStatusPageRequest struct {
 	RequestID uint                      `json:"requestId" validate:"required"`
-	UserID    uint                      `json:"userId" validate:"required"`
 	Status    models.RequestStatus      `json:"status" validate:"required"`
 }

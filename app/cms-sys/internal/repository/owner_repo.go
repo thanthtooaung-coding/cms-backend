@@ -68,11 +68,10 @@ func (r *ownerRepositoryImpl) UpdateOwner(owner *models.User) error {
 
 func (r *ownerRepositoryImpl) GetAllOwners() ([]models.User, error) {
 	var owners []models.User
+	
+	// First, get all owners with their roles
 	err := r.db.Model(&models.User{}).
 		Preload("Role").
-		Select(`"User".*, 
-            (SELECT count(*) FROM "Page_Request" WHERE "Page_Request"."owner_id" = "User"."id") as number_of_request_pages,
-            (SELECT count(*) FROM "Page" WHERE "Page"."owner_id" = "User"."id") as number_of_pages_owned`).
 		Joins(`JOIN "Role" on "Role"."id" = "User"."role_id"`).
 		Where(`"Role"."name" = ?`, models.RoleOwner).
 		Find(&owners).Error
@@ -80,6 +79,26 @@ func (r *ownerRepositoryImpl) GetAllOwners() ([]models.User, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	// Then, calculate counts for each owner
+	for i := range owners {
+		var requestCount int64
+		var pageCount int64
+		
+		// Count page requests
+		r.db.Model(&models.PageRequest{}).
+			Where("owner_id = ?", owners[i].ID).
+			Count(&requestCount)
+		
+		// Count pages
+		r.db.Model(&models.Page{}).
+			Where("owner_id = ?", owners[i].ID).
+			Count(&pageCount)
+		
+		owners[i].NumberOfRequestPages = requestCount
+		owners[i].NumberOfPagesOwned = pageCount
+	}
+
 	return owners, nil
 }
 

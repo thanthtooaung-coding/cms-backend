@@ -11,6 +11,7 @@ public class CourseCategoryResponse {
     private Long id;
     private String name;
     private String description;
+    private OffsetDateTime createdAt;
     private TenantInfo tenant;
     
     @Data

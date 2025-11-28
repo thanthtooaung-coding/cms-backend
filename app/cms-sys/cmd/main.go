@@ -27,6 +27,7 @@ type dISection struct {
 	ownerHandler       handler.OwnerHandle
 	pageRequestHandler handler.PageRequestHandle
 	pageHandler        handler.PageHandle
+	authHandler        handler.AuthHandle
 	consulClient       *api.Client
 }
 
@@ -192,15 +193,22 @@ func dependencyInjectionSection(
 	pageHandler := handler.NewPageHandler(pageService)
 
 	lmsService := service.NewLmsService(logger, lmsServiceURL)
+	emailServiceURL := utils.GetEnv("EMAIL_SERVICE_URL", "http://email-service:8085")
+	emailService := service.NewEmailService(logger, emailServiceURL)
 
 	pageRequestRepo := repository.NewPageRequestRepository(logger, db)
-	pageRequestService := service.NewPageRequestService(logger, pageRequestRepo, pageService, lmsService, ownerRepo)
+	pageRequestService := service.NewPageRequestService(logger, pageRequestRepo, pageService, lmsService, emailService, ownerRepo)
 	pageRequestHandler := handler.NewPageRequestHandler(pageRequestService)
+
+	authRepo := repository.NewAuthRepository(logger, db)
+	authService := service.NewAuthService(logger, authRepo, pageRequestRepo)
+	authHandler := handler.NewAuthHandler(authService)
 
 	return &dISection{
 		ownerHandler:       ownerHandler,
 		pageRequestHandler: pageRequestHandler,
 		pageHandler:        pageHandler,
+		authHandler:        authHandler,
 	}
 }
 
@@ -338,6 +346,7 @@ func main() {
 	})
 
 	di := dependencyInjectionSection(appLogger, dbConnection.DB, consulClient, lmsServiceURL)
+	routes.SetupAuthRoutes(app, di.authHandler)
 	routes.SetupOwnerRoutes(app, di.ownerHandler)
 	routes.SetupPageRequestRoutes(app, di.pageRequestHandler)
 	routes.SetupPageRoutes(app, di.pageHandler)

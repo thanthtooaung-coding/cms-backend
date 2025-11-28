@@ -28,6 +28,8 @@ public class CourseMapper {
                 .id(course.getId())
                 .title(course.getTitle())
                 .description(course.getDescription())
+                .status(course.getStatus())
+                .durationDayCount(course.getDurationDayCount())
                 .category(categoryInfo)
                 .instructor(instructorInfo)
                 .build();

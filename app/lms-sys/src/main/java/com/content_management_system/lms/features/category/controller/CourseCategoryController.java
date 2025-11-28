@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.content_management_system.lms.features.category.dto.BulkDeleteRequest;
 import com.content_management_system.lms.features.category.dto.CourseCategoryResponse;
 import com.content_management_system.lms.features.category.dto.CreateCourseCategoryRequest;
 import com.content_management_system.lms.features.category.dto.UpdateCourseCategoryRequest;
@@ -34,8 +36,8 @@ public class CourseCategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CourseCategoryResponse>> getAllTenants() {
-        List<CourseCategoryResponse> responses = ccService.findAll();
+    public ResponseEntity<List<CourseCategoryResponse>> getAllCategories(@RequestParam(required = false) Long tenantId) {
+        List<CourseCategoryResponse> responses = ccService.findAll(tenantId);
         return ResponseEntity.ok(responses);
     }
 
@@ -54,6 +56,18 @@ public class CourseCategoryController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTenant(@PathVariable Long id) {
     	ccService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/bulk")
+    public ResponseEntity<Void> bulkDelete(@RequestBody BulkDeleteRequest request) {
+        ccService.bulkDelete(request);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/bulk/force")
+    public ResponseEntity<Void> forceDelete(@RequestBody BulkDeleteRequest request) {
+        ccService.forceDelete(request);
         return ResponseEntity.noContent().build();
     }
 }

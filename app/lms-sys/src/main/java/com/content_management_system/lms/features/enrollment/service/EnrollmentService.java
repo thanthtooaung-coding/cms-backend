@@ -8,7 +8,7 @@ import java.util.List;
 public interface EnrollmentService {
     EnrollmentResponse create(CreateEnrollmentRequest request);
 
-    List<EnrollmentResponse> findAll();
+    List<EnrollmentResponse> findAll(Long tenantId);
 
     List<EnrollmentResponse> search(String studentEmail, Long courseId, Long categoryId);
 
