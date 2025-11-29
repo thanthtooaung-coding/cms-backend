@@ -28,6 +28,7 @@ type dISection struct {
 	pageRequestHandler handler.PageRequestHandle
 	pageHandler        handler.PageHandle
 	authHandler        handler.AuthHandle
+	dashboardHandler   *handler.DashboardHandler
 	consulClient       *api.Client
 }
 
@@ -208,11 +209,15 @@ func dependencyInjectionSection(
 	authService := service.NewAuthService(logger, authRepo, pageRequestRepo)
 	authHandler := handler.NewAuthHandler(authService)
 
+	dashboardService := service.NewDashboardService(logger, ownerRepo, pageRequestRepo, pageRepo)
+	dashboardHandler := handler.NewDashboardHandler(dashboardService)
+
 	return &dISection{
 		ownerHandler:       ownerHandler,
 		pageRequestHandler: pageRequestHandler,
 		pageHandler:        pageHandler,
 		authHandler:        authHandler,
+		dashboardHandler:   dashboardHandler,
 	}
 }
 
@@ -364,6 +369,7 @@ func main() {
 	routes.SetupOwnerRoutes(app, di.ownerHandler)
 	routes.SetupPageRequestRoutes(app, di.pageRequestHandler)
 	routes.SetupPageRoutes(app, di.pageHandler)
+	routes.SetupDashboardRoutes(app, di.dashboardHandler)
 
 	port := utils.GetEnv("CMS_PORT", "8081")
 
