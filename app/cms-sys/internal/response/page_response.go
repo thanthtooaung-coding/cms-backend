@@ -9,6 +9,7 @@ type PageResponse struct {
 	ID                 uint              `json:"id"`
 	Title              *string           `json:"title"`
 	ImageURL           *string           `json:"imageUrl"`
+	PageUrl            *string           `json:"pageUrl,omitempty"`
 	Status             models.PageStatus `json:"status"`
 	OwnerID            uint              `json:"ownerId"`
 	Owner              *OwnerResponse    `json:"owner,omitempty"`

@@ -191,8 +191,9 @@ func dependencyInjectionSection(
 	ownerService := service.NewOwnerService(logger, ownerRepo)
 	ownerHandler := handler.NewOwnerHandler(ownerService)
 
+	pageRequestRepo := repository.NewPageRequestRepository(logger, db)
 	pageRepo := repository.NewPageRepository(logger, db)
-	pageService := service.NewPageService(logger, pageRepo)
+	pageService := service.NewPageService(logger, pageRepo, pageRequestRepo)
 	pageHandler := handler.NewPageHandler(pageService)
 
 	lmsService := service.NewLmsService(logger, lmsServiceURL)
@@ -201,7 +202,6 @@ func dependencyInjectionSection(
 	emailServiceURL := utils.GetEnv("EMAIL_SERVICE_URL", "http://email-service:8085")
 	emailService := service.NewEmailService(logger, emailServiceURL)
 
-	pageRequestRepo := repository.NewPageRequestRepository(logger, db)
 	pageRequestService := service.NewPageRequestService(logger, pageRequestRepo, pageService, lmsService, bmsService, ecsService, emailService, ownerRepo)
 	pageRequestHandler := handler.NewPageRequestHandler(pageRequestService)
 

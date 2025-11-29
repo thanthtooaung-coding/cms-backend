@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"github.com/sirupsen/logrus"
 	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/models"
 	"gorm.io/gorm"
@@ -14,6 +15,7 @@ type PageRepository interface {
 	DeletePageByID(id uint) error
 	CountPages() (int64, error)
 	UpdateStatus(id uint, status models.PageStatus) error
+	GetPageUrlByTitleAndOwner(title string, ownerID uint) (*string, error)
 }
 
 type pageRepositoryImpl struct {
@@ -46,7 +48,13 @@ func (r *pageRepositoryImpl) GetPageByID(id uint) (*models.Page, error) {
 
 func (r *pageRepositoryImpl) GetAllPages(offset, limit int) ([]models.Page, error) {
 	var pages []models.Page
-	err := r.db.Preload("Owner.Role").Preload("PublishedByStaff.Role").Offset(offset).Limit(limit).Find(&pages).Error
+	err := r.db.
+		Preload("Owner.Role").
+		Preload("PublishedByStaff.Role").
+		Offset(offset).
+		Limit(limit).
+		Order("created_at DESC").
+		Find(&pages).Error
 	if err != nil {
 		return nil, err
 	}
@@ -88,4 +96,19 @@ func (r *pageRepositoryImpl) UpdateStatus(id uint, status models.PageStatus) err
 		return gorm.ErrRecordNotFound
 	}
 	return nil
+}
+
+func (r *pageRepositoryImpl) GetPageUrlByTitleAndOwner(title string, ownerID uint) (*string, error) {
+	var pageRequest models.PageRequest
+	err := r.db.
+		Where("title = ? AND owner_id = ? AND status = ?", title, ownerID, models.RequestApproved).
+		Order("created_at DESC").
+		First(&pageRequest).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return &pageRequest.PageUrl, nil
 }

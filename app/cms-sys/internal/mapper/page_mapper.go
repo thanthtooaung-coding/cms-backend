@@ -5,11 +5,12 @@ import (
 	"github.com/thanthtooaung-coding/cms-backend/app/cms-sys/internal/response"
 )
 
-func ToPageResponse(page *models.Page) *response.PageResponse {
+func ToPageResponse(page *models.Page, pageUrl *string) *response.PageResponse {
 	resp := &response.PageResponse{
 		ID:                 page.ID,
 		Title:              page.Title,
 		ImageURL:           page.ImageURL,
+		PageUrl:            pageUrl,
 		Status:             page.Status,
 		OwnerID:            page.OwnerID,
 		PublishedByStaffID: page.PublishedByStaffID,
@@ -30,10 +31,3 @@ func ToPageResponse(page *models.Page) *response.PageResponse {
 	return resp
 }
 
-func ToPageListResponse(pages []models.Page) []*response.PageResponse {
-	var pageList []*response.PageResponse
-	for _, page := range pages {
-		pageList = append(pageList, ToPageResponse(&page))
-	}
-	return pageList
-}

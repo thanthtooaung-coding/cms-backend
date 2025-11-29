@@ -25,16 +25,18 @@ type PageService interface {
 }
 
 type pageServiceImpl struct {
-	log  *logrus.Logger
-	repo repository.PageRepository
+	log            *logrus.Logger
+	repo           repository.PageRepository
+	pageRequestRepo repository.PageRequestRepository
 }
 
 var _ PageService = (*pageServiceImpl)(nil)
 
-func NewPageService(log *logrus.Logger, repo repository.PageRepository) PageService {
+func NewPageService(log *logrus.Logger, repo repository.PageRepository, pageRequestRepo repository.PageRequestRepository) PageService {
 	return &pageServiceImpl{
-		log:  log,
-		repo: repo,
+		log:            log,
+		repo:           repo,
+		pageRequestRepo: pageRequestRepo,
 	}
 }
 
@@ -58,7 +60,14 @@ func (s *pageServiceImpl) Create(req request.PageCreateRequest) (*response.PageR
 		return nil, err
 	}
 
-	return mapper.ToPageResponse(createdPage), nil
+	var pageUrl *string
+	if createdPage.Title != nil {
+		url, err := s.repo.GetPageUrlByTitleAndOwner(*createdPage.Title, createdPage.OwnerID)
+		if err == nil && url != nil {
+			pageUrl = url
+		}
+	}
+	return mapper.ToPageResponse(createdPage, pageUrl), nil
 }
 
 func (s *pageServiceImpl) Update(id uint, req request.PageUpdateRequest) (*response.PageResponse, error) {
@@ -92,7 +101,14 @@ func (s *pageServiceImpl) Update(id uint, req request.PageUpdateRequest) (*respo
 		return nil, err
 	}
 
-	return mapper.ToPageResponse(updatedPage), nil
+	var pageUrl *string
+	if updatedPage.Title != nil {
+		url, err := s.repo.GetPageUrlByTitleAndOwner(*updatedPage.Title, updatedPage.OwnerID)
+		if err == nil && url != nil {
+			pageUrl = url
+		}
+	}
+	return mapper.ToPageResponse(updatedPage, pageUrl), nil
 }
 
 func (s *pageServiceImpl) GetAll(req *request.PaginateRequest) ([]*response.PageResponse, *utils.Pagination, error) {
@@ -116,7 +132,20 @@ func (s *pageServiceImpl) GetAll(req *request.PaginateRequest) ([]*response.Page
 		TotalPages: int(math.Ceil(float64(total) / float64(req.Limit))),
 	}
 
-	return mapper.ToPageListResponse(pages), pagination, nil
+	// Map pages to responses with pageUrl from PageRequest
+	var pageResponses []*response.PageResponse
+	for _, page := range pages {
+		var pageUrl *string
+		if page.Title != nil {
+			url, err := s.repo.GetPageUrlByTitleAndOwner(*page.Title, page.OwnerID)
+			if err == nil && url != nil {
+				pageUrl = url
+			}
+		}
+		pageResponses = append(pageResponses, mapper.ToPageResponse(&page, pageUrl))
+	}
+
+	return pageResponses, pagination, nil
 }
 
 func (s *pageServiceImpl) GetByID(id uint) (*response.PageResponse, error) {
@@ -129,7 +158,14 @@ func (s *pageServiceImpl) GetByID(id uint) (*response.PageResponse, error) {
 		return nil, err
 	}
 
-	return mapper.ToPageResponse(page), nil
+	var pageUrl *string
+	if page.Title != nil {
+		url, err := s.repo.GetPageUrlByTitleAndOwner(*page.Title, page.OwnerID)
+		if err == nil && url != nil {
+			pageUrl = url
+		}
+	}
+	return mapper.ToPageResponse(page, pageUrl), nil
 }
 
 func (s *pageServiceImpl) Delete(ids []uint) error {
