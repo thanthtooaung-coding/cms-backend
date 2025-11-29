@@ -88,13 +88,23 @@ func (r *PageRequestRepositoryImpl) GetByOwnerID(ownerID uint) ([]*models.PageRe
 
 func (r *PageRequestRepositoryImpl) GetByUrlSlug(urlSlug string) (*models.PageRequest, error) {
 	var pageRequest models.PageRequest
-	// Match URL patterns like http://localhost:5176/lms/triple-a-language-school
-	// or /lms/triple-a-language-school
-	// or http://localhost:5177/bms/triple-a-language-school
-	// or /bms/triple-a-language-school
+	// Match URL patterns like:
+	// - http://localhost:5176/lms/triple-a-language-school or /lms/triple-a-language-school
+	// - http://localhost:5177/bms/triple-a-language-school or /bms/triple-a-language-school
+	// - http://localhost:5178/ecommerce/vezada (base ECS URL)
+	// - http://localhost:5178/ecommerce/vezada/ecs-client/ or /ecommerce/vezada/ecs-client/
+	// - http://localhost:5179/ecommerce/vezada/ecs-dashboard/ or /ecommerce/vezada/ecs-dashboard/
+	// - http://localhost:5178/ecs-client/vezada or /ecs-client/vezada
+	// - http://localhost:5179/ecs-dashboard/vezada or /ecs-dashboard/vezada
 	lmsUrlPattern := "%/lms/" + urlSlug
 	bmsUrlPattern := "%/bms/" + urlSlug
-	if err := r.db.Where("(page_url LIKE ? OR page_url LIKE ?) AND status = ?", lmsUrlPattern, bmsUrlPattern, models.RequestApproved).
+	ecsClientUrlPattern := "%/ecs-client/" + urlSlug
+	ecsDashboardUrlPattern := "%/ecs-dashboard/" + urlSlug
+	ecommerceBasePattern := "%/ecommerce/" + urlSlug
+	ecommerceEcsClientPattern := "%/ecommerce/" + urlSlug + "/ecs-client%"
+	ecommerceEcsDashboardPattern := "%/ecommerce/" + urlSlug + "/ecs-dashboard%"
+	if err := r.db.Where("(page_url LIKE ? OR page_url LIKE ? OR page_url LIKE ? OR page_url LIKE ? OR page_url LIKE ? OR page_url LIKE ? OR page_url LIKE ?) AND status = ?",
+		lmsUrlPattern, bmsUrlPattern, ecsClientUrlPattern, ecsDashboardUrlPattern, ecommerceBasePattern, ecommerceEcsClientPattern, ecommerceEcsDashboardPattern, models.RequestApproved).
 		Preload("Owner").
 		First(&pageRequest).Error; err != nil {
 		r.logger.WithError(err).Errorf("Failed to get page request by URL slug: %s", urlSlug)

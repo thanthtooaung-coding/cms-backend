@@ -37,19 +37,21 @@ type PageRequestServiceImpl struct {
 	pageService PageService
 	lmsService  LmsService
 	bmsService  BmsService
+	ecsService  EcsService
 	emailService EmailService
 	ownerRepo   repository.OwnerRepository
 }
 
 var _ PageRequestService = (*PageRequestServiceImpl)(nil)
 
-func NewPageRequestService(logger *logrus.Logger, repo repository.PageRequestRepository, pageService PageService, lmsService LmsService, bmsService BmsService, emailService EmailService, ownerRepo repository.OwnerRepository) *PageRequestServiceImpl {
+func NewPageRequestService(logger *logrus.Logger, repo repository.PageRequestRepository, pageService PageService, lmsService LmsService, bmsService BmsService, ecsService EcsService, emailService EmailService, ownerRepo repository.OwnerRepository) *PageRequestServiceImpl {
 	return &PageRequestServiceImpl{
 		logger:      logger,
 		repo:        repo,
 		pageService: pageService,
 		lmsService:  lmsService,
 		bmsService:  bmsService,
+		ecsService:  ecsService,
 		emailService: emailService,
 		ownerRepo:   ownerRepo,
 	}
@@ -243,7 +245,91 @@ CMS Team`,
 			}
 
 		case "E-COMMERCE":
-			s.logger.Infof("RequestType is E-COMMERCE. Setup logic not implemented yet.")
+			s.logger.Infof("RequestType is E-COMMERCE. Triggering setup for new ECS tenant for Owner %d", pageRequest.OwnerID)
+
+			owner, err := s.ownerRepo.GetOwnerByID(pageRequest.OwnerID)
+			if err != nil {
+				s.logger.WithError(err).Errorf("Failed to find Owner with ID %d for ECS setup", pageRequest.OwnerID)
+				return fmt.Errorf("failed to find owner %d: %w", pageRequest.OwnerID, err)
+			}
+
+			ecsReq := EcsTenantRequest{
+				Name:     pageRequest.Title,
+				IsActive: true,
+			}
+
+			createdTenant, err := s.ecsService.CreateTenant(ecsReq)
+			if err != nil {
+				s.logger.WithError(err).Error("Failed to setup new ECS tenant")
+				return fmt.Errorf("failed to setup ECS tenant: %w", err)
+			}
+			s.logger.Infof("Successfully triggered ECS tenant creation for Page ID %d", createdPage.ID)
+
+			generatedPassword, err := utils.GenerateSecurePassword(16)
+			if err != nil {
+				s.logger.WithError(err).Error("Failed to generate secure password for new ECS owner")
+				return fmt.Errorf("failed to generate password: %w", err)
+			}
+			s.logger.Warnf("GENERATED PASSWORD FOR owner %d: %s", owner.ID, generatedPassword)
+
+			// Get the Owner role ID from ECS service
+			ownerRole, err := s.ecsService.GetRoleByName("Owner")
+			if err != nil {
+				s.logger.WithError(err).Error("Failed to get Owner role from ECS service")
+				return fmt.Errorf("failed to get Owner role: %w", err)
+			}
+
+			ecsOwnerReq := EcsOwnerRequest{
+				Username:    owner.Email,
+				Password:    generatedPassword,
+				Email:       owner.Email,
+				Name:        safeDerefString(owner.Name),
+				TenantID:    createdTenant.ID,
+				RoleID:      ownerRole.ID,
+				Address:     safeDerefString(owner.Address),
+				PhoneNumber: safeDerefString(owner.PhoneNumber),
+			}
+
+			if err := s.ecsService.CreateEcsOwner(ecsOwnerReq); err != nil {
+				s.logger.WithError(err).Error("Failed to create ECS owner user after tenant creation")
+				return fmt.Errorf("failed to create ECS owner user: %w", err)
+			}
+
+			s.logger.Infof("Successfully created ECS owner for Tenant ID %d", createdTenant.ID)
+
+			// Send email with ECS credentials
+			emailSubject := fmt.Sprintf("Your ECS Access - %s", pageRequest.Title)
+			emailBody := fmt.Sprintf(`Dear %s,
+
+Your page request "%s" has been approved!
+
+Your ECS access credentials:
+
+Email: %s
+Password: %s
+
+ECS Dashboard: %s/ecs-dashboard/%s
+ECS Client: %s/ecs-client/%s
+
+Please keep these credentials secure and do not share them with anyone.
+
+Best regards,
+CMS Team`,
+				safeDerefString(owner.Name),
+				pageRequest.Title,
+				owner.Email,
+				generatedPassword,
+				pageRequest.PageUrl,
+				extractSlugFromUrl(pageRequest.PageUrl),
+				pageRequest.PageUrl,
+				extractSlugFromUrl(pageRequest.PageUrl))
+
+			if err := s.emailService.SendEmail(owner.Email, emailSubject, emailBody); err != nil {
+				s.logger.WithError(err).Error("Failed to send email with ECS credentials")
+				// Don't fail the whole operation if email fails
+			} else {
+				s.logger.Infof("Successfully sent ECS credentials email to %s", owner.Email)
+			}
 
 		case "BOOKING":
 			s.logger.Infof("RequestType is BOOKING. Triggering setup for new BMS tenant for Owner %d", pageRequest.OwnerID)
@@ -338,7 +424,7 @@ func (s *PageRequestServiceImpl) GetTenantInfoBySlug(urlSlug string) (*response.
 	}
 
 	// Get tenant info based on request type
-	// For LMS, get from LMS service; for BMS, get from BMS service
+	// For LMS, get from LMS service; for BMS, get from BMS service; for E-COMMERCE, get from ECS service
 	var tenantID uint
 	var tenantName string
 	
@@ -377,6 +463,30 @@ func (s *PageRequestServiceImpl) GetTenantInfoBySlug(urlSlug string) (*response.
 			tenantID = tenant.ID
 			tenantName = tenant.Name
 		}
+	} else if pageRequest.RequestType == "E-COMMERCE" {
+		// Try to get tenant by page request title first
+		tenant, err := s.ecsService.GetTenantByName(pageRequest.Title)
+		if err != nil {
+			// If that fails, try to extract slug from URL and match by that
+			urlSlug := extractSlugFromUrl(pageRequest.PageUrl)
+			if urlSlug != "" && urlSlug != pageRequest.Title {
+				s.logger.Infof("Failed to get ECS tenant by title '%s', trying slug '%s'", pageRequest.Title, urlSlug)
+				tenant, err = s.ecsService.GetTenantByName(urlSlug)
+			}
+			
+			if err != nil {
+				s.logger.WithError(err).Warnf("Failed to get ECS tenant by name: %s (also tried slug: %s). Tenant may not exist in ECS yet. Using page request info as fallback.", pageRequest.Title, urlSlug)
+				// Fallback: Use page request info if tenant doesn't exist in ECS
+				tenantID = 0 // Use 0 as placeholder since tenant doesn't exist in ECS
+				tenantName = pageRequest.Title
+			} else {
+				tenantID = tenant.ID
+				tenantName = tenant.Name
+			}
+		} else {
+			tenantID = tenant.ID
+			tenantName = tenant.Name
+		}
 	} else {
 		return nil, fmt.Errorf("unsupported request type: %s", pageRequest.RequestType)
 	}
@@ -399,6 +509,9 @@ func extractSlugFromUrl(pageUrl string) string {
 	// or /lms/triple-a-language-school
 	// or http://localhost:5177/bms/triple-a-language-school
 	// or /bms/triple-a-language-school
+	// or http://localhost:5178/ecs-client/vezada
+	// or /ecs-client/vezada or /ecs-dashboard/vezada
+	// or http://localhost:5178/ecommerce/vezada or /ecommerce/vezada/ecs-client/
 	parts := strings.Split(pageUrl, "/lms/")
 	if len(parts) > 1 {
 		return strings.TrimSuffix(parts[1], "/")
@@ -406,6 +519,25 @@ func extractSlugFromUrl(pageUrl string) string {
 	parts = strings.Split(pageUrl, "/bms/")
 	if len(parts) > 1 {
 		return strings.TrimSuffix(parts[1], "/")
+	}
+	parts = strings.Split(pageUrl, "/ecs-client/")
+	if len(parts) > 1 {
+		return strings.TrimSuffix(parts[1], "/")
+	}
+	parts = strings.Split(pageUrl, "/ecs-dashboard/")
+	if len(parts) > 1 {
+		return strings.TrimSuffix(parts[1], "/")
+	}
+	// Handle /ecommerce/vezada or /ecommerce/vezada/ecs-client/ pattern
+	parts = strings.Split(pageUrl, "/ecommerce/")
+	if len(parts) > 1 {
+		// Extract the slug (e.g., "vezada" from "/ecommerce/vezada" or "/ecommerce/vezada/ecs-client/")
+		slugPart := parts[1]
+		// Remove any trailing path after the slug (e.g., "/ecs-client/" or "/ecs-dashboard/")
+		slugParts := strings.Split(slugPart, "/")
+		if len(slugParts) > 0 && slugParts[0] != "" {
+			return slugParts[0]
+		}
 	}
 	return ""
 }
