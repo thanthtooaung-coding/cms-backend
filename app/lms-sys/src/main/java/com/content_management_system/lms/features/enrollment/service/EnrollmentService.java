@@ -20,4 +20,6 @@ public interface EnrollmentService {
     boolean isStudentEnrolled(Long studentId, Long courseId);
     
     List<EnrolledCourseResponse> getEnrolledCourses(Long studentId, Long userId);
+    
+    List<com.content_management_system.lms.features.enrollment.dto.EnrollmentStatisticsResponse> getEnrollmentStatistics(Long tenantId, Long userId);
 }

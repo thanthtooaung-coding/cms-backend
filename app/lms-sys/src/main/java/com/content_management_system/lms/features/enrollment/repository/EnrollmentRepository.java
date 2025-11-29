@@ -36,4 +36,7 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
            "JOIN e.course c " +
            "WHERE c.instructor.id = :instructorId AND e.deletedAt IS NULL AND c.deletedAt IS NULL")
     long countDistinctStudentsByInstructorId(@Param("instructorId") Long instructorId);
+    
+    @Query("SELECT COUNT(e) FROM Enrollment e WHERE e.course.id = :courseId AND e.deletedAt IS NULL")
+    long countByCourseId(@Param("courseId") Long courseId);
 }

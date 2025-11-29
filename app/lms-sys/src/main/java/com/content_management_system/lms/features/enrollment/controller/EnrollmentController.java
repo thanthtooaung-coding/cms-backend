@@ -74,4 +74,12 @@ public class EnrollmentController {
         List<com.content_management_system.lms.features.enrollment.dto.EnrolledCourseResponse> courses = enrollmentService.getEnrolledCourses(studentId, userId);
         return ResponseEntity.ok(courses);
     }
+
+    @GetMapping("/statistics")
+    public ResponseEntity<List<com.content_management_system.lms.features.enrollment.dto.EnrollmentStatisticsResponse>> getEnrollmentStatistics(
+            @RequestParam(required = false) Long tenantId,
+            @RequestHeader(value = "X-User-Id", required = false) Long userId) {
+        List<com.content_management_system.lms.features.enrollment.dto.EnrollmentStatisticsResponse> statistics = enrollmentService.getEnrollmentStatistics(tenantId, userId);
+        return ResponseEntity.ok(statistics);
+    }
 }

@@ -31,4 +31,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     
     @Query("SELECT COUNT(c) FROM Course c WHERE c.instructor.id = :instructorId AND c.deletedAt IS NULL")
     long countByInstructorId(@Param("instructorId") Long instructorId);
+    
+    @Query("SELECT c FROM Course c WHERE c.instructor.id = :instructorId AND c.deletedAt IS NULL")
+    List<Course> findAllByInstructorId(@Param("instructorId") Long instructorId);
 }

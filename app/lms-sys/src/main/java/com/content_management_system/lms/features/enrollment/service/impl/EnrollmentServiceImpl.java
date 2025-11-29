@@ -298,4 +298,106 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 .filter(response -> response != null)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<com.content_management_system.lms.features.enrollment.dto.EnrollmentStatisticsResponse> getEnrollmentStatistics(Long tenantId, Long userId) {
+        User currentUser = userId != null ? securityUtil.getCurrentUser(userId) : null;
+        
+        if (currentUser == null) {
+            throw new UnauthorizedException("User authentication required");
+        }
+
+        List<com.content_management_system.lms.features.enrollment.dto.EnrollmentStatisticsResponse> statistics = new java.util.ArrayList<>();
+
+        // Check if user is Owner
+        if (securityUtil.hasRole(currentUser, com.content_management_system.lms.shared.constants.LmsRoleName.Owner.name())) {
+            // Owner: Get all instructors with their courses
+            List<User> instructors = userRepository.findAllByRoleName("Instructor");
+            
+            // Also include Staff as they can be instructors too
+            List<User> staff = userRepository.findAllByRoleName("Staff");
+            instructors.addAll(staff);
+            
+            // Remove duplicates and filter by tenant if needed
+            if (tenantId != null) {
+                instructors = instructors.stream()
+                        .filter(instructor -> instructor.getTenant() != null 
+                                && instructor.getTenant().getId().equals(tenantId))
+                        .distinct()
+                        .collect(Collectors.toList());
+            }
+            
+            // Sort by instructor name
+            instructors.sort((a, b) -> {
+                String nameA = a.getName() != null ? a.getName() : a.getUsername();
+                String nameB = b.getName() != null ? b.getName() : b.getUsername();
+                return nameA.compareToIgnoreCase(nameB);
+            });
+            
+            // For each instructor, get their courses and statistics
+            for (User instructor : instructors) {
+                List<Course> courses = courseRepository.findAllByInstructorId(instructor.getId()).stream()
+                        .filter(course -> {
+                            if (tenantId != null) {
+                                return course.getCategory() != null 
+                                        && course.getCategory().getTenant() != null
+                                        && course.getCategory().getTenant().getId().equals(tenantId);
+                            }
+                            return true;
+                        })
+                        .collect(Collectors.toList());
+                
+                for (Course course : courses) {
+                    // Count enrollments for this course
+                    long studentCount = enrollmentRepository.countByCourseId(course.getId());
+                    
+                    // Count certificates for this course
+                    long certifiedCount = certificateRepository.countByCourseId(course.getId());
+                    
+                    statistics.add(com.content_management_system.lms.features.enrollment.dto.EnrollmentStatisticsResponse.builder()
+                            .courseId(course.getId())
+                            .courseName(course.getTitle())
+                            .instructorId(instructor.getId())
+                            .instructorName(instructor.getName() != null ? instructor.getName() : instructor.getUsername())
+                            .studentCount(studentCount)
+                            .certifiedStudentCount(certifiedCount)
+                            .build());
+                }
+            }
+        } else if (securityUtil.isInstructorOrStaff(currentUser)) {
+            // Instructor/Staff: Get only their courses
+            List<Course> courses = courseRepository.findAllByInstructorId(currentUser.getId()).stream()
+                    .filter(course -> {
+                        if (tenantId != null) {
+                            return course.getCategory() != null 
+                                    && course.getCategory().getTenant() != null
+                                    && course.getCategory().getTenant().getId().equals(tenantId);
+                        }
+                        return true;
+                    })
+                    .collect(Collectors.toList());
+            
+            for (Course course : courses) {
+                // Count enrollments for this course
+                long studentCount = enrollmentRepository.countByCourseId(course.getId());
+                
+                // Count certificates for this course
+                long certifiedCount = certificateRepository.countByCourseId(course.getId());
+                
+                statistics.add(com.content_management_system.lms.features.enrollment.dto.EnrollmentStatisticsResponse.builder()
+                        .courseId(course.getId())
+                        .courseName(course.getTitle())
+                        .instructorId(currentUser.getId())
+                        .instructorName(currentUser.getName() != null ? currentUser.getName() : currentUser.getUsername())
+                        .studentCount(studentCount)
+                        .certifiedStudentCount(certifiedCount)
+                        .build());
+            }
+        } else {
+            throw new UnauthorizedException("Only Owner, Instructor, and Staff can view enrollment statistics");
+        }
+        
+        return statistics;
+    }
 }

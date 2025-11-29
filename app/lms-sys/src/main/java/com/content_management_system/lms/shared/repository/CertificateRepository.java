@@ -20,5 +20,8 @@ public interface CertificateRepository extends JpaRepository<Certificate, Long> 
     
     @Query("SELECT c FROM Certificate c WHERE c.course.id = :courseId AND c.deletedAt IS NULL")
     List<Certificate> findAllByCourseId(@Param("courseId") Long courseId);
+    
+    @Query("SELECT COUNT(c) FROM Certificate c WHERE c.course.id = :courseId AND c.deletedAt IS NULL")
+    long countByCourseId(@Param("courseId") Long courseId);
 }
 
