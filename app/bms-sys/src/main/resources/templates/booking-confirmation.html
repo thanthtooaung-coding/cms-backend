@@ -12,7 +12,10 @@
             <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #1a1a2e; border-radius: 8px; color: #ffffff; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
                 <tr>
                     <td align="center" style="padding: 30px 20px;">
-                        <h1 style="margin: 0; color: #e0b0ff; font-size: 36px; font-weight: bold; letter-spacing: 2px;">CELESTIX</h1>
+                        <div th:if="${tenantLogoUrl != null and tenantLogoUrl != ''}">
+                            <img th:src="${tenantLogoUrl}" alt="Logo" style="max-height: 60px; margin-bottom: 10px;"/>
+                        </div>
+                        <h1 style="margin: 0; color: #e0b0ff; font-size: 36px; font-weight: bold; letter-spacing: 2px;" th:text="${tenantName}">CELESTIX</h1>
                     </td>
                 </tr>
                 <tr>
@@ -22,7 +25,7 @@
                             Hi <strong th:text="${customerName}">Customer Name</strong>,
                         </p>
                         <p style="color: #d1d1d1; font-size: 16px; line-height: 1.6;">
-                            Thank you for booking with Celestix. Here are the details of your booking:
+                            Thank you for booking with <span th:text="${tenantName}">Celestix</span>. Here are the details of your booking:
                         </p>
                         <div style="margin-top: 30px; padding: 20px; background-color: #2a2a3e; border-radius: 6px;">
                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -63,7 +66,7 @@
                             Booking ID: <span th:text="${bookingId}">uuid-goes-here</span>
                         </p>
                         <p style="margin: 10px 0 0; color: #8a8a9e; font-size: 12px;">
-                            &copy; 2025 Celestix. All rights reserved.
+                            &copy; 2025 <span th:text="${tenantName}">Celestix</span>. All rights reserved.
                         </p>
                     </td>
                 </tr>

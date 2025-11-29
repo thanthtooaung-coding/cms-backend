@@ -38,7 +38,7 @@ services:
       - "4001:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
-      - ALLOWED_ORIGINS=http://localhost:5173,http://localhost:5174,http://localhost:5175,http://localhost:5176
+      - ALLOWED_ORIGINS=http://localhost:5173,http://localhost:5174,http://localhost:5175,http://localhost:5176,http://localhost:5177
     depends_on:
       consul:
         condition: service_healthy
@@ -78,6 +78,7 @@ services:
       - CONSUL_CHECK_ID=service-check-cms-api-1
       - CMS_PORT=${CMS_PORT}
       - LMS_SERVICE_URL=http://lms-main-system:8082
+      - BMS_SERVICE_URL=http://bms-main-system:8087
     ports:
       - "4011:8081"
     restart: unless-stopped
@@ -114,37 +115,37 @@ services:
       - LMS_PORT=${LMS_PORT}
     restart: unless-stopped
 
-  # bms-main-system:
-  #   build:
-  #     context: ./app/bms-sys
-  #     dockerfile: Dockerfile
-  #   networks:
-  #     - whole-system-network
-  #   depends_on:
-  #     postgres-bms:
-  #       condition: service_healthy
-  #     consul:
-  #       condition: service_healthy
-  #   ports:
-  #     - "8087:8087"
-  #   environment:
-  #     - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
-  #     - BMS_DB_HOST=postgres-bms
-  #     - BMS_DB_PORT=${BMS_DB_PORT}
-  #     - BMS_DB_NAME=${POSTGRES_BMS_DB}
-  #     - BMS_DB_USER=${POSTGRES_BMS_USER}
-  #     - BMS_DB_PASSWORD=${POSTGRES_BMS_PASSWORD}
-  #     - CONSUL_ENABLED=${CONSUL_ENABLED}
-  #     - BMS_CONSUL_ADDRESS=${BMS_CONSUL_ADDRESS}
-  #     - BMS_CONSUL_DATACENTER=${BMS_CONSUL_DATACENTER}
-  #     - BMS_CONSUL_SCHEME=${BMS_CONSUL_SCHEME}
-  #     - BMS_CONSUL_SERVICE_ID=bms-api-1
-  #     - BMS_CONSUL_SERVICE_NAME=bms-service
-  #     - BMS_CONSUL_SERVICE_TAGS=${BMS_SERVICE_TAGS}
-  #     - BMS_CONSUL_CHECK_TTL=30s
-  #     - CONSUL_CHECK_ID=service-check-bms-api-1
-  #     - BMS_PORT=${BMS_PORT}
-  #   restart: unless-stopped
+  bms-main-system:
+    build:
+      context: ./app/bms-sys
+      dockerfile: Dockerfile
+    networks:
+      - whole-system-network
+    depends_on:
+      mysql-bms:
+        condition: service_healthy
+      consul:
+        condition: service_healthy
+    ports:
+      - "4004:8087"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - BMS_DB_HOST=mysql-bms
+      - BMS_DB_PORT=${BMS_DB_PORT:-3306}
+      - BMS_DB_NAME=${MYSQL_BMS_DB:-bms_db}
+      - BMS_DB_USER=${MYSQL_BMS_USER:-bms_user}
+      - BMS_DB_PASSWORD=${MYSQL_BMS_PASSWORD:-bms_password}
+      - CONSUL_ENABLED=${CONSUL_ENABLED:-true}
+      - BMS_CONSUL_ADDRESS=${BMS_CONSUL_ADDRESS:-consul}
+      - BMS_CONSUL_DATACENTER=${BMS_CONSUL_DATACENTER:-dc1}
+      - BMS_CONSUL_SCHEME=${BMS_CONSUL_SCHEME:-http}
+      - BMS_CONSUL_SERVICE_ID=bms-api-1
+      - BMS_CONSUL_SERVICE_NAME=bms-service
+      - BMS_CONSUL_SERVICE_TAGS=${BMS_SERVICE_TAGS:-bms,multi-tenant,api}
+      - BMS_CONSUL_CHECK_TTL=30s
+      - CONSUL_CHECK_ID=service-check-bms-api-1
+      - BMS_PORT=${BMS_PORT:-8087}
+    restart: unless-stopped
 
   postgres-cms:
     image: postgres:15-alpine
@@ -190,27 +191,29 @@ services:
       retries: 5
     command: postgres -c 'hba_file=/etc/postgresql/pg_hba.conf'
   
-  # postgres-bms:
-  #   image: postgres:15-alpine
-  #   container_name: postgres-bms
-  #   environment:
-  #     - POSTGRES_DB=${POSTGRES_BMS_DB}
-  #     - POSTGRES_USER=${POSTGRES_BMS_USER}
-  #     - POSTGRES_PASSWORD=${POSTGRES_BMS_PASSWORD}
-  #   volumes:
-  #     - postgres-lms:/var/lib/postgresql/data
-  #     - ./schema/lms.sql:/docker-entrypoint-initdb.d/init-bms.sql
-  #     - ./config/postgres/pg_hba.conf:/etc/postgresql/pg_hba.conf
-  #   networks:
-  #     - whole-system-network
-  #   ports:
-  #     - "5434:5432"
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "psql -U ${POSTGRES_BMS_USER} -d ${POSTGRES_BMS_DB} -c 'SELECT 1 FROM \"Role\" LIMIT 1'"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
-  #   command: postgres -c 'hba_file=/etc/postgresql/pg_hba.conf'
+  mysql-bms:
+    image: mysql:8.0
+    container_name: mysql-bms
+    environment:
+      - MYSQL_DATABASE=${MYSQL_BMS_DB:-bms_db}
+      - MYSQL_USER=${MYSQL_BMS_USER:-bms_user}
+      - MYSQL_PASSWORD=${MYSQL_BMS_PASSWORD:-bms_password}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_BMS_ROOT_PASSWORD:-root_password}
+    volumes:
+      - mysql-bms:/var/lib/mysql
+      - ./schema/bms.sql:/docker-entrypoint-initdb.d/init-bms.sql
+    networks:
+      - whole-system-network
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_BMS_ROOT_PASSWORD:-root_password}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -319,8 +322,8 @@ volumes:
     driver: local
   postgres-lms:
     driver: local
-  # postgres-bms:
-  #   driver: local
+  mysql-bms:
+    driver: local
   consul-data:
     driver: local
   consul-config:

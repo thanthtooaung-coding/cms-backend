@@ -90,8 +90,11 @@ func (r *PageRequestRepositoryImpl) GetByUrlSlug(urlSlug string) (*models.PageRe
 	var pageRequest models.PageRequest
 	// Match URL patterns like http://localhost:5176/lms/triple-a-language-school
 	// or /lms/triple-a-language-school
-	urlPattern := "%/lms/" + urlSlug
-	if err := r.db.Where("page_url LIKE ? AND status = ?", urlPattern, models.RequestApproved).
+	// or http://localhost:5177/bms/triple-a-language-school
+	// or /bms/triple-a-language-school
+	lmsUrlPattern := "%/lms/" + urlSlug
+	bmsUrlPattern := "%/bms/" + urlSlug
+	if err := r.db.Where("(page_url LIKE ? OR page_url LIKE ?) AND status = ?", lmsUrlPattern, bmsUrlPattern, models.RequestApproved).
 		Preload("Owner").
 		First(&pageRequest).Error; err != nil {
 		r.logger.WithError(err).Errorf("Failed to get page request by URL slug: %s", urlSlug)

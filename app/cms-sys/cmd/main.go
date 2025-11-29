@@ -183,6 +183,7 @@ func dependencyInjectionSection(
 	db *gorm.DB,
 	consulClient *api.Client,
 	lmsServiceURL string,
+	bmsServiceURL string,
 ) *dISection {
 	ownerRepo := repository.NewOwnerRepository(logger, db)
 	ownerService := service.NewOwnerService(logger, ownerRepo)
@@ -193,11 +194,12 @@ func dependencyInjectionSection(
 	pageHandler := handler.NewPageHandler(pageService)
 
 	lmsService := service.NewLmsService(logger, lmsServiceURL)
+	bmsService := service.NewBmsService(logger, bmsServiceURL)
 	emailServiceURL := utils.GetEnv("EMAIL_SERVICE_URL", "http://email-service:8085")
 	emailService := service.NewEmailService(logger, emailServiceURL)
 
 	pageRequestRepo := repository.NewPageRequestRepository(logger, db)
-	pageRequestService := service.NewPageRequestService(logger, pageRequestRepo, pageService, lmsService, emailService, ownerRepo)
+	pageRequestService := service.NewPageRequestService(logger, pageRequestRepo, pageService, lmsService, bmsService, emailService, ownerRepo)
 	pageRequestHandler := handler.NewPageRequestHandler(pageRequestService)
 
 	authRepo := repository.NewAuthRepository(logger, db)
@@ -249,6 +251,11 @@ func main() {
 	lmsServiceURL := utils.GetEnv("LMS_SERVICE_URL", "http://lms-sys:4003")
 	if lmsServiceURL == "" {
 		appLogger.Fatal("LMS_SERVICE_URL environment variable is not set")
+	}
+
+	bmsServiceURL := utils.GetEnv("BMS_SERVICE_URL", "http://bms-main-system:8087")
+	if bmsServiceURL == "" {
+		appLogger.Fatal("BMS_SERVICE_URL environment variable is not set")
 	}  
 
 	consulConfig := loadConsulConfig()
@@ -345,7 +352,7 @@ func main() {
 		})
 	})
 
-	di := dependencyInjectionSection(appLogger, dbConnection.DB, consulClient, lmsServiceURL)
+	di := dependencyInjectionSection(appLogger, dbConnection.DB, consulClient, lmsServiceURL, bmsServiceURL)
 	routes.SetupAuthRoutes(app, di.authHandler)
 	routes.SetupOwnerRoutes(app, di.ownerHandler)
 	routes.SetupPageRequestRoutes(app, di.pageRequestHandler)

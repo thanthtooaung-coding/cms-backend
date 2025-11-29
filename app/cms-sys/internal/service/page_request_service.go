@@ -36,28 +36,49 @@ type PageRequestServiceImpl struct {
 	repo        repository.PageRequestRepository
 	pageService PageService
 	lmsService  LmsService
+	bmsService  BmsService
 	emailService EmailService
 	ownerRepo   repository.OwnerRepository
 }
 
 var _ PageRequestService = (*PageRequestServiceImpl)(nil)
 
-func NewPageRequestService(logger *logrus.Logger, repo repository.PageRequestRepository, pageService PageService, lmsService LmsService, emailService EmailService, ownerRepo repository.OwnerRepository) *PageRequestServiceImpl {
+func NewPageRequestService(logger *logrus.Logger, repo repository.PageRequestRepository, pageService PageService, lmsService LmsService, bmsService BmsService, emailService EmailService, ownerRepo repository.OwnerRepository) *PageRequestServiceImpl {
 	return &PageRequestServiceImpl{
 		logger:      logger,
 		repo:        repo,
 		pageService: pageService,
 		lmsService:  lmsService,
+		bmsService:  bmsService,
 		emailService: emailService,
 		ownerRepo:   ownerRepo,
 	}
 }
 
+// normalizeRequestType converts frontend request type values to backend expected values
+func normalizeRequestType(requestType string) string {
+	switch requestType {
+	case "LMS":
+		return "LMS"
+	case "Booking System":
+		return "BOOKING"
+	case "E-Commerce System":
+		return "E-COMMERCE"
+	case "Agency Management System":
+		return "AGENCY"
+	default:
+		// Return as-is if no mapping found
+		return requestType
+	}
+}
+
 func (s *PageRequestServiceImpl) CreatePageRequest(req request.CreatePageRequest) (*response.PageRequestResponse, error) {
+	// Normalize request type from frontend format to backend format
+	normalizedRequestType := normalizeRequestType(req.RequestType)
 
 	pageRequest := &models.PageRequest{
 		OwnerID:     req.OwnerID,
-		RequestType: req.RequestType,
+		RequestType: normalizedRequestType,
 		Title:       req.Title,
 		PageUrl:     req.PageUrl,
 		LogoUrl:     req.LogoUrl,
@@ -225,7 +246,75 @@ CMS Team`,
 			s.logger.Infof("RequestType is E-COMMERCE. Setup logic not implemented yet.")
 
 		case "BOOKING":
-			s.logger.Infof("RequestType is BOOKING. Setup logic not implemented yet.")
+			s.logger.Infof("RequestType is BOOKING. Triggering setup for new BMS tenant for Owner %d", pageRequest.OwnerID)
+
+			owner, err := s.ownerRepo.GetOwnerByID(pageRequest.OwnerID)
+			if err != nil {
+				s.logger.WithError(err).Errorf("Failed to find Owner with ID %d for BMS setup", pageRequest.OwnerID)
+				return fmt.Errorf("failed to find owner %d: %w", pageRequest.OwnerID, err)
+			}
+
+			bmsReq := BmsTenantRequest{
+				Name:     pageRequest.Title,
+				IsActive: true,
+			}
+
+			createdTenant, err := s.bmsService.CreateTenant(bmsReq)
+			if err != nil {
+				s.logger.WithError(err).Error("Failed to setup new BMS tenant")
+				return fmt.Errorf("failed to setup BMS tenant: %w", err)
+			}
+			s.logger.Infof("Successfully triggered BMS tenant creation for Page ID %d", createdPage.ID)
+
+			generatedPassword, err := utils.GenerateSecurePassword(16)
+			if err != nil {
+				s.logger.WithError(err).Error("Failed to generate secure password for new BMS owner")
+				return fmt.Errorf("failed to generate password: %w", err)
+			}
+			s.logger.Warnf("GENERATED PASSWORD FOR owner %d: %s", owner.ID, generatedPassword)
+
+			bmsAdminReq := BmsAdminRequest{
+				Name:     safeDerefString(owner.Name),
+				Email:    owner.Email,
+				Password: generatedPassword,
+			}
+
+			if err := s.bmsService.CreateBmsAdmin(bmsAdminReq, createdTenant.ID); err != nil {
+				s.logger.WithError(err).Error("Failed to create BMS admin user after tenant creation")
+				return fmt.Errorf("failed to create BMS admin user: %w", err)
+			}
+
+			s.logger.Infof("Successfully created BMS admin for Tenant ID %d", createdTenant.ID)
+
+			// Send email with BMS credentials
+			emailSubject := fmt.Sprintf("Your BMS Access - %s", pageRequest.Title)
+			emailBody := fmt.Sprintf(`Dear %s,
+
+Your page request "%s" has been approved!
+
+Your BMS access credentials:
+
+Email: %s
+Password: %s
+
+BMS Client: http://localhost:5177/bms/%s
+
+Please keep these credentials secure and do not share them with anyone.
+
+Best regards,
+CMS Team`,
+				safeDerefString(owner.Name),
+				pageRequest.Title,
+				owner.Email,
+				generatedPassword,
+				extractSlugFromUrl(pageRequest.PageUrl))
+
+			if err := s.emailService.SendEmail(owner.Email, emailSubject, emailBody); err != nil {
+				s.logger.WithError(err).Error("Failed to send email with BMS credentials")
+				// Don't fail the whole operation if email fails
+			} else {
+				s.logger.Infof("Successfully sent BMS credentials email to %s", owner.Email)
+			}
 
 		default:
 			s.logger.Warnf("No specific setup logic for RequestType: %s", pageRequest.RequestType)
@@ -248,16 +337,53 @@ func (s *PageRequestServiceImpl) GetTenantInfoBySlug(urlSlug string) (*response.
 		return nil, fmt.Errorf("page request is not approved")
 	}
 
-	// Get tenant info from LMS by name (tenant name is the page request title)
-	tenant, err := s.lmsService.GetTenantByName(pageRequest.Title)
-	if err != nil {
-		s.logger.WithError(err).Errorf("Failed to get tenant by name: %s", pageRequest.Title)
-		return nil, fmt.Errorf("failed to get tenant info: %w", err)
+	// Get tenant info based on request type
+	// For LMS, get from LMS service; for BMS, get from BMS service
+	var tenantID uint
+	var tenantName string
+	
+	if pageRequest.RequestType == "LMS" {
+		tenant, err := s.lmsService.GetTenantByName(pageRequest.Title)
+		if err != nil {
+			s.logger.WithError(err).Errorf("Failed to get tenant by name: %s", pageRequest.Title)
+			return nil, fmt.Errorf("failed to get tenant info: %w", err)
+		}
+		tenantID = tenant.ID
+		tenantName = tenant.Name
+	} else if pageRequest.RequestType == "BOOKING" {
+		// Try to get tenant by page request title first
+		tenant, err := s.bmsService.GetTenantByName(pageRequest.Title)
+		if err != nil {
+			// If that fails, try to extract slug from URL and match by that
+			// The slug from URL (e.g., "jcgv-mandalay") might match the tenant name better
+			urlSlug := extractSlugFromUrl(pageRequest.PageUrl)
+			if urlSlug != "" && urlSlug != pageRequest.Title {
+				s.logger.Infof("Failed to get tenant by title '%s', trying slug '%s'", pageRequest.Title, urlSlug)
+				tenant, err = s.bmsService.GetTenantByName(urlSlug)
+			}
+			
+			if err != nil {
+				s.logger.WithError(err).Warnf("Failed to get BMS tenant by name: %s (also tried slug: %s). Tenant may not exist in BMS yet. Using page request info as fallback.", pageRequest.Title, urlSlug)
+				// Fallback: Use page request info if tenant doesn't exist in BMS
+				// This handles cases where page request was approved before tenant creation was implemented
+				// or if tenant creation failed
+				tenantID = 0 // Use 0 as placeholder since tenant doesn't exist in BMS
+				tenantName = pageRequest.Title
+			} else {
+				tenantID = tenant.ID
+				tenantName = tenant.Name
+			}
+		} else {
+			tenantID = tenant.ID
+			tenantName = tenant.Name
+		}
+	} else {
+		return nil, fmt.Errorf("unsupported request type: %s", pageRequest.RequestType)
 	}
 
 	tenantInfo := &response.TenantInfoResponse{
-		TenantID:   tenant.ID,
-		TenantName: tenant.Name,
+		TenantID:   tenantID,
+		TenantName: tenantName,
 		PageTitle:  pageRequest.Title,
 		PageUrl:    pageRequest.PageUrl,
 		LogoUrl:    pageRequest.LogoUrl,
@@ -271,7 +397,13 @@ func (s *PageRequestServiceImpl) GetTenantInfoBySlug(urlSlug string) (*response.
 func extractSlugFromUrl(pageUrl string) string {
 	// Extract slug from URL like http://localhost:5176/lms/triple-a-language-school
 	// or /lms/triple-a-language-school
+	// or http://localhost:5177/bms/triple-a-language-school
+	// or /bms/triple-a-language-school
 	parts := strings.Split(pageUrl, "/lms/")
+	if len(parts) > 1 {
+		return strings.TrimSuffix(parts[1], "/")
+	}
+	parts = strings.Split(pageUrl, "/bms/")
 	if len(parts) > 1 {
 		return strings.TrimSuffix(parts[1], "/")
 	}

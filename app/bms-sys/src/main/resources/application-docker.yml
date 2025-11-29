@@ -2,16 +2,23 @@ spring:
   application:
     name: bms-service
   datasource:
-    url: jdbc:postgresql://${BMS_DB_HOST:localhost}:${BMS_DB_PORT:5434}/${BMS_DB_NAME:bms-db}
-    username: ${BMS_DB_USER:user}
-    password: ${BMS_DB_PASSWORD:password}
+    url: jdbc:mysql://${BMS_DB_HOST:mysql-bms}:${BMS_DB_PORT:3306}/${BMS_DB_NAME:bms_db}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&createDatabaseIfNotExist=true
+    username: ${BMS_DB_USER:bms_user}
+    password: ${BMS_DB_PASSWORD:bms_password}
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 300000
+      max-lifetime: 1200000
+      connection-test-query: SELECT 1
   jpa:
     hibernate:
       ddl-auto: none
     show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
   cloud:
     consul:
@@ -23,6 +30,17 @@ spring:
         instance-id: ${spring.application.name}-1
         health-check-path: /health
         health-check-interval: 15s
+  mail:
+    host: ${SPRING_MAIL_HOST:smtp.gmail.com}
+    port: ${SPRING_MAIL_PORT:587}
+    username: ${SPRING_MAIL_USERNAME:celestix118@gmail.com}
+    password: ${SPRING_MAIL_PASSWORD:dfbx rnsq iykn sdvt}
+    properties:
+      mail:
+        smtp:
+          auth: ${SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH:true}
+          starttls:
+            enable: ${SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE:true}
 
 server:
   port: ${BMS_PORT:8087}
@@ -36,4 +54,19 @@ management:
   endpoint:
     health:
       show-details: ALWAYS
-      
+
+jwt:
+  secret: ${JWT_SECRET:QWcSdXNp2gTo6CyJuMxCDD18I7zx4aD0t2UmWoV+u9Y=}
+
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:5174,http://localhost:5175,http://localhost:5176,http://localhost:5177}
+
+cloudinary:
+  cloud:
+    name: ${CLOUDINARY_CLOUD_NAME:dsylx9zse}
+  api:
+    key: ${CLOUDINARY_API_KEY:323724637428716}
+    secret: ${CLOUDINARY_API_SECRET:ObkjrGOodGjUiw2IFLjCEPJOksE}
+
+cms:
+  base-url: ${CMS_BASE_URL:http://localhost:4001}
